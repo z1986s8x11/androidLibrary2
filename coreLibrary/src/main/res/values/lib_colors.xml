@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 透膜 -->
+    <color name="lib_transparent">#00000000</color>
+    <!-- 半透膜 -->
+    <color name="lib_translucent">#80000000</color>
+    <color name="lib_black">#000000</color>
+    <color name="lib_white">#FFFFFF</color>
+    <color name="lib_green">#00FF00</color>
+    <color name="lib_red">#FF0000</color>
+    <color name="lib_blue">#0000FF</color>
+    <color name="lib_orange">#ff8a5a</color>
+    <color name="lib_yellow">#f0a032</color>
+    <color name="lib_gray">#A9A9A9</color>
+    <color name="lib_driver">#E5E5E5</color>
+    <color name="lib_font_black">#484848</color>
+    <color name="lib_font_gray">#a5a5a5</color>
+    <color name="lib_font_blue">#0076ff</color>
+    <color name="lib_font_green">#00bd00</color>
+    <color name="lib_bg_red">#d43b33</color>
+    <color name="lib_bg_gray">#cccccc</color>
+    <color name="lib_bg_green">#7dc97e</color>
+</resources>
