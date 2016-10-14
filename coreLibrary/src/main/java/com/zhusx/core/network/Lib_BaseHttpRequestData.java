@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.interfaces.IPageData;
 import com.zhusx.core.utils._HttpURLRequests;
 import com.zhusx.core.utils._Networks;
 
@@ -448,5 +449,28 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
 
     protected int __getDefaultPage(Id id) {
         return 1;
+    }
+
+
+    public boolean hasMoreData() {
+        if (_isLoading()) {
+            return false;
+        }
+        if (!_hasCache()) {
+            return true;
+        }
+        HttpResult<Result> result = _getLastData();
+        if (result.getData() instanceof IPageData) {
+            IPageData impl = (IPageData) result.getData();
+            if (impl.getTotalPageCount() != 0 && impl.getTotalPageCount() >= _getNextPage()) {
+                return true;
+            }
+            return false;
+        } else {
+            if (LogUtil.DEBUG) {
+                LogUtil.e(this, String.valueOf(_getRequestID()) + "T 必须实现 IPageData 接口");
+            }
+        }
+        return true;
     }
 }
