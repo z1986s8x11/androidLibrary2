@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.interfaces.IChangeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
  * Email         327270607@qq.com
  * Created       2016/10/12 16:14
  */
-public abstract class Lib_BaseAdapter<T> extends BaseAdapter {
+public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeAdapter<T> {
     protected List<T> p_list = new ArrayList<>();
     protected LayoutInflater inflater;
 
@@ -89,7 +90,8 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter {
     /**
      * 更新列表
      */
-    public synchronized void _setItemsToUpdate(List<T> replaceList) {
+    @Override
+    public void _setItemToUpdate(List<T> replaceList) {
         if (replaceList == null) {
             p_list.clear();
             notifyDataSetChanged();
@@ -100,9 +102,20 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter {
     }
 
     /**
+     * 更新列表
+     */
+    @Override
+    public void _setItemToUpdate(T item) {
+        p_list.clear();
+        p_list.add(item);
+        notifyDataSetChanged();
+    }
+
+    /**
      * 清空
      */
-    public synchronized void _clearToUpdate() {
+    @Override
+    public void _clearItemToUpdate() {
         p_list.clear();
         notifyDataSetChanged();
     }
@@ -110,7 +123,8 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter {
     /**
      * 添加项
      */
-    public synchronized void _addItemToUpdate(T bean) {
+    @Override
+    public void _addItemToUpdate(T bean) {
         if (p_list.add(bean)) {
             notifyDataSetChanged();
         } else {
@@ -120,7 +134,8 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter {
         }
     }
 
-    public synchronized void _addItemToUpdate(int position, T bean) {
+    @Override
+    public void _addItemToUpdate(int position, T bean) {
         if (position < 0 || position > p_list.size()) {
             if (LogUtil.DEBUG) {
                 LogUtil.e(this, "_addItemToUpdate 失败! 当前List.size():+" + p_list.size() + ";position:" + position);
@@ -134,13 +149,15 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter {
     /**
      * 添加项
      */
-    public synchronized void _addItemToUpdate(List<T> bean) {
+    @Override
+    public void _addItemToUpdate(List<T> bean) {
         if (bean.size() > 0) {
             p_list.addAll(bean);
             notifyDataSetChanged();
         }
     }
 
+    @Override
     public boolean _removeItemToUpdate(T m) {
         if (p_list.remove(m)) {
             notifyDataSetChanged();
@@ -149,16 +166,14 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter {
         return false;
     }
 
-    public boolean _removeItem(T m) {
-        return p_list.remove(m);
-    }
-
-    public T _removeItemToUpdate(int position) {
+    @Override
+    public boolean _removeItemToUpdate(int position) {
         T bean = p_list.remove(position);
         if (bean != null) {
             notifyDataSetChanged();
+            return true;
         }
-        return bean;
+        return false;
     }
 
     public T _removeItem(int position) {

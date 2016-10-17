@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.interfaces.IChangeAdapter;
 import com.zhusx.core.utils._Lists;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.List;
  * Email        327270607@qq.com
  * Created      2016/3/2 10:43
  */
-public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Lib_BaseRecyclerAdapter._ViewHolder> {
+public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Lib_BaseRecyclerAdapter._ViewHolder> implements IChangeAdapter<T> {
     private List<T> mList;
     protected LayoutInflater mLayoutInflater;
 
@@ -74,10 +76,10 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     }
 
     public static class _ViewHolder extends RecyclerView.ViewHolder {
-        public SparseArray viewHolder = new SparseArray();
+        SparseArray viewHolder = new SparseArray();
         public View rootView;
 
-        public _ViewHolder(View itemView) {
+        _ViewHolder(View itemView) {
             super(itemView);
             rootView = itemView;
         }
@@ -96,11 +98,13 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
         }
     }
 
+    @Override
     public void _addItemToUpdate(T t) {
         mList.add(t);
         notifyItemInserted(mList.size() - 1);
     }
 
+    @Override
     public void _addItemToUpdate(List<T> list) {
         if (!_Lists.isEmpty(list)) {
             mList.addAll(list);
@@ -108,32 +112,57 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
         }
     }
 
+    @Override
+    public void _addItemToUpdate(int position, T t) {
+        if (position < 0 || position > mList.size()) {
+            if (LogUtil.DEBUG) {
+                LogUtil.e(this, "_addItemToUpdate 失败! 当前List.size():+" + mList.size() + ";position:" + position);
+            }
+            return;
+        }
+        mList.add(position, t);
+        notifyItemRangeInserted(mList.size() - position, mList.size());
+    }
+
+    @Override
     public void _setItemToUpdate(T t) {
         mList.clear();
         mList.add(t);
         notifyDataSetChanged();
     }
 
+    @Override
     public void _setItemToUpdate(List<T> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
+    @Override
     public void _clearItemToUpdate() {
         mList.clear();
         notifyDataSetChanged();
     }
 
-    public void _removeItemToUpdate(T t) {
+    @Override
+    public boolean _removeItemToUpdate(T t) {
         int position = mList.indexOf(t);
-        mList.remove(position);
-        notifyItemRemoved(position);
+        if (position != -1) {
+            mList.remove(position);
+            notifyItemRemoved(position);
+            return true;
+        }
+        return false;
     }
 
-    public void _removeItemToUpdate(int position) {
-        mList.remove(position);
+    @Override
+    public boolean _removeItemToUpdate(int position) {
+        T t = mList.remove(position);
         notifyItemRemoved(position);
+        if (t != null) {
+            return true;
+        }
+        return false;
     }
 
     public void _moveItemToUpdate(int from, int to) {

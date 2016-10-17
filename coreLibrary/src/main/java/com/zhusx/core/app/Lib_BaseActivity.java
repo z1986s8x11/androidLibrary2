@@ -125,8 +125,8 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
     /**
      * 关闭程序
      */
-    public void _exitSystem() {
-        Lib_SystemExitManager.exitSystem();
+    public void _exitSystem(Boolean isKillProcess) {
+        Lib_SystemExitManager.exitSystem(isKillProcess);
     }
 
 
