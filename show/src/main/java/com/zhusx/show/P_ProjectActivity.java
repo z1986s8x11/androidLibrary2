@@ -87,7 +87,7 @@ public class P_ProjectActivity extends Lib_BaseActivity {
             }
         });
         if (getIntent() != null && getIntent().getStringExtra(_EXTRA_String) != null) {
-            adapter._setItemsToUpdate(Arrays.asList(P_ProjectHelper.getInstance().get(getIntent().getStringExtra(_EXTRA_String)).list()));
+            adapter._setItemToUpdate(Arrays.asList(P_ProjectHelper.getInstance().get(getIntent().getStringExtra(_EXTRA_String)).list()));
         } else {
             Lib_Subscribes.subscribe(new Lib_Subscribes.Subscriber<P_ProjectHelper>() {
                 @Override
@@ -97,7 +97,7 @@ public class P_ProjectActivity extends Lib_BaseActivity {
 
                 @Override
                 public void onComplete(P_ProjectHelper helper) {
-                    adapter._setItemsToUpdate(Arrays.asList(helper.list()));
+                    adapter._setItemToUpdate(Arrays.asList(helper.list()));
                 }
 
                 @Override
