@@ -21,7 +21,7 @@ import com.zhusx.core.network.OnHttpLoadingListener;
  * Email         327270607@qq.com
  * Created       2016/10/13 9:20
  */
-public abstract class _LoadingHelper<Id, Result, Parameter> implements OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> {
+public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> {
     private ViewGroup helperLayout;
     private View loadingView;
     private View errorView;
@@ -29,7 +29,7 @@ public abstract class _LoadingHelper<Id, Result, Parameter> implements OnHttpLoa
     private View resLayout;
     private Animatable anim;
 
-    public _LoadingHelper(View resLayout) {
+    public Lib_LoadingHelper(View resLayout) {
         this.resLayout = resLayout;
         ViewParent parent = resLayout.getParent();
         if (parent == null) {
@@ -53,7 +53,7 @@ public abstract class _LoadingHelper<Id, Result, Parameter> implements OnHttpLoa
         }
     }
 
-    public _LoadingHelper(Activity activity) {
+    public Lib_LoadingHelper(Activity activity) {
         ViewGroup group = (ViewGroup) activity.getWindow().getDecorView();
         this.resLayout = group.getChildAt(0);
         ViewGroup.LayoutParams lp = resLayout.getLayoutParams();
