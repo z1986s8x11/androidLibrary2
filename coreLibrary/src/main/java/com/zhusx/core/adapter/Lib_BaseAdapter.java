@@ -1,6 +1,9 @@
 package com.zhusx.core.adapter;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.util.SparseArray;
@@ -213,6 +216,27 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
         public void setCheck(@IdRes int id, boolean checked) {
             ((CompoundButton) getView(id)).setChecked(checked);
         }
+
+        public void setTextColor(@IdRes int id, @ColorInt int resId) {
+            ((TextView) getView(id)).setTextColor(resId);
+        }
+
+        public void setTextColorRes(@IdRes int id, @ColorRes int resId) {
+            ((TextView) getView(id)).setTextColor(rootView.getResources().getColor(resId));
+        }
+
+        public void setImageRes(@IdRes int id, @DrawableRes int resId) {
+            ((ImageView) getView(id)).setImageResource(resId);
+        }
+
+        public void setBackgroundRes(@IdRes int id, @DrawableRes @ColorRes int resId) {
+            getView(id).setBackgroundResource(resId);
+        }
+
+        public void setBackgroundColor(@IdRes int id, @ColorInt int resId) {
+            getView(id).setBackgroundColor(resId);
+        }
+
 
         public <T extends View> T getView(int id) {
             View childView = (View) viewHolder.get(id);

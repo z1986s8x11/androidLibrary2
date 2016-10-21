@@ -1,11 +1,16 @@
 package com.zhusx.core.adapter;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhusx.core.debug.LogUtil;
@@ -86,6 +91,22 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
 
         public void setText(int id, String text) {
             ((TextView) getView(id)).setText(text);
+        }
+
+        public void setTextColorRes(@IdRes int id, @ColorRes int resId) {
+            ((TextView) getView(id)).setTextColor(rootView.getResources().getColor(resId));
+        }
+
+        public void setImageRes(@IdRes int id, @DrawableRes int resId) {
+            ((ImageView) getView(id)).setImageResource(resId);
+        }
+
+        public void setBackgroundRes(@IdRes int id, @DrawableRes @ColorRes int resId) {
+            getView(id).setBackgroundResource(resId);
+        }
+
+        public void setBackgroundColor(@IdRes int id, @ColorInt int resId) {
+            getView(id).setBackgroundColor(resId);
         }
 
         public <T extends View> T getView(int id) {
