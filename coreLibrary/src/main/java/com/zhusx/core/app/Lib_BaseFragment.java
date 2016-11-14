@@ -24,7 +24,7 @@ public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycle
     public static final String _EXTRA_Integer = Lib_BaseActivity._EXTRA_Integer;
     public static final String _EXTRA_Boolean = Lib_BaseActivity._EXTRA_Boolean;
     public static final String _EXTRA_Double = Lib_BaseActivity._EXTRA_Double;
-    public static final String _EXTRA_String_ID = Lib_BaseActivity._EXTRA_Strig_ID;
+    public static final String _EXTRA_String_ID = Lib_BaseActivity._EXTRA_String_ID;
     private Toast pToast;
     private boolean pIsFirst = false;
 
