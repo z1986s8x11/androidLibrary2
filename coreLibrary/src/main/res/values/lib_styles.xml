@@ -88,4 +88,25 @@
         <item name="android:listSelector">@android:color/transparent</item>
         <item name="android:cacheColorHint">@android:color/transparent</item>
     </style>
+
+    <!--dialog 动画-->
+    <style name="lib_dialog_bottom_anim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/lib_translate_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/lib_translate_bottom_out</item>
+    </style>
+
+    <style name="lib_dialog_top_anim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/lib_translate_top_in</item>
+        <item name="android:windowExitAnimation">@anim/lib_translate_top_out</item>
+    </style>
+
+    <style name="lib_dialog_scale_anim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/lib_scale_center_in</item>
+        <item name="android:windowExitAnimation">@anim/lib_scale_center_out</item>
+    </style>
+
+    <style name="lib_dialog_alpha_anim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/lib_alpha_in</item>
+        <item name="android:windowExitAnimation">@anim/lib_alpha_out</item>
+    </style>
 </resources>
