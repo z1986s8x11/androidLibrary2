@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zhusx.core.debug.LogUtil;
@@ -274,6 +275,14 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
 
     protected CheckBox _toCheckBox(View v) {
         return (CheckBox) v;
+    }
+
+    /**
+     * 是否是显示的item
+     * 重写 getView 是用来判断是否重复调用第一个getView
+     */
+    public boolean _isShowItemView(ListView listView, int position) {
+        return listView.getChildCount() == position;
     }
 
     /**

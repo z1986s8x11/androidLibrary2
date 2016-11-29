@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
@@ -205,13 +206,35 @@ public class P_SourceCodeFragment extends Lib_BaseFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (mWebView != null) {
+            mWebView.onPause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mWebView != null) {
+            mWebView.onResume();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        mWebView.clearHistory();
-        mWebView.clearFormData();
-        mWebView.clearCache(true);
-        mWebView.stopLoading();
-        mWebView.removeAllViews();
-        mWebView.destroy();
+        if (mWebView != null) {
+            mWebView.clearHistory();
+            mWebView.clearFormData();
+            mWebView.clearCache(true);
+            mWebView.stopLoading();
+            ViewParent parent = mWebView.getParent();
+            if (parent != null && parent instanceof ViewGroup) {
+                ((ViewGroup) parent).removeView(mWebView);
+            }
+            mWebView.removeAllViews();
+            mWebView.destroy();
+        }
     }
 }
