@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.StyleRes;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -44,6 +45,13 @@ public class Lib_BaseDialog extends Dialog {
             lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
             lp.gravity = gravity;
             win.setAttributes(lp);
+        }
+    }
+
+    public void _setWindowAnimations(@StyleRes int resId) {
+        Window window = getWindow();
+        if (window != null) {
+            window.setWindowAnimations(resId);
         }
     }
 }
