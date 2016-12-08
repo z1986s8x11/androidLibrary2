@@ -192,7 +192,7 @@ public class P_SourceCodeFragment extends Lib_BaseFragment {
                     getActivity().finish();
                     return;
                 }
-                mWebView.loadDataWithBaseURL(null, html, "html/text", "UTF-8", null);
+                mWebView.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
             }
         }, this);
     }

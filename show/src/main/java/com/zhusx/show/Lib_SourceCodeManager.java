@@ -46,16 +46,13 @@ public class Lib_SourceCodeManager {
                 }
                 if (!SlidingMenu.class.getSimpleName().equals(((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0).getClass().getSimpleName())) {
                     List<Class> list = new ArrayList<>();
-                    if (activity instanceof _PublicActivity) {
-                        Fragment sourceFragment = null;
-                        List<Fragment> fragments = ((_PublicActivity) activity).getSupportFragmentManager().getFragments();
+                    if (activity instanceof FragmentActivity) {
+                        list.add(activity.getClass());
+                        List<Fragment> fragments = ((FragmentActivity) activity).getSupportFragmentManager().getFragments();
                         if (!_Lists.isEmpty(fragments)) {
-                            sourceFragment = fragments.get(0);
-                        }
-                        if (sourceFragment != null) {
-                            list.add(sourceFragment.getClass());
-                        } else {
-                            return;
+                            for (int i = 0; i < fragments.size(); i++) {
+                                list.add(fragments.get(i).getClass());
+                            }
                         }
                     } else {
                         list.add(activity.getClass());
@@ -63,14 +60,6 @@ public class Lib_SourceCodeManager {
 
                     SlidingMenu mSlidingMenu = new SlidingMenu(activity, SlidingMenu.SLIDING_CONTENT);
                     ListView listView = new ListView(activity);
-                    if (activity instanceof FragmentActivity) {
-                        List<Fragment> fragments = ((FragmentActivity) activity).getSupportFragmentManager().getFragments();
-                        if (!_Lists.isEmpty(fragments)) {
-                            for (int i = 0; i < fragments.size(); i++) {
-                                list.add(fragments.get(i).getClass());
-                            }
-                        }
-                    }
                     listView.setAdapter(new Lib_BaseAdapter<Class>(list) {
                         @Override
                         public View getView(LayoutInflater inflater, final Class bean, int position, View convertView, ViewGroup parent) {
