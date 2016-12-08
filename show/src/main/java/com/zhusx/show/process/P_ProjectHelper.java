@@ -1,4 +1,4 @@
-package com.zhusx.show;
+package com.zhusx.show.process;
 
 import android.content.Context;
 
@@ -101,6 +101,9 @@ public class P_ProjectHelper {
     public P_ProjectHelper get(String packName) {
         String[] keys = packName.trim().split("\\.");
         Map<String, P_ProjectHelper> maps = this.map;
+        if (maps == null) {
+            return null;
+        }
         for (int i = 0; i < keys.length; i++) {
             if (i == keys.length - 1) {
                 return maps.get(keys[i]);

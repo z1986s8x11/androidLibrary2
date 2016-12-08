@@ -1,7 +1,9 @@
 package com.zhusx.test;
 
-import android.app.AlertDialog;
 import android.app.Application;
+
+import com.zhusx.core.debug.LogUtil;
+import com.zhusx.show.Lib_SourceCodeManager;
 
 
 /**
@@ -14,7 +16,7 @@ public class AppApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        new Tools.Builder(this).build();
-        new AlertDialog.Builder(this).create().show();
+        LogUtil.DEBUG = true;
+        new Lib_SourceCodeManager.Builder(this).build();
     }
 }

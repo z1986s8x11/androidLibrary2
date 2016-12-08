@@ -1,4 +1,4 @@
-package com.zhusx.show;
+package com.zhusx.show.ui;
 
 import android.graphics.Color;
 import android.os.Build;

@@ -1,7 +1,8 @@
-package com.zhusx.show;
+package com.zhusx.show.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.zhusx.core.adapter.Lib_BaseAdapter;
-import com.zhusx.core.app.Lib_BaseActivity;
+import com.zhusx.core.app.Lib_BaseFragment;
 import com.zhusx.core.app._PublicActivity;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.helper.Lib_Subscribes;
+import com.zhusx.show.process.P_ProjectHelper;
+import com.zhusx.show.R;
 
 import java.util.Arrays;
 
@@ -21,38 +24,42 @@ import java.util.Arrays;
  * Email        327270607@qq.com
  * Created      2016/4/12 15:49
  */
-public class P_ProjectActivity extends Lib_BaseActivity {
+public class P_ProjectFragment extends Lib_BaseFragment {
     private ListView mListView;
     private Lib_BaseAdapter<P_ProjectHelper> adapter;
     private Class cls = getClass();
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.lib_activity_project);
-        mListView = (ListView) findViewById(R.id.listView);
-        mListView.setAdapter(adapter = new Lib_BaseAdapter<P_ProjectHelper>(this) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.lib_fragment_project, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mListView = (ListView) view.findViewById(R.id.listView);
+        mListView.setAdapter(adapter = new Lib_BaseAdapter<P_ProjectHelper>() {
             @Override
             public View getView(LayoutInflater inflater, final P_ProjectHelper bean, int position, View convertView, ViewGroup parent) {
-                View[] vs = _getViewArrays(convertView, parent, R.layout.lib_list_item_1);
+                ViewHolder holder;
                 if (bean.isDir()) {
-                    _toTextView(vs[0]).setText(bean.name);
-                    vs[0].setBackgroundResource(R.color.lib_yellow);
-                    _toTextView(vs[0]).setTextColor(getResources().getColor(R.color.lib_blue));
-                    vs[0].setOnClickListener(new View.OnClickListener() {
+                    holder = _getViewHolder(convertView, parent, R.layout.lib_item_list_showcode_folder);
+                    holder.setText(R.id.tv_name, bean.name);
+                    holder.rootView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), cls);
+                            Intent intent = new Intent(v.getContext(), _PublicActivity.class);
+                            intent.putExtra(_PublicActivity._EXTRA_FRAGMENT, cls);
                             intent.putExtra(_EXTRA_String, bean.path);
                             startActivity(intent);
 
                         }
                     });
                 } else {
-                    _toTextView(vs[0]).setText(bean.name.substring(0, bean.name.lastIndexOf("_")));
-                    vs[0].setBackgroundResource(R.color.lib_white);
-                    _toTextView(vs[0]).setTextColor(getResources().getColor(R.color.lib_black));
-                    vs[0].setOnClickListener(new View.OnClickListener() {
+                    holder = _getViewHolder(convertView, parent, R.layout.lib_item_list_showcode_file);
+                    holder.setText(R.id.tv_name, bean.name.substring(0, bean.name.lastIndexOf("_")));
+                    holder.rootView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (TextUtils.isEmpty(bean.path)) {
@@ -83,20 +90,37 @@ public class P_ProjectActivity extends Lib_BaseActivity {
                         }
                     });
                 }
-                return vs[0];
+                return holder.rootView;
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                if (getItem(position).isDir()) {
+                    return 0;
+                }
+                return 1;
+            }
+
+            @Override
+            public int getViewTypeCount() {
+                return 2;
             }
         });
-        if (getIntent() != null && getIntent().getStringExtra(_EXTRA_String) != null) {
-            adapter._setItemToUpdate(Arrays.asList(P_ProjectHelper.getInstance().get(getIntent().getStringExtra(_EXTRA_String)).list()));
+        if (getArguments() != null && getArguments().getString(_EXTRA_String) != null) {
+            adapter._setItemToUpdate(Arrays.asList(P_ProjectHelper.getInstance().get(getArguments().getString(_EXTRA_String)).list()));
         } else {
             Lib_Subscribes.subscribe(new Lib_Subscribes.Subscriber<P_ProjectHelper>() {
                 @Override
                 public P_ProjectHelper doInBackground() {
-                    return P_ProjectHelper.getInstance()._init(P_ProjectActivity.this).get(__getFilterPackage());
+                    return P_ProjectHelper.getInstance()._init(getActivity()).get(__getFilterPackage());
                 }
 
                 @Override
                 public void onComplete(P_ProjectHelper helper) {
+                    if (helper == null || helper.list() == null) {
+                        _showToast("未找到_Activity 或者 _Fragment 文件");
+                        return;
+                    }
                     adapter._setItemToUpdate(Arrays.asList(helper.list()));
                 }
 
@@ -109,7 +133,8 @@ public class P_ProjectActivity extends Lib_BaseActivity {
         }
     }
 
+
     protected String __getFilterPackage() {
-        return getPackageName();
+        return getActivity().getPackageName();
     }
 }

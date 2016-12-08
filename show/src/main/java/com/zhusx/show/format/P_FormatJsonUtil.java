@@ -1,4 +1,4 @@
-package com.zhusx.show;
+package com.zhusx.show.format;
 
 import java.util.ArrayList;
 
@@ -15,8 +15,6 @@ public class P_FormatJsonUtil {
      *
      * @param json           需要格式的json串
      * @param fillStringUnit 每一层之前的占位符号比如空格 制表符
-     * @return
-     * @author peiyuxin
      */
     public static String _formatJson(String json, String fillStringUnit) {
         if (json == null || json.trim().length() == 0) {

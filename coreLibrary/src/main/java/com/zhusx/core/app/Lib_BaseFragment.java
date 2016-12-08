@@ -1,5 +1,6 @@
 package com.zhusx.core.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -160,5 +161,12 @@ public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycle
 
     protected void __onFragmentFirstVisible() {
 
+    }
+
+    public void finish() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.finish();
+        }
     }
 }
