@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,12 +45,26 @@ public class Lib_SourceCodeManager {
                     }
                 }
                 if (!SlidingMenu.class.getSimpleName().equals(((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0).getClass().getSimpleName())) {
+                    List<Class> list = new ArrayList<>();
+                    if (activity instanceof _PublicActivity) {
+                        Fragment sourceFragment = null;
+                        List<Fragment> fragments = ((_PublicActivity) activity).getSupportFragmentManager().getFragments();
+                        if (!_Lists.isEmpty(fragments)) {
+                            sourceFragment = fragments.get(0);
+                        }
+                        if (sourceFragment != null) {
+                            list.add(sourceFragment.getClass());
+                        } else {
+                            return;
+                        }
+                    } else {
+                        list.add(activity.getClass());
+                    }
+
                     SlidingMenu mSlidingMenu = new SlidingMenu(activity, SlidingMenu.SLIDING_CONTENT);
                     ListView listView = new ListView(activity);
-                    List<Class> list = new ArrayList<>();
-                    list.add(activity.getClass());
                     if (activity instanceof FragmentActivity) {
-                        List<android.support.v4.app.Fragment> fragments = ((FragmentActivity) activity).getSupportFragmentManager().getFragments();
+                        List<Fragment> fragments = ((FragmentActivity) activity).getSupportFragmentManager().getFragments();
                         if (!_Lists.isEmpty(fragments)) {
                             for (int i = 0; i < fragments.size(); i++) {
                                 list.add(fragments.get(i).getClass());
