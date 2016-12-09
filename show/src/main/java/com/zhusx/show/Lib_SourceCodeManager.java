@@ -31,6 +31,7 @@ public class Lib_SourceCodeManager {
     private static Lib_SourceCodeManager sourceCodeManager;
 
     private Lib_SourceCodeManager(Application application, final Builder builder) {
+        final String highlightPackageName = builder.highlightPackageName;
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
@@ -39,10 +40,8 @@ public class Lib_SourceCodeManager {
 
             @Override
             public void onActivityStarted(final Activity activity) {
-                if (builder.isOnlyShowPackage) {
-                    if (!activity.getClass().getName().startsWith(activity.getPackageName())) {
-                        return;
-                    }
+                if (!activity.getClass().getName().startsWith(highlightPackageName)) {
+                    return;
                 }
                 if (!SlidingMenu.class.getSimpleName().equals(((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0).getClass().getSimpleName())) {
                     List<Class> list = new ArrayList<>();
@@ -70,7 +69,8 @@ public class Lib_SourceCodeManager {
                                 public void onClick(View v) {
                                     Intent in = new Intent(v.getContext(), _PublicActivity.class);
                                     in.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_SourceCodeFragment.class);
-                                    in.putExtra(Lib_BaseActivity._EXTRA_String, "java/" + bean.getName().replace(".", "/") + ".java");
+                                    in.putExtra(Lib_BaseActivity._EXTRA_String_ID, "java/" + bean.getName().replace(".", "/") + ".java");
+                                    in.putExtra(Lib_BaseActivity._EXTRA_String, highlightPackageName);
                                     activity.startActivity(in);
                                 }
                             });
@@ -113,20 +113,23 @@ public class Lib_SourceCodeManager {
 
     public static class Builder {
         Application application;
-        public boolean isOnlyShowPackage = true;
+        public String highlightPackageName;
 
         public Builder(Application application) {
             this.application = application;
         }
 
-        public Builder setOnlyShowPackage(boolean isOnlyShowPackage) {
-            this.isOnlyShowPackage = isOnlyShowPackage;
+        public Builder setHighlightPackageName(String highlightPackageName) {
+            this.highlightPackageName = highlightPackageName;
             return this;
         }
 
         public Lib_SourceCodeManager build() {
             if (sourceCodeManager == null) {
                 sourceCodeManager = new Lib_SourceCodeManager(application, this);
+            }
+            if (highlightPackageName == null) {
+                highlightPackageName = application.getPackageName();
             }
             return sourceCodeManager;
         }

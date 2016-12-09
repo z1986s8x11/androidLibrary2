@@ -21,10 +21,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
-* Author        zhusx
-* Email         327270607@qq.com
-* Created       2016/10/13 9:22
-*/
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/10/13 9:22
+ */
 public class Lib_SelectPhotoHelper {
     public static final int ActivityCameraRequestCode = 0x8A1;
     public static final int ActivityPhotoRequestCode = 0x8B2;
@@ -241,4 +241,35 @@ public class Lib_SelectPhotoHelper {
         }
         return null;
     }
+
+//
+//    获取 虚拟文件 流
+//    url : https://developer.android.google.cn/about/versions/nougat/android-7.0.html#gles_32
+//
+//    final static private int REQUEST_CODE = 64;
+//    // We listen to the OnActivityResult event to respond to the user's selection.
+//    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+//        try {
+//            if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//                Uri uri = null;
+//                if (resultData != null) {
+//                    uri = resultData.getData();
+//                    ContentResolver resolver = getContentResolver();
+//                    // Before attempting to coerce a file into a MIME type,
+//                    // check to see what alternative MIME types are available to
+//                    // coerce this file into.
+//                    String[] streamTypes = resolver.getStreamTypes(uri, "*/*");
+//                    AssetFileDescriptor descriptor =
+//                            resolver.openTypedAssetFileDescriptor(
+//                                    uri,
+//                                    streamTypes[0],
+//                                    null);
+//                    // Retrieve a stream to the virtual file.
+//                    InputStream inputStream = descriptor.createInputStream();
+//                }
+//            }
+//        } catch (Exception ex) {
+//            Log.e("EXCEPTION", "ERROR: ", ex);
+//        }
+//    }
 }

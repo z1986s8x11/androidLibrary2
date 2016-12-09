@@ -15,6 +15,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.zhusx.core.app.Lib_BaseActivity;
 import com.zhusx.core.app.Lib_BaseFragment;
 import com.zhusx.core.app._PublicActivity;
 import com.zhusx.core.helper.Lib_Subscribes;
@@ -37,6 +38,7 @@ import java.util.zip.ZipFile;
  */
 public class P_SourceCodeFragment extends Lib_BaseFragment {
     private WebView mWebView;
+    private String showPackage;
 
     @Nullable
     @Override
@@ -44,7 +46,8 @@ public class P_SourceCodeFragment extends Lib_BaseFragment {
         mWebView = new WebView(inflater.getContext());
         initWebView(mWebView);
         if (getArguments() != null) {
-            String fileName = getArguments().getString(_EXTRA_String);
+            String fileName = getArguments().getString(_EXTRA_String_ID);
+            showPackage = getArguments().getString(_EXTRA_String, getActivity().getPackageName());
             initData(fileName);
         }
         return mWebView;
@@ -69,7 +72,8 @@ public class P_SourceCodeFragment extends Lib_BaseFragment {
     protected void startShowCodeActivity(String filePath) {
         Intent in = new Intent(getActivity(), _PublicActivity.class);
         in.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_SourceCodeFragment.class);
-        in.putExtra(_EXTRA_String, filePath);
+        in.putExtra(Lib_BaseActivity._EXTRA_String, showPackage);
+        in.putExtra(_EXTRA_String_ID, filePath);
         getActivity().startActivity(in);
     }
 

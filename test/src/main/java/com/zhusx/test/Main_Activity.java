@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.zhusx.core.app._PublicActivity;
 import com.zhusx.show.ui.P_ProjectFragment;
+import com.zhusx.test.test.A_Activity;
 
 public class Main_Activity extends AppCompatActivity {
 
@@ -20,5 +21,6 @@ public class Main_Activity extends AppCompatActivity {
         Intent intent = new Intent(this, _PublicActivity.class);
         intent.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_ProjectFragment.class);
         startActivity(intent);
+        new A_Activity();
     }
 }

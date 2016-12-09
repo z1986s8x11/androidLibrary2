@@ -17,6 +17,6 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         LogUtil.DEBUG = true;
-        new Lib_SourceCodeManager.Builder(this).setOnlyShowPackage(false).build();
+        new Lib_SourceCodeManager.Builder(this).setHighlightPackageName(getPackageName()).build();
     }
 }

@@ -38,6 +38,14 @@ import java.util.Comparator;
  */
 public class _Files {
     /**
+     * 读取txt文件乱码：
+     BufferedReader read = new BufferedReader(new FileReader(new File(filename)));
+
+     解决办法：
+     InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "UTF-8");
+     BufferedReader read = new BufferedReader(isr);
+     */
+    /**
      * 返回清除Bom了的InputStream
      *
      * @param in
