@@ -1,4 +1,4 @@
-package com.zhusx.core.interfaces;
+package com.zhusx.core.entity;
 
 /**
  * Author       zhusx
@@ -6,13 +6,13 @@ package com.zhusx.core.interfaces;
  * Created      2016/12/12 9:24
  */
 
-public class Lib_AdapterItems<K, V> {
-    public Lib_AdapterItems(K itemA, V itemB) {
+public class Lib_AdapterItem<K, V> {
+    public Lib_AdapterItem(K itemA, V itemB) {
         this.itemA = itemA;
         this.itemB = itemB;
     }
 
-    public Lib_AdapterItems() {
+    public Lib_AdapterItem() {
     }
 
     public K itemA;

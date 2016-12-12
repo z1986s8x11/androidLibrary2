@@ -43,7 +43,11 @@ public class Lib_SourceCodeManager {
                 if (!activity.getClass().getName().startsWith(highlightPackageName)) {
                     return;
                 }
-                if (!SlidingMenu.class.getSimpleName().equals(((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0).getClass().getSimpleName())) {
+                View contentLayout = ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+                if (contentLayout == null) {
+                    return;
+                }
+                if (!SlidingMenu.class.getSimpleName().equals(contentLayout.getClass().getSimpleName())) {
                     List<Class> list = new ArrayList<>();
                     if (activity instanceof FragmentActivity) {
                         list.add(activity.getClass());
