@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- */
+* Author        zhusx
+* Email         327270607@qq.com
+* Created       2016/12/12 9:27
+*/
 public class Lib_SystemExitManager {
     private static List<SoftReference<Activity>> list;
 

@@ -5,7 +5,9 @@ import android.database.Cursor;
 /**
  * boolean 有三种状态, 0(false) 1(true) 和 null
  *
- * @author pt-zsx
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/12 9:27
  */
 public class Lib_SQLManager {
     /**

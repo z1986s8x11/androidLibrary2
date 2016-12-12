@@ -12,8 +12,10 @@ import com.nineoldandroids.view.ViewHelper;
 import com.zhusx.core.utils._Views;
 
 /**
- * Created by Administrator on 2015/12/11.
- */
+* Author        zhusx
+* Email         327270607@qq.com
+* Created       2016/12/12 9:28
+*/
 public class Lib_AnimatorHelper {
     protected FrameLayout rootView;
 

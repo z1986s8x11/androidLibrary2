@@ -18,6 +18,9 @@ import java.io.PushbackInputStream;
 
 /**
  * 用于去除Bom
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/12 9:28
  */
 public class Lib_UnicodeInputStream extends InputStream {
     PushbackInputStream internalIn;
