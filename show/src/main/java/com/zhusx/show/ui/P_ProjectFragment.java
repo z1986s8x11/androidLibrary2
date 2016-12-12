@@ -1,8 +1,11 @@
 package com.zhusx.show.ui;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.zhusx.core.adapter.Lib_BaseAdapter;
+import com.zhusx.core.app.Lib_BaseActivity;
 import com.zhusx.core.app.Lib_BaseFragment;
 import com.zhusx.core.app._PublicActivity;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.helper.Lib_Subscribes;
-import com.zhusx.show.process.P_ProjectHelper;
 import com.zhusx.show.R;
+import com.zhusx.show.process.P_ProjectHelper;
 
 import java.util.Arrays;
 
@@ -66,26 +70,32 @@ public class P_ProjectFragment extends Lib_BaseFragment {
                                 return;
                             }
                             try {
-                                Class cls = Class.forName(bean.path);
+                                Class<?> cls = Class.forName(bean.path);
                                 Intent intent;
                                 Bundle b = new Bundle();
-                                if (bean.path.endsWith("_Activity")) {
+                                if (Activity.class.isAssignableFrom(cls)) {
                                     intent = new Intent(v.getContext(), cls);
-                                } else if (bean.path.endsWith("_Fragment")) {
+                                } else if (Fragment.class.isAssignableFrom(cls)) {
                                     intent = new Intent(v.getContext(), _PublicActivity.class);
                                     b.putSerializable(_PublicActivity._EXTRA_FRAGMENT, cls);
+                                    b.putString(_EXTRA_String, bean.path);
                                 } else {
-                                    return;
+                                    intent = new Intent(getActivity(), _PublicActivity.class);
+                                    intent.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_SourceCodeFragment.class);
+                                    intent.putExtra(Lib_BaseActivity._EXTRA_String, __getFilterPackage());
+                                    intent.putExtra(_EXTRA_String_ID, "java/" + bean.path.replaceAll("\\.", "/") + ".java");
                                 }
-                                b.putString(_EXTRA_String, bean.path);
                                 intent.putExtras(b);
                                 startActivity(intent);
                             } catch (ClassNotFoundException e) {
                                 e.printStackTrace();
                                 _showToast(bean.path + " 没有找到");
-                            } catch (Exception e) {
+                            } catch (ActivityNotFoundException e) {
                                 e.printStackTrace();
                                 _showToast("Activity 在mainfest.xml 没有注册");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                _showToast("发生未知异常");
                             }
                         }
                     });
@@ -127,7 +137,9 @@ public class P_ProjectFragment extends Lib_BaseFragment {
                 @Override
                 public void onError(Throwable t) {
                     _showToast("未知错误");
-                    LogUtil.e(t);
+                    if (LogUtil.DEBUG) {
+                        LogUtil.e(t);
+                    }
                 }
             }, this);
         }
