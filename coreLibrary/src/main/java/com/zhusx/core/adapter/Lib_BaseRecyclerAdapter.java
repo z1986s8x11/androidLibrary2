@@ -186,6 +186,11 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
         return false;
     }
 
+    @Override
+    public boolean _isEmpty() {
+        return _Lists.isEmpty(mList);
+    }
+
     public void _moveItemToUpdate(int from, int to) {
         Collections.swap(mList, from, to);
         notifyItemMoved(from, to);

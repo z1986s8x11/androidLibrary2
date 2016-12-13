@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.IChangeAdapter;
+import com.zhusx.core.utils._Lists;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,6 +179,11 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean _isEmpty() {
+        return _Lists.isEmpty(p_list);
     }
 
     public T _removeItem(int position) {
