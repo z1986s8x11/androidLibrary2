@@ -1,21 +1,20 @@
 package com.zhusx.core.helper;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.zhusx.core.utils._Views;
 
 /**
-* Author        zhusx
-* Email         327270607@qq.com
-* Created       2016/12/12 9:28
-*/
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/12 9:28
+ */
 public class Lib_AnimatorHelper {
     protected FrameLayout rootView;
 
@@ -55,8 +54,8 @@ public class Lib_AnimatorHelper {
             fromView.getLocationOnScreen(location);
             int[] location1 = new int[2];
             toView.getLocationOnScreen(location1);
-            ViewHelper.setX(animView, ViewHelper.getX(fromView));
-            ViewHelper.setY(animView, ViewHelper.getY(fromView));
+            animView.setX(animView.getX());
+            animView.setY(animView.getY());
             ObjectAnimator.ofFloat(animView, "translationY", location[1], location1[1]).start();
             ObjectAnimator animator = ObjectAnimator.ofFloat(animView, "translationX", fromView.getLeft(), toView.getLeft());
             animator.addListener(new Animator.AnimatorListener() {
@@ -85,27 +84,27 @@ public class Lib_AnimatorHelper {
         public void startTop(View fromView, int top) {
             int[] location = new int[2];
             fromView.getLocationOnScreen(location);
-            ViewHelper.setX(animView, ViewHelper.getX(fromView) + (fromView.getMeasuredWidth() - animView.getMeasuredWidth()) / 2);
-            ViewHelper.setY(animView, ViewHelper.getY(fromView));
+            animView.setX(fromView.getX() + (fromView.getMeasuredWidth() - animView.getMeasuredWidth()) / 2);
+            animView.setY(fromView.getY());
             ObjectAnimator.ofFloat(animView, "translationY", location[1], location[1] - top).start();
             ObjectAnimator animator = ObjectAnimator.ofFloat(animView, "alpha", 1, 0);
             animator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    ViewHelper.setAlpha(animView, 1.0f);
+                    animView.setAlpha(1.0f);
                     animView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     animView.setVisibility(View.GONE);
-                    ViewHelper.setAlpha(animView, 1.0f);
+                    animView.setAlpha(1.0f);
                 }
 
                 @Override
                 public void onAnimationCancel(Animator animation) {
                     animView.setVisibility(View.GONE);
-                    ViewHelper.setAlpha(animView, 1.0f);
+                    animView.setAlpha(1.0f);
                 }
 
                 @Override
