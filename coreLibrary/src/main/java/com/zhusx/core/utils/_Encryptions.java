@@ -91,8 +91,7 @@ public class _Encryptions {
         return null;
     }
 
-    public static byte[] encode(Symmetry type, String key, String data)
-            throws InvalidKeyException, NoSuchAlgorithmException,
+    public static byte[] encode(Symmetry type, String key, String data) throws InvalidKeyException, NoSuchAlgorithmException,
             InvalidKeySpecException, NoSuchPaddingException,
             IllegalBlockSizeException, BadPaddingException,
             InvalidAlgorithmParameterException {
@@ -100,18 +99,11 @@ public class _Encryptions {
         switch (type) {
             case DES:
                 cipher = Cipher.getInstance("DES");
-                cipher.init(
-                        Cipher.ENCRYPT_MODE,
-                        SecretKeyFactory.getInstance("DES").generateSecret(
-                                new DESKeySpec(key.getBytes())), new SecureRandom());
+                cipher.init(Cipher.ENCRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new SecureRandom());
                 return cipher.doFinal(data.getBytes());
             case DES_CBB_PKCS5:
                 cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-                cipher.init(
-                        Cipher.ENCRYPT_MODE,
-                        SecretKeyFactory.getInstance("DES").generateSecret(
-                                new DESKeySpec(key.getBytes())),
-                        new IvParameterSpec(key.getBytes()));
+                cipher.init(Cipher.ENCRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new IvParameterSpec(key.getBytes()));
                 return cipher.doFinal(data.getBytes());
             case AES_128:
             case AES_192:
@@ -132,13 +124,11 @@ public class _Encryptions {
                     default:
                 }
                 cipher = Cipher.getInstance("AES");
-                cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(kGen
-                        .generateKey().getEncoded(), "AES"));
+                cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(kGen.generateKey().getEncoded(), "AES"));
                 return cipher.doFinal(data.getBytes());
             case AES_ECB_PKCS5:
                 cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-                cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes(),
-                        "AES"));
+                cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes(), "AES"));
                 return cipher.doFinal(data.getBytes());
             default:
                 break;
@@ -155,18 +145,11 @@ public class _Encryptions {
         switch (type) {
             case DES:
                 cipher = Cipher.getInstance("DES");
-                cipher.init(
-                        Cipher.DECRYPT_MODE,
-                        SecretKeyFactory.getInstance("DES").generateSecret(
-                                new DESKeySpec(key.getBytes())), new SecureRandom());
+                cipher.init(Cipher.DECRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new SecureRandom());
                 return cipher.doFinal(data);
             case DES_CBB_PKCS5:
                 cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-                cipher.init(
-                        Cipher.DECRYPT_MODE,
-                        SecretKeyFactory.getInstance("DES").generateSecret(
-                                new DESKeySpec(key.getBytes())),
-                        new IvParameterSpec(key.getBytes()));
+                cipher.init(Cipher.DECRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new IvParameterSpec(key.getBytes()));
                 return cipher.doFinal(data);
             case AES_128:
             case AES_192:
@@ -188,14 +171,12 @@ public class _Encryptions {
                 }
                 SecretKey sKey = kGen.generateKey();
                 byte[] rawKey = sKey.getEncoded();
-                SecretKeySpec sKeySpec = new SecretKeySpec(rawKey, "AES");
                 cipher = Cipher.getInstance("AES");
-                cipher.init(Cipher.DECRYPT_MODE, sKeySpec);
+                cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(rawKey, "AES"));
                 return cipher.doFinal(data);
             case AES_ECB_PKCS5:
                 cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-                cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes(),
-                        "AES"));
+                cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes(), "AES"));
                 return cipher.doFinal(data);
             default:
                 break;
