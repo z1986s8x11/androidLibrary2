@@ -1,23 +1,18 @@
 package com.zhusx.core.app;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnBackKeyListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
 import com.zhusx.core.manager.Lib_SystemExitManager;
+import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Lists;
 
 import java.util.HashSet;
@@ -33,7 +28,6 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
     public static final String _EXTRA_Double = "extra_double";
     public static final String _EXTRA_String_ID = "extra_id";
 
-    protected String mToastMessage = "再次点击退出";
     /**
      * 一个Activity 只创建一个Toast
      */
@@ -71,38 +65,11 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (!isClickNoEditTextCloseInput) {
-            return super.dispatchTouchEvent(ev);
-        }
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (isShouldHideInput(v, ev)) {
-                if (v.getWindowToken() != null) {
-                    InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    im.hideSoftInputFromWindow(v.getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
+        if (isClickNoEditTextCloseInput) {
+            _Activitys._dispatchTouchEventHideSoftInput(this, ev);
         }
         return super.dispatchTouchEvent(ev);
     }
-
-    private boolean isShouldHideInput(View v, MotionEvent event) {
-        if (v != null && (v instanceof EditText)) {
-            int[] l = {0, 0};
-            v.getLocationInWindow(l);
-            int left = l[0], top = l[1], bottom = top + v.getHeight(), right = left
-                    + v.getWidth();
-            if (event.getX() > left && event.getX() < right
-                    && event.getY() > top && event.getY() < bottom) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     @Override
     public void _addOnCycleListener(Lib_OnCycleListener listener) {
@@ -129,72 +96,20 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
         Lib_SystemExitManager.exitSystem(isKillProcess);
     }
 
-
-    /**
-     * 拿到屏幕的宽度
-     */
-    public int _getFullScreenWidth() {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return displayMetrics.widthPixels;
+    public void _addFragment(int id, Fragment to) {
+        _Activitys._addFragment(this, id, to);
     }
 
-    /**
-     * 拿到屏幕的高度
-     */
-    public int _getFullScreenHeight() {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return displayMetrics.heightPixels;
-    }
-
-    public void _addFragment(int id, Fragment from, Fragment to, String tag,
-                             boolean addBackStack, String stackName) {
-        if (from == to) {
-            return;
-        }
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction();
-        if (from != null && from.isAdded() && !from.isHidden()) {
-            transaction.hide(from);
-        }
-        if (!to.isAdded()) {
-            if (tag == null) {
-                transaction.add(id, to);
-            } else {
-                transaction.add(id, to, tag);
-            }
-            if (addBackStack) {
-                transaction.addToBackStack(stackName);
-            }
-        } else {
-            transaction.show(to);
-        }
-//        transaction.commit();
-        transaction.commitAllowingStateLoss();
-    }
-
-    public void _addFragment(int id, Fragment from, Fragment to) {
-        _addFragment(id, from, to, null, false, null);
-    }
-
-    public void _addFragment(int id, Fragment from, Fragment to, String tag) {
-        _addFragment(id, from, to, tag, false, null);
-    }
-
-    public void _addFragmentToStack(int id, Fragment from, Fragment to) {
-        _addFragment(id, from, to, null, true, null);
-    }
-
-    public void _addFragmentToStack(int id, Fragment from, Fragment to,
-                                    String tag) {
-        _addFragment(id, from, to, tag, true, null);
+    public void _addFragment(int id, Fragment to, String tag, boolean addBackStack, String stackName) {
+        _Activitys._addFragment(this, id, to, tag, addBackStack, stackName);
     }
 
     public void _replaceFragment(int id, Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(id, fragment).commit();
+        _Activitys._replaceFragment(this, id, fragment);
     }
 
     public void _replaceFragment(int id, Fragment fragment, String tag) {
-        getSupportFragmentManager().beginTransaction().replace(id, fragment, tag).commit();
+        _Activitys._replaceFragment(this, id, fragment, tag);
     }
 
     @Override

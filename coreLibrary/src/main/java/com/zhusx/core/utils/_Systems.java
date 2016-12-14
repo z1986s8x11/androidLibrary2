@@ -30,14 +30,10 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.TelephonyManager;
-import android.text.Selection;
-import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.zhusx.core.debug.LogUtil;
 
@@ -354,51 +350,6 @@ public class _Systems {
             LogUtil.w(ex);
         }
         return "";
-    }
-
-
-    public static void setSelection(EditText ed) {
-        CharSequence text = ed.getText();
-        Selection.setSelection((Spannable) text, text.length());
-    }
-
-    /**
-     * 隐藏键盘
-     *
-     * @param context
-     */
-    public static void hideInputMethod(Context context) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        // 强制显示
-        // imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
-        boolean isOpen = imm.isActive();// isOpen若返回true，则表示输入法打开
-        if (isOpen) {
-            // 强制隐藏键盘
-            // imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            if (context instanceof Activity) {
-                Activity activity = (Activity) context;
-                View v = activity.getCurrentFocus();
-                if (v != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
-        }
-    }
-
-    /**
-     * 键盘自动弹出
-     */
-    public static void showInputMethod(final EditText mEditText) {
-        mEditText.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager inputManager = (InputMethodManager) mEditText
-                        .getContext().getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
-                inputManager.showSoftInput(mEditText, 0);
-                setSelection(mEditText);
-            }
-        }, 500);
     }
 
     /**

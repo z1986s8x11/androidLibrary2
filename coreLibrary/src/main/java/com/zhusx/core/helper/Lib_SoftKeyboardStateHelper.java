@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 
-import com.zhusx.core.utils._Systems;
 import com.zhusx.core.utils._EditTexts;
 
 import java.util.LinkedList;
@@ -75,7 +74,7 @@ public class Lib_SoftKeyboardStateHelper implements
     }
 
     public void _hideInputMethod(Context context) {
-        _Systems.hideInputMethod(context);
+        _EditTexts.hideInputMethod(context);
     }
 
     public void _showInputMethod(EditText et) {
