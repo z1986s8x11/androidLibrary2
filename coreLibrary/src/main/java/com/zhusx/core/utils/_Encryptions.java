@@ -64,6 +64,24 @@ public class _Encryptions {
         return null;
     }
 
+    public static String encodeBase64(Symmetry type, String key, String message) {
+        try {
+            return _Base64.encode(encode(type, key, message));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String decodeBase64(Symmetry type, String key, String message) {
+        try {
+            return new String(decode(type, key, _Base64.decode(message)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String encodeHex(Symmetry type, String key, String message) {
         try {
             return byte2hex(encode(type, key, message));
