@@ -96,12 +96,22 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
         Lib_SystemExitManager.exitSystem(isKillProcess);
     }
 
+    private Fragment currentFragment;
+
     public void _addFragment(int id, Fragment to) {
-        _Activitys._addFragment(this, id, to);
+        if (currentFragment != null && currentFragment == to) {
+            return;
+        }
+        _Activitys._addFragment(this, id, currentFragment, to);
+        currentFragment = to;
     }
 
     public void _addFragment(int id, Fragment to, String tag, boolean addBackStack, String stackName) {
-        _Activitys._addFragment(this, id, to, tag, addBackStack, stackName);
+        if (currentFragment != null && currentFragment == to) {
+            return;
+        }
+        _Activitys._addFragment(this, id, currentFragment, to, tag, addBackStack, stackName);
+        currentFragment = to;
     }
 
     public void _replaceFragment(int id, Fragment fragment) {

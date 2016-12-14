@@ -31,16 +31,15 @@ public class _Activitys {
         return _Views.getHeight(context);
     }
 
-    public static void _addFragment(FragmentActivity activity, int id, Fragment to) {
-        _addFragment(activity, id, to, null, false, null);
+    public static void _addFragment(FragmentActivity activity, int id,Fragment from, Fragment to) {
+        _addFragment(activity, id,from, to, null, false, null);
     }
 
-    public static void _addFragment(FragmentActivity activity, int id, Fragment to, String tag, boolean addBackStack, String stackName) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        Fragment from = fragmentManager.findFragmentById(id);
+    public static void _addFragment(FragmentActivity activity, int id,Fragment from, Fragment to, String tag, boolean addBackStack, String stackName) {
         if (from == to) {
             return;
         }
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         if (from != null && from.isAdded() && !from.isHidden()) {
             transaction.hide(from);
