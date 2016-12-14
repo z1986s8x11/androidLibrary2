@@ -1,20 +1,21 @@
 package com.zhusx.core.utils;
 
-import com.zhusx.core.debug.LogUtil;
-
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
@@ -26,192 +27,178 @@ import javax.crypto.spec.SecretKeySpec;
  * Created       2016/10/13 9:31
  */
 public class _Encryptions {
-
     /**
-     * DES算法，加密
-     *
-     * @param data 待加密字符串
-     * @param key  加密私钥，长度不能够小于8位
-     * @return 加密后的字节数组，一般结合Base64编码使用
-     * @throws InvalidAlgorithmParameterException
-     * @throws Exception
+     * 对称加密
      */
-    public static String encodeDES(String key, String data) {
-        if (data == null) {
-            return null;
-        }
-        if (key == null || key.length() < 8) {
-            if (LogUtil.DEBUG) {
-                LogUtil.e(_Encryptions.class, "key.length() < 8 !!!");
-            }
-            return data;
-        }
-        try {
-            DESKeySpec dks = new DESKeySpec(key.getBytes());
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-            // key的长度不能够小于8位字节
-            Key secretKey = keyFactory.generateSecret(dks);
-            /**第一种*/
-//            Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-//            AlgorithmParameterSpec paramSpec = new IvParameterSpec("12345678".getBytes());
-            /**第二种*/
-            Cipher cipher = Cipher.getInstance("DES");
-            // DES算法要求有一个可信任的随机数源
-            SecureRandom paramSpec = new SecureRandom();
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey, paramSpec);
-            byte[] bytes = cipher.doFinal(data.getBytes());
-            return byte2hex(bytes);
-        } catch (InvalidKeyException e) {
-            if (LogUtil.DEBUG) {
-                // 长度不对
-                LogUtil.e(e);
-            }
-        } catch (Exception e) {
-            if (LogUtil.DEBUG) {
-                LogUtil.w(e);
-            }
-        }
-        return data;
+    public enum Symmetry {
+        DES, // key 必须大于8位
+        DES_CBB_PKCS5, // key 必须大于8位
+        AES_128, // key 长度无限制
+        AES_192, // 可能不支持
+        AES_256, // 可能不支持
+        AES_ECB_PKCS5 // key 必须大于16位
     }
 
     /**
-     * DES算法，解密
-     *
-     * @param data 待解密字符串
-     * @param key  解密私钥，长度不能够小于8位
-     * @return 解密后的字节数组
-     * @throws Exception 异常
+     * 摘要
      */
-    public static String decodeDES(String key, String data) {
-        if (data == null) {
-            return null;
-        }
-        if (key == null || key.length() < 8) {
-            if (LogUtil.DEBUG) {
-                LogUtil.e(_Encryptions.class, "key.length() < 8 !!!");
-            }
-            return data;
-        }
-        try {
-            DESKeySpec dks = new DESKeySpec(key.getBytes());
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-            // key的长度不能够小于8位字节
-            Key secretKey = keyFactory.generateSecret(dks);
-            /**第一种*/
-//            Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-//            AlgorithmParameterSpec paramSpec = new IvParameterSpec("12345678".getBytes());
-            /**第二种*/
-            Cipher cipher = Cipher.getInstance("DES");
-            // DES算法要求有一个可信任的随机数源
-            SecureRandom paramSpec = new SecureRandom();
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, paramSpec);
-            return new String(cipher.doFinal(hex2byte(data.getBytes())));
-        } catch (BadPaddingException e) {
-            if (LogUtil.DEBUG) {
-                LogUtil.e(e);
-            }
-        } catch (Exception e) {
-            if (LogUtil.DEBUG) {
-                LogUtil.w(e);
-            }
-        }
-        return data;
+    public enum Digest {
+        MD5, SHA
     }
 
-    /**
-     * MD5算法 信息-摘要算法
-     *
-     * @param content
-     * @return
-     */
-    public static String encodeMD5(String content) {
-        if (content == null) {
-            return content;
-        }
+    public static String decodeHex(Symmetry type, String key, String message) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            digest.update(content.getBytes());
-            return byte2hex(digest.digest());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * SHA算法 安全散列算法
-     *
-     * @param content
-     * @return
-     */
-    public static String encodeSHA(String content) {
-        if (content == null) {
-            return content;
-        }
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA");
-            digest.update(content.getBytes());
-            return byte2hex(digest.digest());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * @param key     密钥
-     * @param content 原文
-     * @return 加密后的数据
-     */
-    public static String encodeAES(String key, String content) {
-        try {
-            /**第一种*/
-            KeyGenerator kGen = KeyGenerator.getInstance("AES");
-            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-            sr.setSeed(key.getBytes());
-            // 可以为 128 or 192 or 256 bits
-            kGen.init(128, sr);
-            SecretKey sKey = kGen.generateKey();
-            byte[] rawKey = sKey.getEncoded();
-            SecretKeySpec sKeySpec = new SecretKeySpec(rawKey, "AES");
-            Cipher cipher = Cipher.getInstance("AES");
-            /**第二种*/
-//            SecretKeySpec sKeySpec = new SecretKeySpec(key.getBytes(), "AES");
-//            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, sKeySpec);
-            byte[] result = cipher.doFinal(content.getBytes());
-            return byte2hex(result);
+            return new String(decode(type, key, hex2byte(message.getBytes())));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    /**
-     * @param key  密钥
-     * @param data 密文
-     * @return 加密后的数据
-     */
-    public static String decodeAES(String key, String data) {
+    public static String encodeHex(Digest type, String message) {
         try {
-            /**第一种*/
-            KeyGenerator kGen = KeyGenerator.getInstance("AES");
-            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-            sr.setSeed(key.getBytes());
-            // 可以为 128 or 192 or 256 bits
-            kGen.init(128, sr);
-            SecretKey sKey = kGen.generateKey();
-            byte[] rawKey = sKey.getEncoded();
-            SecretKeySpec sKeySpec = new SecretKeySpec(rawKey, "AES");
-            Cipher cipher = Cipher.getInstance("AES");
-            /**第二种*/
-//            SecretKeySpec sKeySpec = new SecretKeySpec(key.getBytes(), "AES");
-//            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, sKeySpec);
-            byte[] result = cipher.doFinal(hex2byte(data.getBytes()));
-            return new String(result);
+            return byte2hex(encode(type, message));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String encodeHex(Symmetry type, String key, String message) {
+        try {
+            return byte2hex(encode(type, key, message));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static byte[] encode(Digest type, String data)
+            throws NoSuchAlgorithmException {
+        MessageDigest digest;
+        switch (type) {
+            case MD5:
+                digest = MessageDigest.getInstance("MD5");
+                digest.update(data.getBytes());
+                return digest.digest();
+            case SHA:
+                digest = MessageDigest.getInstance("SHA");
+                digest.update(data.getBytes());
+                return digest.digest();
+            default:
+                break;
+        }
+        return null;
+    }
+
+    public static byte[] encode(Symmetry type, String key, String data)
+            throws InvalidKeyException, NoSuchAlgorithmException,
+            InvalidKeySpecException, NoSuchPaddingException,
+            IllegalBlockSizeException, BadPaddingException,
+            InvalidAlgorithmParameterException {
+        Cipher cipher;
+        switch (type) {
+            case DES:
+                cipher = Cipher.getInstance("DES");
+                cipher.init(
+                        Cipher.ENCRYPT_MODE,
+                        SecretKeyFactory.getInstance("DES").generateSecret(
+                                new DESKeySpec(key.getBytes())), new SecureRandom());
+                return cipher.doFinal(data.getBytes());
+            case DES_CBB_PKCS5:
+                cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+                cipher.init(
+                        Cipher.ENCRYPT_MODE,
+                        SecretKeyFactory.getInstance("DES").generateSecret(
+                                new DESKeySpec(key.getBytes())),
+                        new IvParameterSpec(key.getBytes()));
+                return cipher.doFinal(data.getBytes());
+            case AES_128:
+            case AES_192:
+            case AES_256:
+                KeyGenerator kGen = KeyGenerator.getInstance("AES");
+                SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+                sr.setSeed(key.getBytes());
+                switch (type) {
+                    case AES_128:
+                        kGen.init(128, sr);
+                        break;
+                    case AES_192:
+                        kGen.init(192, sr);
+                        break;
+                    case AES_256:
+                        kGen.init(256, sr);
+                        break;
+                    default:
+                }
+                cipher = Cipher.getInstance("AES");
+                cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(kGen
+                        .generateKey().getEncoded(), "AES"));
+                return cipher.doFinal(data.getBytes());
+            case AES_ECB_PKCS5:
+                cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes(),
+                        "AES"));
+                return cipher.doFinal(data.getBytes());
+            default:
+                break;
+        }
+        return null;
+    }
+
+    public static byte[] decode(Symmetry type, String key, byte[] data)
+            throws InvalidKeyException, InvalidKeySpecException,
+            NoSuchAlgorithmException, NoSuchPaddingException,
+            IllegalBlockSizeException, BadPaddingException,
+            InvalidAlgorithmParameterException {
+        Cipher cipher;
+        switch (type) {
+            case DES:
+                cipher = Cipher.getInstance("DES");
+                cipher.init(
+                        Cipher.DECRYPT_MODE,
+                        SecretKeyFactory.getInstance("DES").generateSecret(
+                                new DESKeySpec(key.getBytes())), new SecureRandom());
+                return cipher.doFinal(data);
+            case DES_CBB_PKCS5:
+                cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+                cipher.init(
+                        Cipher.DECRYPT_MODE,
+                        SecretKeyFactory.getInstance("DES").generateSecret(
+                                new DESKeySpec(key.getBytes())),
+                        new IvParameterSpec(key.getBytes()));
+                return cipher.doFinal(data);
+            case AES_128:
+            case AES_192:
+            case AES_256:
+                KeyGenerator kGen = KeyGenerator.getInstance("AES");
+                SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+                sr.setSeed(key.getBytes());
+                switch (type) {
+                    case AES_128:
+                        kGen.init(128, sr);
+                        break;
+                    case AES_192:
+                        kGen.init(192, sr);
+                        break;
+                    case AES_256:
+                        kGen.init(256, sr);
+                        break;
+                    default:
+                }
+                SecretKey sKey = kGen.generateKey();
+                byte[] rawKey = sKey.getEncoded();
+                SecretKeySpec sKeySpec = new SecretKeySpec(rawKey, "AES");
+                cipher = Cipher.getInstance("AES");
+                cipher.init(Cipher.DECRYPT_MODE, sKeySpec);
+                return cipher.doFinal(data);
+            case AES_ECB_PKCS5:
+                cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes(),
+                        "AES"));
+                return cipher.doFinal(data);
+            default:
+                break;
         }
         return null;
     }
