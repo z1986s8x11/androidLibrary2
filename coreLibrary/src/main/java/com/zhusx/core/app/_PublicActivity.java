@@ -1,6 +1,7 @@
 package com.zhusx.core.app;
 
 import android.os.Bundle;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 
 import com.zhusx.core.R;
@@ -13,10 +14,15 @@ import com.zhusx.core.R;
  */
 public final class _PublicActivity extends Lib_BaseActivity {
     public static final String _EXTRA_FRAGMENT = "fragment";
+    @StyleRes
+    public static int THEME_STYLE_ID = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (THEME_STYLE_ID != -1) {
+            setTheme(THEME_STYLE_ID);
+        }
         setContentView(R.layout.lib_layout_linearlayout);
         try {
             Class<Fragment> fragmentClass = (Class<Fragment>) getIntent().getSerializableExtra(_EXTRA_FRAGMENT);

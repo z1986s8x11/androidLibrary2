@@ -23,6 +23,7 @@
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
+        android:textColor="@color/lib_font_black"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:maxLines="1" />
