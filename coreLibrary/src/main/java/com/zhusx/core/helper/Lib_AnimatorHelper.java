@@ -46,12 +46,15 @@ public class Lib_AnimatorHelper {
         final View animView = getAnimView(makeAnimView);
         animView.setX(fromView.getX());
         animView.setY(fromView.getY());
-        ObjectAnimator.ofFloat(animView, "translationY", location[1], location1[1]).start();
-        ObjectAnimator animator = ObjectAnimator.ofFloat(animView, "translationX", fromView.getLeft(), toView.getLeft());
+
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", location[1], location1[1]);
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", fromView.getLeft(), toView.getLeft());
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(animView, translationY, translationX);
+        animator.setDuration(500);
+
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                animView.setVisibility(View.VISIBLE);
             }
 
             @Override
