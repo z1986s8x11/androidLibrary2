@@ -5,6 +5,7 @@ import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 
 import com.zhusx.core.R;
+import com.zhusx.core.debug.LogUtil;
 
 /**
  * 公共的Activity 依托于传入的Fragment创建UI
@@ -14,15 +15,27 @@ import com.zhusx.core.R;
  */
 public final class _PublicActivity extends Lib_BaseActivity {
     public static final String _EXTRA_FRAGMENT = "fragment";
+    public static final String _EXTRA_THEME_STYLE_ID = "lib_extra_theme_style_id";
     @StyleRes
     public static int THEME_STYLE_ID = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (THEME_STYLE_ID != -1) {
-            setTheme(THEME_STYLE_ID);
+        int themeStyleId = THEME_STYLE_ID;
+        if (getIntent().hasExtra(_EXTRA_THEME_STYLE_ID)) {
+            try {
+                themeStyleId = getIntent().getIntExtra(_EXTRA_THEME_STYLE_ID, THEME_STYLE_ID);
+            } catch (Exception e) {
+                if (LogUtil.DEBUG) {
+                    LogUtil.w(e);
+                }
+            }
         }
+        if (themeStyleId != -1) {
+            setTheme(themeStyleId);
+        }
+
         setContentView(R.layout.lib_layout_linearlayout);
         try {
             Class<Fragment> fragmentClass = (Class<Fragment>) getIntent().getSerializableExtra(_EXTRA_FRAGMENT);
