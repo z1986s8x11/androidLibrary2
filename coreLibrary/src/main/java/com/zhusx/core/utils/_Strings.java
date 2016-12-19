@@ -271,4 +271,11 @@ public class _Strings {
     public static String encodeUrl(String url) {
         return _HttpURLRequests.encodeUrl(url, null);
     }
+
+    public static String valueOf(String s) {
+        if (s == null) {
+            return "";
+        }
+        return String.valueOf(s);
+    }
 }
