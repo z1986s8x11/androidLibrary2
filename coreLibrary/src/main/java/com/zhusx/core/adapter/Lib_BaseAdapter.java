@@ -14,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zhusx.core.debug.LogUtil;
@@ -32,6 +31,7 @@ import java.util.List;
 public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeAdapter<T> {
     protected List<T> p_list = new ArrayList<>();
     protected LayoutInflater inflater;
+    private boolean isExpandListViewOrGridView = false;
 
     public Lib_BaseAdapter() {
         this(null, null);
@@ -72,6 +72,11 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (isExpandListViewOrGridView) {
+            if (position != parent.getChildCount()) {
+                return convertView != null ? convertView : parent.getChildAt(0);
+            }
+        }
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());
         }
@@ -284,11 +289,10 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
     }
 
     /**
-     * 是否是显示的item
-     * 重写 getView 是用来判断是否重复调用第一个getView
+     * 是否是ScrollView 嵌套的ListView 或者 GridView
      */
-    public boolean _isShowItemView(ListView listView, int position) {
-        return listView.getChildCount() == position;
+    public void setExpandListViewOrGridView(boolean isExpandListViewOrGridView) {
+        this.isExpandListViewOrGridView = isExpandListViewOrGridView;
     }
 
     /**
