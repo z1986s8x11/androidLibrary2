@@ -74,7 +74,7 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
     public View getView(int position, View convertView, ViewGroup parent) {
         if (isExpandListViewOrGridView) {
             if (position != parent.getChildCount()) {
-                return convertView != null ? convertView : parent.getChildAt(0);
+                return convertView != null ? convertView : parent.getChildAt(position);
             }
         }
         if (inflater == null) {
