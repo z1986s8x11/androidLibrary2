@@ -17,6 +17,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/22 14:03
+ */
 public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycleListener {
     public static final String _EXTRA_Serializable = Lib_BaseActivity._EXTRA_Serializable;
     public static final String _EXTRA_ListSerializable = Lib_BaseActivity._EXTRA_ListSerializable;

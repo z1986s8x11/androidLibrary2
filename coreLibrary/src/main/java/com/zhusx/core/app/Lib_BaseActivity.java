@@ -18,6 +18,11 @@ import com.zhusx.core.utils._Lists;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/22 14:03
+ */
 public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleListener {
     public static final String _EXTRA_Serializable = "extra_Serializable";
     public static final String _EXTRA_String = "extra_String";

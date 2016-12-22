@@ -6,9 +6,10 @@ import android.util.Log;
 import com.zhusx.core.BuildConfig;
 
 /**
- * @author zsx
- * @date 2013-12-18
- * @description
+ * zsxTitle
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2013/12/18 14:04
  */
 public class LogUtil {
     public static boolean DEBUG = BuildConfig.DEBUG;

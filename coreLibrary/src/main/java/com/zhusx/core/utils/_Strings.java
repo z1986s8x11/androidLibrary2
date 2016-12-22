@@ -1,14 +1,13 @@
 package com.zhusx.core.utils;
 
-import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.zhusx.core.debug.LogUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,34 +15,20 @@ import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressLint("SimpleDateFormat")
+/**
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/22 14:13
+ */
 public class _Strings {
     public static String toString(File file) {
         if (!file.exists()) {
             return null;
         }
-        BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader(file));
-            StringBuffer sb = new StringBuffer();
-            String str;
-            while ((str = br.readLine()) != null) {
-                sb.append(str);
-                sb.append("\n");
-            }
-            return sb.toString();
+            return toString(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            LogUtil.w(e);
-        } catch (IOException e) {
-            LogUtil.w(e);
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
         return null;
     }
@@ -55,8 +40,9 @@ public class _Strings {
         if (in == null) {
             return null;
         }
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        BufferedReader br = null;
         try {
+            br = new BufferedReader(new InputStreamReader(in));
             StringBuffer sb = new StringBuffer();
             String str;
             while ((str = br.readLine()) != null) {
