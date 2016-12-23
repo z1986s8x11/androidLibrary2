@@ -11,7 +11,8 @@ install {
             project {
                 packaging 'aar'
                 // Add your description here
-                name 'Android Commonly used utils'  //项目描述
+                name 'core'//项目描述
+                description 'Android Commonly used utils'
                 url siteUrl
                 // Set your license
                 licenses {
@@ -22,8 +23,8 @@ install {
                 }
                 developers {
                     developer {
-                        id 'zhusixiang'       //填写开发者基本信息
-                        name 'zhusx'
+                        id 'zhusx'       //填写开发者基本信息
+                        name 'zhusixiang'
                         email 'z1986s8x11@163.com'
                     }
                 }
@@ -41,7 +42,7 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 task javadoc(type: Javadoc) {
-    options.encoding = "utf-8"
+    options.encoding = "UTF-8"
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
