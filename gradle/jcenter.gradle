@@ -4,9 +4,11 @@ apply plugin: 'com.jfrog.bintray'
 def siteUrl = 'https://github.com/z1986s8x11/androidLibrary2'      // 项目的主页
 def gitUrl = 'https://github.com/z1986s8x11/androidLibrary2.git'   // Git仓库的url
 group = "com.zhusx.core" // Maven Group ID for the artifact，一般填你唯一的包名
+project.archivesBaseName = GRADLE_ARTIFACTID
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
+        pom.artifactId = GRADLE_ARTIFACTID
         pom {
             project {
                 packaging 'aar'
@@ -37,22 +39,39 @@ install {
         }
     }
 }
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-task javadoc(type: Javadoc) {
+//task sourcesJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    classifier = 'sources'
+//}
+//task javadoc(type: Javadoc) {
+//    options.encoding = "UTF-8"
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//}
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+task androidJavadocs(type: Javadoc) {
     options.encoding = "UTF-8"
-    source = android.sourceSets.main.java.srcDirs
+    source = android.sourceSets.main.java.source
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
-task javadocJar(type: Jar, dependsOn: javadoc) {
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.source
 }
 artifacts {
-    archives javadocJar
-    archives sourcesJar
+//    archives javadocJar
+//    archives sourcesJar
+    archives androidSourcesJar
+    archives androidJavadocsJar
 }
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
