@@ -7,7 +7,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName GRADLE_VERSION
+        versionName "1.0.0"
     }
     buildTypes {
         release {
