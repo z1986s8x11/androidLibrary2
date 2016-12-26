@@ -5,6 +5,8 @@ def siteUrl = 'https://github.com/z1986s8x11/androidLibrary2'      // 项目的�
 def gitUrl = 'https://github.com/z1986s8x11/androidLibrary2.git'   // Git仓库的url
 group = "com.zhusx.core" // Maven Group ID for the artifact，一般填你唯一的包名
 project.archivesBaseName = GRADLE_ARTIFACTID
+version="1.0.0"
+
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
