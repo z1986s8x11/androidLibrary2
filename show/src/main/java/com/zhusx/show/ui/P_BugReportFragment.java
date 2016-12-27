@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package com.zhusx.core.debug;
+package com.zhusx.show.ui;
 
 import android.app.Activity;
 import android.content.Intent;

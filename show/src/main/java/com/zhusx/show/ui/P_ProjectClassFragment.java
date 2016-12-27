@@ -15,7 +15,6 @@ import android.widget.ListView;
 import com.zhusx.core.adapter.Lib_BaseAdapter;
 import com.zhusx.core.app.Lib_BaseActivity;
 import com.zhusx.core.app.Lib_BaseFragment;
-import com.zhusx.core.app._PublicActivity;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.helper.Lib_Subscribes;
 import com.zhusx.show.R;

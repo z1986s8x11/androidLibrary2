@@ -5,10 +5,8 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 
 import com.zhusx.core.debug.LogUtil;
-import com.zhusx.core.debug.P_UncaughtException;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
 import com.zhusx.core.network.Lib_NetworkStateReceiver;
@@ -33,7 +31,6 @@ public class ZsxApplicationManager {
     public static class Builder {
         private Application context;
         private boolean monitorNet;
-        private boolean uncaughtException;
         private boolean safety;
         private Application.ActivityLifecycleCallbacks activityCallbacks;
         private Lib_NetworkStateReceiver receiver;
@@ -56,14 +53,6 @@ public class ZsxApplicationManager {
         }
 
 
-        /**
-         * 设置是否启用捕获全局异常
-         */
-        public Builder setUncaughtException(boolean uncaught) {
-            this.uncaughtException = uncaught;
-            return this;
-        }
-
         public Builder setSafety(boolean safety) {
             this.safety = safety;
             return this;
@@ -74,14 +63,6 @@ public class ZsxApplicationManager {
             if (monitorNet) {
                 receiver = new Lib_NetworkStateReceiver();
                 receiver.registerNetworkStateReceiver(context);
-            }
-            /*必须 DEBUG 下*/
-            if (LogUtil.DEBUG) {
-                if (uncaughtException) {
-                /* 监听全局异常 */
-                    P_UncaughtException._getInstance()._init(context);
-                }
-                StrictMode.enableDefaults();
             }
             if (safety) {
                 if (!LogUtil.DEBUG) {

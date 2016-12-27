@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -13,10 +14,11 @@ import android.widget.ListView;
 
 import com.zhusx.core.adapter.Lib_BaseAdapter;
 import com.zhusx.core.app.Lib_BaseActivity;
-import com.zhusx.core.app._PublicActivity;
 import com.zhusx.core.utils._Lists;
 import com.zhusx.core.widget.slidingmenu.SlidingMenu;
+import com.zhusx.show.html.P_UncaughtException;
 import com.zhusx.show.ui.P_SourceCodeFragment;
+import com.zhusx.show.ui._PublicActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +117,7 @@ public class Lib_SourceCodeManager {
     public static class Builder {
         Application application;
         public String highlightPackageName;
+        private boolean uncaughtException;
 
         public Builder(Application application) {
             this.application = application;
@@ -125,12 +128,25 @@ public class Lib_SourceCodeManager {
             return this;
         }
 
+        /**
+         * 设置是否启用捕获全局异常
+         */
+        public Builder setUncaughtException(boolean uncaught) {
+            this.uncaughtException = uncaught;
+            return this;
+        }
+
         public Lib_SourceCodeManager build() {
             if (sourceCodeManager == null) {
                 sourceCodeManager = new Lib_SourceCodeManager(application, this);
             }
             if (highlightPackageName == null) {
                 highlightPackageName = application.getPackageName();
+            }
+            if (uncaughtException) {
+                /* 监听全局异常 */
+                P_UncaughtException._getInstance()._init(application);
+                StrictMode.enableDefaults();
             }
             return sourceCodeManager;
         }

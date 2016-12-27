@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.zhusx.core.app._PublicActivity;
 import com.zhusx.show.ui.P_ProjectClassFragment;
+import com.zhusx.show.ui._PublicActivity;
 import com.zhusx.test.test.A_Activity;
 
 public class Main_Activity extends Activity {

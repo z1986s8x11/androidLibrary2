@@ -1,4 +1,4 @@
-package com.zhusx.core.debug;
+package com.zhusx.show.html;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,10 +13,12 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.zhusx.core.app.Lib_BaseActivity;
-import com.zhusx.core.app._PublicActivity;
+import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.manager.Lib_SystemExitManager;
 import com.zhusx.core.utils._Files;
 import com.zhusx.core.utils._Systems;
+import com.zhusx.show.ui.P_BugReportFragment;
+import com.zhusx.show.ui._PublicActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;

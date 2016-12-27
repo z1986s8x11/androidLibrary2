@@ -1,10 +1,11 @@
-package com.zhusx.core.app;
+package com.zhusx.show.ui;
 
 import android.os.Bundle;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 
 import com.zhusx.core.R;
+import com.zhusx.core.app.Lib_BaseActivity;
 import com.zhusx.core.debug.LogUtil;
 
 /**

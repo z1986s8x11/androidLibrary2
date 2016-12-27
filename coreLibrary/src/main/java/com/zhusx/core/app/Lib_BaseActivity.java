@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnBackKeyListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
-import com.zhusx.core.manager.Lib_SystemExitManager;
 import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Lists;
 
@@ -24,14 +23,14 @@ import java.util.Set;
  * Created       2016/12/22 14:03
  */
 public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleListener {
-    public static final String _EXTRA_Serializable = "extra_Serializable";
-    public static final String _EXTRA_String = "extra_String";
-    public static final String _EXTRA_Strings = "extra_Strings";
-    public static final String _EXTRA_ListSerializable = "extra_ListSerializable";
-    public static final String _EXTRA_Integer = "extra_Integer";
-    public static final String _EXTRA_Boolean = "extra_boolean";
-    public static final String _EXTRA_Double = "extra_double";
-    public static final String _EXTRA_String_ID = "extra_id";
+    public static final String _EXTRA_Serializable = _Activitys._EXTRA_Serializable;
+    public static final String _EXTRA_String = _Activitys._EXTRA_String;
+    public static final String _EXTRA_Strings = _Activitys._EXTRA_Strings;
+    public static final String _EXTRA_ListSerializable = _Activitys._EXTRA_ListSerializable;
+    public static final String _EXTRA_Integer = _Activitys._EXTRA_Integer;
+    public static final String _EXTRA_Boolean = _Activitys._EXTRA_Boolean;
+    public static final String _EXTRA_Double = _Activitys._EXTRA_Double;
+    public static final String _EXTRA_String_ID = _Activitys._EXTRA_String_ID;
 
     /**
      * 一个Activity 只创建一个Toast
@@ -98,7 +97,7 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
      * 关闭程序
      */
     public void _exitSystem(Boolean isKillProcess) {
-        Lib_SystemExitManager.exitSystem(isKillProcess);
+        _Activitys._exitSystem(isKillProcess);
     }
 
     private Fragment currentFragment;

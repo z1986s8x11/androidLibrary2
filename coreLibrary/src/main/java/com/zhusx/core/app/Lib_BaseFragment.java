@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
+import com.zhusx.core.utils._Activitys;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -23,14 +24,14 @@ import java.util.Set;
  * Created       2016/12/22 14:03
  */
 public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycleListener {
-    public static final String _EXTRA_Serializable = Lib_BaseActivity._EXTRA_Serializable;
-    public static final String _EXTRA_ListSerializable = Lib_BaseActivity._EXTRA_ListSerializable;
-    public static final String _EXTRA_String = Lib_BaseActivity._EXTRA_String;
-    public static final String _EXTRA_Strings = Lib_BaseActivity._EXTRA_Strings;
-    public static final String _EXTRA_Integer = Lib_BaseActivity._EXTRA_Integer;
-    public static final String _EXTRA_Boolean = Lib_BaseActivity._EXTRA_Boolean;
-    public static final String _EXTRA_Double = Lib_BaseActivity._EXTRA_Double;
-    public static final String _EXTRA_String_ID = Lib_BaseActivity._EXTRA_String_ID;
+    public static final String _EXTRA_Serializable = _Activitys._EXTRA_Serializable;
+    public static final String _EXTRA_ListSerializable = _Activitys._EXTRA_ListSerializable;
+    public static final String _EXTRA_String = _Activitys._EXTRA_String;
+    public static final String _EXTRA_Strings = _Activitys._EXTRA_Strings;
+    public static final String _EXTRA_Integer = _Activitys._EXTRA_Integer;
+    public static final String _EXTRA_Boolean = _Activitys._EXTRA_Boolean;
+    public static final String _EXTRA_Double = _Activitys._EXTRA_Double;
+    public static final String _EXTRA_String_ID = _Activitys._EXTRA_String_ID;
     private Toast pToast;
     private boolean pIsFirst = false;
 
