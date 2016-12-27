@@ -3,7 +3,6 @@ package com.zhusx.test;
 import android.app.Application;
 
 import com.zhusx.core.debug.LogUtil;
-import com.zhusx.show.Lib_SourceCodeManager;
 
 
 /**
@@ -17,6 +16,5 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         LogUtil.DEBUG = true;
-        new Lib_SourceCodeManager.Builder(this).setHighlightPackageName(getPackageName()).build();
     }
 }

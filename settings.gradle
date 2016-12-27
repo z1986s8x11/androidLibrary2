@@ -1,1 +1,1 @@
-include ':coreLibrary', ':show', ':others', ':test', ':retrofit2'
+include ':coreLibrary', ':test', ':others', ':retrofit2'

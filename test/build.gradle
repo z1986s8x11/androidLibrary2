@@ -10,9 +10,6 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
@@ -28,5 +25,4 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:recyclerview-v7:25.0.0'
     compile project(':coreLibrary')
-    compile project(':show')
 }
