@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
@@ -23,13 +24,14 @@ import java.util.List;
  * Created       2016/5/26 9:53
  */
 public class P_LogCatFragment extends Lib_BaseFragment {
+    private WebView mWebView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         LinearLayout rootView = new LinearLayout(inflater.getContext());
         rootView.setBackgroundColor(Color.WHITE);
         rootView.setOrientation(LinearLayout.HORIZONTAL);
-        final WebView mWebView = new WebView(inflater.getContext());
+        mWebView = new WebView(inflater.getContext());
         Lib_Subscribes.subscribe(new Lib_Subscribes.Subscriber<String>() {
             @Override
             public String doInBackground() {
@@ -66,5 +68,38 @@ public class P_LogCatFragment extends Lib_BaseFragment {
         mWebView.getSettings().setUseWideViewPort(true);
         rootView.addView(mWebView);
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mWebView != null) {
+            mWebView.onPause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mWebView != null) {
+            mWebView.onResume();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mWebView != null) {
+            mWebView.clearHistory();
+            mWebView.clearFormData();
+            mWebView.clearCache(true);
+            mWebView.stopLoading();
+            ViewParent parent = mWebView.getParent();
+            if (parent != null && parent instanceof ViewGroup) {
+                ((ViewGroup) parent).removeView(mWebView);
+            }
+            mWebView.removeAllViews();
+            mWebView.destroy();
+        }
     }
 }

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.zhusx.core.app._PublicActivity;
-import com.zhusx.show.ui.P_ProjectFragment;
+import com.zhusx.show.ui.P_ProjectClassFragment;
 import com.zhusx.test.test.A_Activity;
 
 public class Main_Activity extends Activity {
@@ -25,7 +25,7 @@ public class Main_Activity extends Activity {
 
     public void goSource(View v) {
         Intent intent = new Intent(this, _PublicActivity.class);
-        intent.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_ProjectFragment.class);
+        intent.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_ProjectClassFragment.class);
         startActivity(intent);
         new A_Activity();
     }

@@ -19,7 +19,7 @@ import com.zhusx.core.app._PublicActivity;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.helper.Lib_Subscribes;
 import com.zhusx.show.R;
-import com.zhusx.show.process.P_ProjectHelper;
+import com.zhusx.show.process.P_ProjectClassScanHelper;
 
 import java.util.Arrays;
 
@@ -28,9 +28,9 @@ import java.util.Arrays;
  * Email        327270607@qq.com
  * Created      2016/4/12 15:49
  */
-public class P_ProjectFragment extends Lib_BaseFragment {
+public class P_ProjectClassFragment extends Lib_BaseFragment {
     private ListView mListView;
-    private Lib_BaseAdapter<P_ProjectHelper> adapter;
+    private Lib_BaseAdapter<P_ProjectClassScanHelper> adapter;
     private Class cls = getClass();
 
     @Nullable
@@ -43,9 +43,9 @@ public class P_ProjectFragment extends Lib_BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mListView = (ListView) view.findViewById(R.id.listView);
-        mListView.setAdapter(adapter = new Lib_BaseAdapter<P_ProjectHelper>() {
+        mListView.setAdapter(adapter = new Lib_BaseAdapter<P_ProjectClassScanHelper>() {
             @Override
-            public View getView(LayoutInflater inflater, final P_ProjectHelper bean, int position, View convertView, ViewGroup parent) {
+            public View getView(LayoutInflater inflater, final P_ProjectClassScanHelper bean, int position, View convertView, ViewGroup parent) {
                 ViewHolder holder;
                 if (bean.isDir()) {
                     holder = _getViewHolder(convertView, parent, R.layout.lib_item_list_showcode_folder);
@@ -117,16 +117,16 @@ public class P_ProjectFragment extends Lib_BaseFragment {
             }
         });
         if (getArguments() != null && getArguments().getString(_EXTRA_String) != null) {
-            adapter._setItemToUpdate(Arrays.asList(P_ProjectHelper.getInstance().get(getArguments().getString(_EXTRA_String)).list()));
+            adapter._setItemToUpdate(Arrays.asList(P_ProjectClassScanHelper.getInstance().get(getArguments().getString(_EXTRA_String)).list()));
         } else {
-            Lib_Subscribes.subscribe(new Lib_Subscribes.Subscriber<P_ProjectHelper>() {
+            Lib_Subscribes.subscribe(new Lib_Subscribes.Subscriber<P_ProjectClassScanHelper>() {
                 @Override
-                public P_ProjectHelper doInBackground() {
-                    return P_ProjectHelper.getInstance()._init(getActivity()).get(__getFilterPackage());
+                public P_ProjectClassScanHelper doInBackground() {
+                    return P_ProjectClassScanHelper.getInstance()._init(getActivity()).get(__getFilterPackage());
                 }
 
                 @Override
-                public void onComplete(P_ProjectHelper helper) {
+                public void onComplete(P_ProjectClassScanHelper helper) {
                     if (helper == null || helper.list() == null) {
                         _showToast("未找到_Activity 或者 _Fragment 文件");
                         return;

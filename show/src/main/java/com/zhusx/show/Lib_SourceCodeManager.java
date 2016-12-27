@@ -49,18 +49,15 @@ public class Lib_SourceCodeManager {
                 }
                 if (!SlidingMenu.class.getSimpleName().equals(contentLayout.getClass().getSimpleName())) {
                     List<Class> list = new ArrayList<>();
+                    list.add(activity.getClass());
                     if (activity instanceof FragmentActivity) {
-                        list.add(activity.getClass());
                         List<Fragment> fragments = ((FragmentActivity) activity).getSupportFragmentManager().getFragments();
                         if (!_Lists.isEmpty(fragments)) {
                             for (int i = 0; i < fragments.size(); i++) {
                                 list.add(fragments.get(i).getClass());
                             }
                         }
-                    } else {
-                        list.add(activity.getClass());
                     }
-
                     SlidingMenu mSlidingMenu = new SlidingMenu(activity, SlidingMenu.SLIDING_CONTENT);
                     ListView listView = new ListView(activity);
                     listView.setAdapter(new Lib_BaseAdapter<Class>(list) {

@@ -18,36 +18,36 @@ import dalvik.system.DexFile;
  * Email        327270607@qq.com
  * Created      2016/4/7 18:08
  */
-public class P_ProjectHelper {
-    public Map<String, P_ProjectHelper> map;
+public class P_ProjectClassScanHelper {
+    public Map<String, P_ProjectClassScanHelper> map;
     public static Set<String> classNameSet = new HashSet<>();
     public String name;
     public String path;
-    public static P_ProjectHelper scanData;
+    public static P_ProjectClassScanHelper scanData;
 
-    private P_ProjectHelper() {
+    private P_ProjectClassScanHelper() {
     }
 
-    public static P_ProjectHelper getInstance() {
+    public static P_ProjectClassScanHelper getInstance() {
         if (scanData == null) {
-            scanData = new P_ProjectHelper();
+            scanData = new P_ProjectClassScanHelper();
         }
         return scanData;
     }
 
 
-    public P_ProjectHelper _init(Context context) {
+    public P_ProjectClassScanHelper _init(Context context) {
         initClassesFromPackage(context);
         return scanData;
     }
 
 
     public void add(String packName) {
-        P_ProjectHelper rootItem = this;
+        P_ProjectClassScanHelper rootItem = this;
         String[] keys = packName.split("\\.");
         String path = "";
         for (int i = 0; i < keys.length; i++) {
-            P_ProjectHelper item = new P_ProjectHelper();
+            P_ProjectClassScanHelper item = new P_ProjectClassScanHelper();
             path += "." + keys[i];
             item.name = keys[i];
             if (i == keys.length - 1) {
@@ -66,7 +66,7 @@ public class P_ProjectHelper {
         }
     }
 
-    private P_ProjectHelper initClassesFromPackage(Context context) {
+    private P_ProjectClassScanHelper initClassesFromPackage(Context context) {
         if (map != null) {
             map.clear();
         }
@@ -83,9 +83,9 @@ public class P_ProjectHelper {
             Enumeration<String> entries = df.entries();
             while (entries.hasMoreElements()) {
                 String className = entries.nextElement();
-                if (className.contains(packageName)) {
-                    if (!className.contains("$")) {
-                        if (className.endsWith("_Activity") || className.endsWith("_Fragment")) {
+                if (className.startsWith(packageName)) {
+                    if (className.endsWith("_Activity") || className.endsWith("_Fragment")) {
+                        if (!className.contains("$")) {
                             scanData.add(className);
                             classNameSet.add(className);
                         }
@@ -98,9 +98,9 @@ public class P_ProjectHelper {
         return scanData;
     }
 
-    public P_ProjectHelper get(String packName) {
+    public P_ProjectClassScanHelper get(String packName) {
         String[] keys = packName.trim().split("\\.");
-        Map<String, P_ProjectHelper> maps = this.map;
+        Map<String, P_ProjectClassScanHelper> maps = this.map;
         if (maps == null) {
             return null;
         }
@@ -119,12 +119,12 @@ public class P_ProjectHelper {
         return map != null;
     }
 
-    public P_ProjectHelper[] list() {
+    public P_ProjectClassScanHelper[] list() {
         if (map == null) {
-            return new P_ProjectHelper[]{};
+            return new P_ProjectClassScanHelper[]{};
         }
-        Collection<P_ProjectHelper> c = map.values();
-        return c.toArray(new P_ProjectHelper[]{});
+        Collection<P_ProjectClassScanHelper> c = map.values();
+        return c.toArray(new P_ProjectClassScanHelper[]{});
     }
 
     @Override
