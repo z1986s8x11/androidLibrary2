@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.zhusx.core.app._PublicActivity" />
+        <activity android:name="com.zhusx.show.ui._PublicActivity" />
     </application>
 
 </manifest>
