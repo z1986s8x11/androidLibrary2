@@ -13,10 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.zhusx.core.adapter.Lib_BaseAdapter;
-import com.zhusx.core.app.Lib_BaseActivity;
 import com.zhusx.core.app.Lib_BaseFragment;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.helper.Lib_Subscribes;
+import com.zhusx.core.utils._Activitys;
 import com.zhusx.show.R;
 import com.zhusx.show.process.P_ProjectClassScanHelper;
 
@@ -81,7 +81,7 @@ public class P_ProjectClassFragment extends Lib_BaseFragment {
                                 } else {
                                     intent = new Intent(getActivity(), _PublicActivity.class);
                                     intent.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_SourceCodeFragment.class);
-                                    intent.putExtra(Lib_BaseActivity._EXTRA_String, __getFilterPackage());
+                                    intent.putExtra(_Activitys._EXTRA_String, __getFilterPackage());
                                     intent.putExtra(_EXTRA_String_ID, "java/" + bean.path.replaceAll("\\.", "/") + ".java");
                                 }
                                 intent.putExtras(b);

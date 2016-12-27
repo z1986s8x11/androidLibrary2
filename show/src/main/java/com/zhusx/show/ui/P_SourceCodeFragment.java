@@ -15,9 +15,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.zhusx.core.app.Lib_BaseActivity;
 import com.zhusx.core.app.Lib_BaseFragment;
 import com.zhusx.core.helper.Lib_Subscribes;
+import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Files;
 import com.zhusx.show.html.P_SourceJavaCode;
 import com.zhusx.show.html.P_SourceLayoutCode;
@@ -71,7 +71,7 @@ public class P_SourceCodeFragment extends Lib_BaseFragment {
     protected void startShowCodeActivity(String filePath) {
         Intent in = new Intent(getActivity(), _PublicActivity.class);
         in.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_SourceCodeFragment.class);
-        in.putExtra(Lib_BaseActivity._EXTRA_String, showPackage);
+        in.putExtra(_Activitys._EXTRA_String, showPackage);
         in.putExtra(_EXTRA_String_ID, filePath);
         getActivity().startActivity(in);
     }

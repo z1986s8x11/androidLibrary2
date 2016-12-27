@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.zhusx.core.adapter.Lib_BaseAdapter;
-import com.zhusx.core.app.Lib_BaseActivity;
+import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Lists;
 import com.zhusx.core.widget.slidingmenu.SlidingMenu;
 import com.zhusx.show.html.P_UncaughtException;
@@ -72,8 +72,8 @@ public class Lib_SourceCodeManager {
                                 public void onClick(View v) {
                                     Intent in = new Intent(v.getContext(), _PublicActivity.class);
                                     in.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_SourceCodeFragment.class);
-                                    in.putExtra(Lib_BaseActivity._EXTRA_String_ID, "java/" + bean.getName().replace(".", "/") + ".java");
-                                    in.putExtra(Lib_BaseActivity._EXTRA_String, highlightPackageName);
+                                    in.putExtra(_Activitys._EXTRA_String_ID, "java/" + bean.getName().replace(".", "/") + ".java");
+                                    in.putExtra(_Activitys._EXTRA_String, highlightPackageName);
                                     activity.startActivity(in);
                                 }
                             });
@@ -116,7 +116,7 @@ public class Lib_SourceCodeManager {
 
     public static class Builder {
         Application application;
-        public String highlightPackageName;
+        String highlightPackageName;
         private boolean uncaughtException;
 
         public Builder(Application application) {

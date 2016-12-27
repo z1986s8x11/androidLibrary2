@@ -12,9 +12,9 @@ import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
 
-import com.zhusx.core.app.Lib_BaseActivity;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.manager.Lib_SystemExitManager;
+import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Files;
 import com.zhusx.core.utils._Systems;
 import com.zhusx.show.ui.P_BugReportFragment;
@@ -139,7 +139,7 @@ public final class P_UncaughtException implements UncaughtExceptionHandler {
             Intent intent = new Intent(mContext, _PublicActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(_PublicActivity._EXTRA_FRAGMENT, P_BugReportFragment.class);
-            intent.putExtra(Lib_BaseActivity._EXTRA_String, log);
+            intent.putExtra(_Activitys._EXTRA_String, log);
             mContext.startActivity(intent);
             return true;
         } catch (Exception e) {
