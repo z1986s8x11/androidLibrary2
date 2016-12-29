@@ -1,11 +1,6 @@
 package com.zhusx.core.manager;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
-
-import com.zhusx.core.debug.LogUtil;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -75,25 +70,5 @@ public class Lib_SystemExitManager {
             System.exit(0);
         }
         System.gc();
-    }
-
-    public static boolean isTopActivity(Context context) {
-        if (context == null) {
-            return false;
-        }
-        boolean isTop = false;
-        try {
-            ActivityManager am = (ActivityManager) context
-                    .getSystemService(Context.ACTIVITY_SERVICE);
-            ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-            if (context.getClass().getName().equals(cn.getClassName())) {
-                isTop = true;
-            }
-        } catch (Exception e) {
-            LogUtil.e(Lib_SystemExitManager.class,
-                    "requires android.permission.GET_TASKS");
-            isTop = false;
-        }
-        return isTop;
     }
 }
