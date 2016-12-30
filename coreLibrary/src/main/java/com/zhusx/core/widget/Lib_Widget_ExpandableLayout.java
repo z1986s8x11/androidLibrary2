@@ -19,9 +19,10 @@ import com.zhusx.core.R;
 
 
 /**
- * Created by SilenceDut on 16/6/6.
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/30 14:32
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class Lib_Widget_ExpandableLayout extends LinearLayout {
     private static final int EXPAND_DURATION = 300;
     private final int PREINIT = -1;
