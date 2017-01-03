@@ -1,1 +1,3 @@
 include ':coreLibrary', ':test', ':others', ':retrofit2'
+def submoduleProject = project(':coreLibrary')
+submoduleProject.name = 'core'
