@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import com.zhusx.core.debug.LogUtil;
-import com.zhusx.core.helper.Lib_UnicodeInputStream;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,16 +44,7 @@ public class _Files {
      InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "UTF-8");
      BufferedReader read = new BufferedReader(isr);
      */
-    /**
-     * 返回清除Bom了的InputStream
-     *
-     * @param in
-     * @return
-     * @throws IOException
-     */
-    public static InputStream clearBom(InputStream in) throws IOException {
-        return new Lib_UnicodeInputStream(in, "utf-8");
-    }
+
 
     /**
      * 是否存在SD卡
