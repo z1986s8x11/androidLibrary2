@@ -16,16 +16,12 @@ import com.zhusx.core.R;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
 
-
 /**
- * <attr name="scrollable" format="boolean" />
- * <attr name="autoScroll" format="boolean" />
- * <attr name="interval" format="integer" />
- * <p/>
  * 可禁止滑动的ViewPager
- *
- * @author zhusx
- */
+* Author        zhusx
+* Email         327270607@qq.com
+* Created       2017/1/4 10:28
+*/
 public class Lib_Widget_ViewPager extends ViewPager {
     private boolean isScrollable = true;//是否可以滑动
     private boolean isAutoScroll;//是否自动滚动

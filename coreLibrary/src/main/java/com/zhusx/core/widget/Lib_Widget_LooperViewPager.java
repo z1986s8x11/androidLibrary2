@@ -16,22 +16,18 @@ import com.zhusx.core.widget.view.Lib_Widget_ViewPager;
 
 /**
  * A ViewPager subclass enabling infinte scrolling of the viewPager elements
- * <p>
  * When used for paginating views (in opposite to fragments), no code changes
- * should be needed only change xml's from <android.support.v4.view.ViewPager>
- * to <com.imbryk.viewPager.LoopViewPager>
- * <p>
+ * should be needed only change xml's from [android.support.v4.view.ViewPager]
+ * to [com.imbryk.viewPager.LoopViewPager]
  * If "blinking" can be seen when paginating to first or last view, simply call
  * seBoundaryCaching( true ), or change DEFAULT_BOUNDARY_CASHING to true
- * <p>
  * When using a FragmentPagerAdapter or FragmentStatePagerAdapter,
  * additional changes in the adapter must be done.
  * The adapter must be prepared to create 2 extra items e.g.:
- * <p>
  * The original adapter creates 4 items: [0,1,2,3]
  * The modified adapter will have to create 6 items [0,1,2,3,4,5]
  * with mapping realPosition=(position-1)%count
- * [0->3, 1->0, 2->1, 3->2, 4->3, 5->0]
+ * [0-3, 1-0, 2-1, 3-2, 4-3, 5-0]
  */
 public class Lib_Widget_LooperViewPager extends Lib_Widget_ViewPager {
 
@@ -44,9 +40,6 @@ public class Lib_Widget_LooperViewPager extends Lib_Widget_ViewPager {
 
     /**
      * helper function which may be used when implementing FragmentPagerAdapter
-     *
-     * @param position
-     * @param count
      * @return (position-1)%count
      */
     public static int toRealPosition(int position, int count) {
@@ -62,8 +55,6 @@ public class Lib_Widget_LooperViewPager extends Lib_Widget_ViewPager {
     /**
      * If set to true, the boundary views (i.e. first and last) will never be destroyed
      * This may help to prevent "blinking" of some views
-     *
-     * @param flag
      */
     public void setBoundaryCaching(boolean flag) {
         mBoundaryCaching = flag;

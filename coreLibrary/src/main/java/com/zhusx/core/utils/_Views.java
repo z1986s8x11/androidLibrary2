@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * @author zsx
- * @date 2013-12-27 上午11:22:32
- * @description
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/1/4 10:13
  */
 public class _Views {
     /**

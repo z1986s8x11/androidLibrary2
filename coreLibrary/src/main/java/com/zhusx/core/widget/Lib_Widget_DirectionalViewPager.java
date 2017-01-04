@@ -24,16 +24,6 @@ import android.widget.Scroller;
 
 import java.util.ArrayList;
 
-/**
- * Layout manager that allows the user to flip horizontally or vertically
- * through pages of data.  You supply an implementation of a
- * {@link PagerAdapter} to generate the pages that the view shows.
- * <p/>
- * <p>Note this class is currently under early design and
- * development.  The API will likely change in later updates of
- * the compatibility library, requiring changes to the source code
- * of apps when they are compiled against the newer version.</p>
- */
 public class Lib_Widget_DirectionalViewPager extends ViewPager {
     private static final String TAG = "DirectionalViewPager";
     private static final String XML_NS = "http://schemas.android.com/apk/res/android";
@@ -86,7 +76,6 @@ public class Lib_Widget_DirectionalViewPager extends ViewPager {
     private int mActivePointerId = INVALID_POINTER;
     /**
      * Sentinel value for no current active pointer.
-     * Used by {@link #mActivePointerId}.
      */
     private static final int INVALID_POINTER = -1;
 
@@ -223,8 +212,6 @@ public class Lib_Widget_DirectionalViewPager extends ViewPager {
     }
 
     /**
-     * Like {@link View#scrollBy}, but scroll smoothly instead of immediately.
-     *
      * @param x the number of pixels to scroll by on the X axis
      * @param y the number of pixels to scroll by on the Y axis
      */

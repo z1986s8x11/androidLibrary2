@@ -78,7 +78,7 @@ public class SlidingMenu extends RelativeLayout {
 	 * The class that is interested in processing a onOpen
 	 * event implements this interface, and the object created
 	 * with that class is registered with a component using the
-	 * component's <code>addOnOpenListener<code> method. When
+	 * component's <code>addOnOpenListener</code> method. When
 	 * the onOpen event occurs, that object's appropriate
 	 * method is invoked
 	 */
@@ -95,7 +95,7 @@ public class SlidingMenu extends RelativeLayout {
 	 * The class that is interested in processing a onOpened
 	 * event implements this interface, and the object created
 	 * with that class is registered with a component using the
-	 * component's <code>addOnOpenedListener<code> method. When
+	 * component's <code>addOnOpenedListener</code> method. When
 	 * the onOpened event occurs, that object's appropriate
 	 * method is invoked.
 	 *
@@ -113,7 +113,7 @@ public class SlidingMenu extends RelativeLayout {
 	 * The class that is interested in processing a onClose
 	 * event implements this interface, and the object created
 	 * with that class is registered with a component using the
-	 * component's <code>addOnCloseListener<code> method. When
+	 * component's <code>addOnCloseListener</code> method. When
 	 * the onClose event occurs, that object's appropriate
 	 * method is invoked.
 	 *
@@ -131,7 +131,7 @@ public class SlidingMenu extends RelativeLayout {
 	 * The class that is interested in processing a onClosed
 	 * event implements this interface, and the object created
 	 * with that class is registered with a component using the
-	 * component's <code>addOnClosedListener<code> method. When
+	 * component's <code>addOnClosedListener</code> method. When
 	 * the onClosed event occurs, that object's appropriate
 	 * method is invoked.
 	 *

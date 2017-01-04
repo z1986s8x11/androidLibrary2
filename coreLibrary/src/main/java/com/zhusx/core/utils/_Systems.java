@@ -1,7 +1,6 @@
 package com.zhusx.core.utils;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -121,8 +120,6 @@ public class _Systems {
     /**
      * 复制字符串
      */
-    @SuppressWarnings("deprecation")
-    @SuppressLint("NewApi")
     public static void copy(Context context, String str) {
         if (Build.VERSION.SDK_INT >= 11) {
             android.content.ClipboardManager cmb1 = (android.content.ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
@@ -136,8 +133,6 @@ public class _Systems {
     /**
      * @return 拿到上一次复制的字符串
      */
-    @SuppressWarnings("deprecation")
-    @SuppressLint("NewApi")
     public static String getLastCopyText(Context context) {
         if (Build.VERSION.SDK_INT >= 11) {
             android.content.ClipboardManager cmb1 = (android.content.ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
@@ -185,9 +180,6 @@ public class _Systems {
 
     /**
      * 返回手机服务商名字
-     *
-     * @param context
-     * @return
      */
     public static String getProvidersName(Context context) {
         String ProvidersName = null;
@@ -210,9 +202,6 @@ public class _Systems {
     }
 
     /**
-     * 与电话卡相关
-     *
-     * @param context
      * @return 手机IMSI号码(国际移动用户识别码)
      */
     public static String getIMSI(Context context) {
@@ -268,9 +257,6 @@ public class _Systems {
 
     /**
      * 返回本地手机号码，这个号码不一定能获取到
-     *
-     * @param context
-     * @return
      */
     public static String getNativePhoneNumber(Context context) {
         TelephonyManager telephonyManager;
@@ -281,12 +267,7 @@ public class _Systems {
     }
 
     /**
-     * 使用Wifi时获取IP 设置用户权限
-     * <p>
-     * <uses-permission
-     * android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-     *
-     * @return
+     * 使用Wifi时获取IP
      */
     public static String getWifiIp(Context context) {
         // 获取wifi服务
@@ -310,12 +291,6 @@ public class _Systems {
 
     /**
      * 打开Wifi 按钮
-     * <p>
-     * <uses-permission
-     * android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-     *
-     * @param context
-     * @return
      */
     public static boolean openWifeConnect(Context context) {
         // 获取wifi服务
@@ -327,14 +302,6 @@ public class _Systems {
         return false;
     }
 
-    /**
-     * 使用GPRS上网，时获取ip地址，设置用户上网权限
-     * <p>
-     * <uses-permission
-     * android:name="android.permission.INTERNET"></uses-permission>
-     *
-     * @return
-     */
     public static String getGPRSIp() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
@@ -362,11 +329,7 @@ public class _Systems {
     private static boolean isAutoScreen;
 
     /**
-     * 设置 当前 屏幕超时休眠时间 需要<uses-permission
-     * android:name=\"android.permission.WRITE_SETTINGS\"/>
-     *
-     * @param context
-     * @param currentScreen
+     * 设置 当前 屏幕超时休眠时间
      */
     public static void setScreenTimeOut(Context context, int currentScreen) {
         try {
@@ -387,10 +350,7 @@ public class _Systems {
     }
 
     /**
-     * 恢复 当前 屏幕超时休眠时间 需要<uses-permission
-     * android:name=\"android.permission.WRITE_SETTINGS\"/>
-     *
-     * @param context
+     * 恢复 当前 屏幕超时休眠时间
      */
     public void restoreScreenTimeOut(Context context) {
         try {
@@ -411,9 +371,6 @@ public class _Systems {
 
     /**
      * 判断是否开启了自动亮度调节
-     *
-     * @param aContentResolver
-     * @return
      */
     public static boolean isAutoBrightness(ContentResolver aContentResolver) {
         boolean automicBrightness = false;
@@ -426,16 +383,14 @@ public class _Systems {
     }
 
     /**
-     * 停止自动亮度调节 需要<uses-permission
-     * android:name=\"android.permission.WRITE_SETTINGS\"/>
+     * 停止自动亮度调节 需要android.permission.WRITE_SETTINGS
      */
     public static void stopAutoBrightness(Context context) {
         Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
     }
 
     /**
-     * 设置自动亮度调节 需要<uses-permission
-     * android:name=\"android.permission.WRITE_SETTINGS\"/>
+     * 设置自动亮度调节 需要 android.permission.WRITE_SETTINGS
      */
     public static void startAutoBrightness(Context context) {
         Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
@@ -476,11 +431,12 @@ public class _Systems {
     private static Camera camera;
 
     /**
-     * 打开闪光灯 需要 <uses-permission android:name="android.permission.CAMERA" />
-     * <uses-permission android:name="android.permission.FLASHLIGHT" />
-     * <uses-feature android:name="android.hardware.camera" /> <uses-feature
-     * android:name="android.hardware.camera.autofocus" /> <uses-feature
-     * android:name="android.hardware.camera.flash" />
+     * 打开闪光灯 需要
+     * android.permission.CAMERA
+     * android.permission.FLASHLIGHT"
+     * android.hardware.camera"
+     * android.hardware.camera.autofocus
+     * android.hardware.camera.flash
      */
     public static void openFlashlight() {
         if (camera == null) {
@@ -596,9 +552,6 @@ public class _Systems {
 
     /**
      * 启动对应包名的应用
-     *
-     * @param context
-     * @param packageName
      */
     public static void startAppByPackageName(Context context, String packageName) {
         PackageInfo pi = null;
@@ -697,9 +650,7 @@ public class _Systems {
     }
 
     /**
-     * 需要android.permission.READ_LOGS
-     * <p>
-     * 拿到过滤过的Log 日志
+     * 需要android.permission.READ_LOGS 拿到过滤过的Log 日志
      */
     public static List<String> getLogCatForLogUtil() {
         List<String> list = new ArrayList<>();

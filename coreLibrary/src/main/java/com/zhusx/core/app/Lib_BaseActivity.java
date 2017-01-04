@@ -26,7 +26,7 @@ import java.util.Set;
  * Email         327270607@qq.com
  * Created       2016/12/22 14:03
  */
-public class Lib_BaseActivityResult extends FragmentActivity implements Lib_LifeCycleListener, Lib_PermissionsResultListener {
+public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleListener, Lib_PermissionsResultListener {
     public static final String _EXTRA_Serializable = _Activitys._EXTRA_Serializable;
     public static final String _EXTRA_String = _Activitys._EXTRA_String;
     public static final String _EXTRA_Strings = _Activitys._EXTRA_Strings;

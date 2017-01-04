@@ -360,9 +360,6 @@ public class _Files {
 
     /**
      * 获取内置存储位置
-     *
-     * @param context
-     * @return
      */
     public static String getBuildInPath(Context context) {
         StorageManager storageManager = (StorageManager) context
@@ -420,7 +417,6 @@ public class _Files {
 
     /**
      * 复制Assets文件到指定file下
-     * <p/>
      * 使用数据库用 SQLiteDatabase.openOrCreateDatabase(new File(context.getFilesDir(), dbName).getPath(), null);
      */
     public static void copyAssetToFile(Context context,
@@ -520,7 +516,6 @@ public class _Files {
     }
 
     /**
-     * @param context
      * @param rootDirName rootPath
      * @param dirName     rootPath 下面的子目录
      */

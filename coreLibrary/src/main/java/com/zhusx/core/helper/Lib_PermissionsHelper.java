@@ -29,7 +29,6 @@ public class Lib_PermissionsHelper {
      * 请求权限
      *
      * @param permissions Manifest.permission.xxxxx
-     * @return
      */
     public void _requestPermissions(String... permissions) {
         if (!_hasPermissions(permissions)) {

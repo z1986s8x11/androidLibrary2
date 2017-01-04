@@ -11,21 +11,10 @@ import com.zhusx.core.utils._Systems;
 import com.zhusx.core.utils._Networks;
 
 /**
- * 是一个检测网络状态改变的，需要配置
- * <code>
- *     <receiver android:name="com.ta.util.netstate.TANetworkStateReceiver" >
- *          <intent-filter>
- *               <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
- *               <action android:name="lib.android.net.conn.CONNECTIVITY_CHANGE" />
- *          </intent-filter>
- *     </receiver>
- *     <p/>
- * 需要开启权限 <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
- *              <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
- *              <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
- *              <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
- * </code>
- *
+ * 需要开启权限 android.permission.CHANGE_NETWORK_STATE
+ *              android.permission.CHANGE_WIFI_STATE
+ *              android.permission.ACCESS_NETWORK_STATE
+ *              android.permission.ACCESS_WIFI_STATE
  * Author        zhusx
  * Email         327270607@qq.com
  * Created       2016/10/12 16:42
@@ -56,8 +45,6 @@ public class Lib_NetworkStateReceiver extends BroadcastReceiver {
 
     /**
      * 注册网络状态广播
-     *
-     * @param mContext
      */
     public void registerNetworkStateReceiver(Context mContext) {
         if (_Systems.isPermission(mContext, Manifest.permission.ACCESS_NETWORK_STATE)) {
@@ -73,8 +60,6 @@ public class Lib_NetworkStateReceiver extends BroadcastReceiver {
 
     /**
      * 注销网络状态广播
-     *
-     * @param mContext
      */
     public void unRegisterNetworkStateReceiver(Context mContext) {
         mContext.getApplicationContext().unregisterReceiver(this);

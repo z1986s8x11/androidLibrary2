@@ -29,9 +29,7 @@ public class _Intents {
     /**
      * 短信分享
      *
-     * @param mContext
      * @param smstext  短信分享内容
-     * @return
      */
     public static void sendSms(Context mContext, String smstext) {
         Uri smsToUri = Uri.parse("smsto:");
@@ -47,7 +45,6 @@ public class _Intents {
      * @param toUser   发送给谁
      * @param title    标题
      * @param text     文本
-     * @return
      */
     public static void sendMail(Context mContext, String[] toUser,
                                 String title, String text) {
@@ -69,7 +66,6 @@ public class _Intents {
     /**
      * 卸载App
      *
-     * @param context
      * @param packageName 报名
      * @throws ActivityNotFoundException 没有找到该应用
      * @throws SecurityException         没有权限

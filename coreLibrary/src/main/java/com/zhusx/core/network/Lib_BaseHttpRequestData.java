@@ -19,11 +19,11 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * @param <Parameter> loadData 参数类型
- * @param <Result>    返回参数
- * @author zsx
- * @date 2014-5-9
- * @description
+ * Parameter loadData 参数类型
+ * Result    返回参数
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/1/4 10:18
  */
 public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
     private HttpWork pWorkThread;
@@ -107,8 +107,6 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
 
     /**
      * 不成功
-     *
-     * @Deprecated
      */
     public void _cancelLoadData() {
         if (pIsDownding) {
@@ -385,9 +383,6 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
 
     /**
      * 构造请求参数
-     *
-     * @param objects
-     * @return
      */
     protected abstract HttpParams getHttpParams(Id id, Parameter... objects);
 
@@ -395,15 +390,12 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
      * @param currentDownloadText Http请求的数据
      * @param lastData            上一次 parseStr()方法返回的数据
      * @return 会在onComplete()中回调出去
-     * @throws Exception
      */
     protected abstract HttpResult<Result> parseStr(Id id, String currentDownloadText,
                                                    HttpResult<Result> lastData) throws Exception;
 
     /**
      * 开始下载
-     *
-     * @param id
      */
     protected void __onStart(Id id, HttpRequest<Parameter> request) {
     }
@@ -411,7 +403,6 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
     /**
      * 请求发生错误
      *
-     * @param id
      * @param isAPIError    <ul>
      *                      <li>true parStr 解析错误</li>
      *                      <li>false 请求超时 网络连接异常等</li>

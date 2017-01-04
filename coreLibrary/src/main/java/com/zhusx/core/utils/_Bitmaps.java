@@ -183,7 +183,6 @@ public class _Bitmaps {
 
     /**
      * 设置高斯模糊
-     * <p/>
      * ps:
      * 设置高斯模糊是依靠scaleFactor和radius配合使用的，比如这里默认设置是：scaleFactor = 8;radius = 2; 模糊效果和scaleFactor = 1;radius = 20;是一样的，而且效率高
      *
