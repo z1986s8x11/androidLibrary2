@@ -291,7 +291,7 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
     /**
      * 是否是ScrollView 嵌套的ListView 或者 GridView
      */
-    public void setExpandListViewOrGridView(boolean isExpandListViewOrGridView) {
+    public void _setExpandListViewOrGridView(boolean isExpandListViewOrGridView) {
         this.isExpandListViewOrGridView = isExpandListViewOrGridView;
     }
 
