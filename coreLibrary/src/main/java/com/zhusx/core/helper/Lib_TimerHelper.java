@@ -1,6 +1,7 @@
 package com.zhusx.core.helper;
 
 import android.os.Handler;
+import android.support.annotation.NonNull;
 
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
@@ -17,11 +18,11 @@ public class Lib_TimerHelper implements Lib_OnCycleListener {
     private boolean isStart;
     private boolean isCanPause;
 
-    public Lib_TimerHelper(Runnable runnable, long delayMillis, Lib_LifeCycleListener listener) {
+    public Lib_TimerHelper(@NonNull Runnable runnable, long delayMillis, @NonNull Lib_LifeCycleListener listener) {
         this(runnable, delayMillis, listener, true);
     }
 
-    public Lib_TimerHelper(Runnable runnable, long delayMillis, Lib_LifeCycleListener listener, boolean isCanPause) {
+    public Lib_TimerHelper(@NonNull Runnable runnable, long delayMillis, @NonNull Lib_LifeCycleListener listener, boolean isCanPause) {
         listener._addOnCycleListener(this);
         this.runnable = runnable;
         this.delayMillis = delayMillis;

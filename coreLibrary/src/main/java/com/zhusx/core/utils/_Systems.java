@@ -215,6 +215,7 @@ public class _Systems {
     }
 
     /**
+     * 需要 android.permission.READ_PHONE_STATE
      * @return 返回手机ICCID号码(国际移动装备辨识码)
      */
     public static String getICCID(Context context) {
@@ -228,6 +229,7 @@ public class _Systems {
     }
 
     /**
+     * 需要 android.permission.READ_PHONE_STATE
      * @return 手机串号
      */
     public static String getIMEI(Context context) {
@@ -237,6 +239,7 @@ public class _Systems {
     }
 
     /**
+     * 需要 android.permission.READ_PHONE_STATE
      * @return 获取设备唯一字符串
      */
     public static String getUUID(Context context) {

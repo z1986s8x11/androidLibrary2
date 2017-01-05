@@ -2,6 +2,7 @@ package com.zhusx.core.helper;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
@@ -22,11 +23,11 @@ public class Lib_Subscribes {
     private static Set<Subscriber> subscribes = new LinkedHashSet<>();
     private static ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public static <T> void subscribe(final Subscriber<T> subscriber) {
+    public static <T> void subscribe(@NonNull final Subscriber<T> subscriber) {
         subscribe(subscriber, null);
     }
 
-    public static <T> void subscribe(final Subscriber<T> subscriber, final Lib_LifeCycleListener lifeCycle) {
+    public static <T> void subscribe(@NonNull final Subscriber<T> subscriber, final Lib_LifeCycleListener lifeCycle) {
         if (subscribes.contains(subscriber)) {
             return;
         }
