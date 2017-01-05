@@ -14,7 +14,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by zhusx on 2015/11/25.
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2015/11/25. 9:32
  */
 public class Lib_Subscribes {
     private static Set<Subscriber> subscribes = new LinkedHashSet<>();
