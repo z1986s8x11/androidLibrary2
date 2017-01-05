@@ -1,7 +1,6 @@
 package com.zhusx.core.app;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -12,11 +11,8 @@ import android.widget.Toast;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnBackKeyListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
-import com.zhusx.core.interfaces.Lib_OnRequestPermissionsResult;
-import com.zhusx.core.interfaces.Lib_PermissionsResultListener;
 import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Lists;
-import com.zhusx.core.utils._Sets;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +22,7 @@ import java.util.Set;
  * Email         327270607@qq.com
  * Created       2016/12/22 14:03
  */
-public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleListener, Lib_PermissionsResultListener {
+public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleListener {
     public static final String _EXTRA_Serializable = _Activitys._EXTRA_Serializable;
     public static final String _EXTRA_String = _Activitys._EXTRA_String;
     public static final String _EXTRA_Strings = _Activitys._EXTRA_Strings;
@@ -49,7 +45,6 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
      * 基于Activity生命周期回调
      */
     private Set<Lib_OnCycleListener> cycleListener = new HashSet<Lib_OnCycleListener>();
-    private Set<Lib_OnRequestPermissionsResult> permissionListener;
     private Lib_OnBackKeyListener onBackKeyListener;
 
     public void _showToast(String message) {
@@ -152,31 +147,5 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
 
     public void _setOnBackKeyListener(Lib_OnBackKeyListener onBackKeyListener) {
         this.onBackKeyListener = onBackKeyListener;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (!_Sets.isEmpty(permissionListener)) {
-            for (Lib_OnRequestPermissionsResult l : permissionListener) {
-                l.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            }
-        }
-    }
-
-    @Override
-    public void _addPermissionsListener(Lib_OnRequestPermissionsResult listener) {
-        if (permissionListener == null) {
-            permissionListener = new HashSet<>();
-        }
-        permissionListener.add(listener);
-    }
-
-    @Override
-    public void _removePermissionsListener(Lib_OnRequestPermissionsResult listener) {
-        if (permissionListener == null) {
-            return;
-        }
-        permissionListener.remove(listener);
     }
 }
