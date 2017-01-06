@@ -11,7 +11,7 @@ import com.zhusx.core.interfaces.Lib_OnCycleListener;
  * Email        327270607@qq.com
  * Created      2017/1/5 9:33
  */
-public class Lib_TimerHelper implements Lib_OnCycleListener {
+public class Lib_TimerHelper implements Lib_OnCycleListener, Runnable {
     private Handler mHandler = new Handler();
     private Runnable runnable;
     private long delayMillis;
@@ -31,7 +31,7 @@ public class Lib_TimerHelper implements Lib_OnCycleListener {
 
     public void start() {
         if (!isStart) {
-            mHandler.postDelayed(runnable, delayMillis);
+            mHandler.postDelayed(this, delayMillis);
             isStart = true;
         }
     }
@@ -40,7 +40,7 @@ public class Lib_TimerHelper implements Lib_OnCycleListener {
     public void onResume() {
         if (isCanPause) {
             if (!isStart) {
-                mHandler.postDelayed(runnable, delayMillis);
+                mHandler.postDelayed(this, delayMillis);
                 isStart = true;
             }
         }
@@ -50,7 +50,7 @@ public class Lib_TimerHelper implements Lib_OnCycleListener {
     public void onPause() {
         if (isCanPause) {
             if (isStart) {
-                mHandler.removeCallbacks(runnable);
+                mHandler.removeCallbacks(this);
                 isStart = false;
             }
         }
@@ -61,6 +61,15 @@ public class Lib_TimerHelper implements Lib_OnCycleListener {
         if (isStart) {
             mHandler.removeCallbacks(runnable);
             isStart = false;
+        }
+    }
+    @Override
+    public void run() {
+        long start = System.currentTimeMillis();
+        runnable.run();
+        long expendTime = System.currentTimeMillis() - start;
+        if (isStart) {
+            mHandler.postDelayed(this, delayMillis - expendTime);
         }
     }
 }
