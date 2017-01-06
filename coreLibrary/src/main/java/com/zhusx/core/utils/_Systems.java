@@ -733,7 +733,7 @@ public class _Systems {
     }
 
     /**
-     * 需要权限 Write_Sms
+     * 需要权限 android.permission.write_sms
      */
     public static void writeSms(Context context, String phone, String body) {
         ContentResolver cr = context.getContentResolver();
