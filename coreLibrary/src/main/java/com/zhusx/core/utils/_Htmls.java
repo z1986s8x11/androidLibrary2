@@ -77,11 +77,6 @@ public class _Htmls {
 
     /**
      * 替换Html所有标签
-     *
-     * @param html
-     * @param html
-     * @param replaceStr
-     * @return
      */
     public static String replaceHtmlTag(String html, String replaceStr) {
         Pattern p = Pattern.compile("<(!|/)?(.|\n)*?>");
@@ -97,11 +92,6 @@ public class _Htmls {
 
     /**
      * 替换Html 标签中的数据
-     *
-     * @param html
-     * @param sourceStr
-     * @param replaceStr
-     * @return
      */
     public static String replaceHtmlTagValue(String html, String sourceStr, String replaceStr) {
         /** 匹配>数据< */
