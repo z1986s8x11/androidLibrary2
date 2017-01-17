@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
 import com.zhusx.core.utils._Activitys;
+import com.zhusx.core.utils._Views;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -117,8 +117,7 @@ public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycle
         if (getActivity() == null) {
             return 720;
         }
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return displayMetrics.widthPixels;
+        return _Views.getWidth(getActivity());
     }
 
     /**
@@ -128,8 +127,7 @@ public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycle
         if (getActivity() == null) {
             return 1280;
         }
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return displayMetrics.heightPixels;
+        return _Views.getHeight(getActivity());
     }
 
     protected final void _removeParentView(View view) {
