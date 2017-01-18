@@ -52,6 +52,13 @@ public class ZsxApplicationManager {
             return this;
         }
 
+        /**
+         * 设置日志开关
+         */
+        public Builder setLogDebug(boolean isDebug) {
+            LogUtil.DEBUG = isDebug;
+            return this;
+        }
 
         public Builder setSafety(boolean safety) {
             this.safety = safety;
