@@ -34,7 +34,7 @@ public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycle
     public static final String _EXTRA_String_ID = _Activitys._EXTRA_String_ID;
     private Toast pToast;
     private boolean pIsFirst = false;
-
+    private boolean isVisibleToUser = false;
     /**
      * 基于Activity生命周期回调
      */
@@ -153,18 +153,24 @@ public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycle
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (isVisibleToUser && !pIsFirst) {
+            pIsFirst = true;
+            __onFragmentFirstVisible();
+        }
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            if (!pIsFirst) {
-                pIsFirst = true;
-                __onFragmentFirstVisible();
-            }
+        this.isVisibleToUser = isVisibleToUser;
+        if (this.isVisibleToUser && !pIsFirst && getView() != null) {
+            pIsFirst = true;
+            __onFragmentFirstVisible();
         }
     }
 
     protected void __onFragmentFirstVisible() {
-
     }
 
     public void finish() {
