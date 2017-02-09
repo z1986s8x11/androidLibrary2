@@ -170,6 +170,13 @@ public abstract class Lib_BaseFragment extends Fragment implements Lib_LifeCycle
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        pIsFirst = false;
+        isVisibleToUser = false;
+    }
+
     protected void __onFragmentFirstVisible() {
     }
 

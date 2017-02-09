@@ -20,7 +20,7 @@ public class Lib_Widget_PushScrollView extends ScrollView {
     private static final int DEFAULT_POSITION = -1;
     private float y = DEFAULT_POSITION;// 点击时y的坐标
     private Rect normal = new Rect();
-
+    protected int pDuration = 500;
     // 滑动距离及坐标
     private float xDistance, yDistance, xLast, yLast;
 
@@ -99,7 +99,7 @@ public class Lib_Widget_PushScrollView extends ScrollView {
         // 开启移动动画
         TranslateAnimation ta = new TranslateAnimation(0, 0, inner.getTop(),
                 normal.top);
-        ta.setDuration(200);
+        ta.setDuration(pDuration);
         inner.startAnimation(ta);
         // 设置回到正常的布局位置
         inner.layout(normal.left, normal.top, normal.right, normal.bottom);
