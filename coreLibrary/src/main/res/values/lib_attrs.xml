@@ -1,32 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="Lib_SlidingMenu">
-        <attr name="lib_mode">
-            <enum name="left" value="0" />
-            <enum name="right" value="1" />
-        </attr>
-        <attr name="lib_viewAbove" format="reference" />
-        <attr name="lib_viewBehind" format="reference" />
-        <attr name="lib_behindOffset" format="dimension" />
-        <attr name="lib_behindWidth" format="dimension" />
-        <attr name="lib_behindScrollScale" format="float" />
-        <attr name="lib_touchModeAbove">
-            <enum name="margin" value="0" />
-            <enum name="fullscreen" value="1" />
-            <enum name="none" value="2" />
-        </attr>
-        <attr name="lib_touchModeBehind">
-            <enum name="margin" value="0" />
-            <enum name="fullscreen" value="1" />
-            <enum name="none" value="2" />
-        </attr>
-        <attr name="lib_shadowDrawable" format="reference" />
-        <attr name="lib_shadowWidth" format="dimension" />
-        <attr name="lib_fadeEnabled" format="boolean" />
-        <attr name="lib_fadeDegree" format="float" />
-        <attr name="lib_selectorEnabled" format="boolean" />
-        <attr name="lib_selectorDrawable" format="reference" />
-    </declare-styleable>
     <!-- ViewPager -->
     <declare-styleable name="Lib_ViewPager">
         <attr name="lib_scrollable" format="boolean" />
@@ -63,7 +36,7 @@
             <enum name="left_right" value="6" />
             <enum name="tl_br" value="7" />
         </attr>
-        <attr name="lib_background2" format="color|reference"/>
+        <attr name="lib_background2" format="color|reference" />
         <attr name="lib_status">
             <enum name="pressed" value="0" />
             <enum name="enabled" value="1" />
@@ -71,39 +44,39 @@
             <enum name="selected" value="3" />
         </attr>
         <!--<attr name="help">-->
-            <!--<enum name="bottomLeftRadius" value="0" />-->
-            <!--<enum name="bottomRightRadius" value="1" />-->
-            <!--<enum name="topLeftRadius" value="2" />-->
-            <!--<enum name="topRightRadius" value="3" />-->
-            <!--<enum name="radius" value="4" />-->
-            <!--<enum name="solidColor" value="5" />-->
-            <!--<enum name="solidColor2" value="6" />-->
-            <!--<enum name="strokeColor" value="7" />-->
-            <!--<enum name="strokeColor2" value="8" />-->
-            <!--<enum name="strokeDashWidth" value="9" />-->
-            <!--<enum name="strokeDashGap" value="10" />-->
-            <!--<enum name="strokeWidth" value="11" />-->
-            <!--<enum name="gradientStartColor" value="12" />-->
-            <!--<enum name="gradientStartColor2" value="13" />-->
-            <!--<enum name="gradientCenterColor" value="14" />-->
-            <!--<enum name="gradientCenterColor2" value="15" />-->
-            <!--<enum name="gradientEndColor" value="16" />-->
-            <!--<enum name="gradientEndColor2" value="17" />-->
-            <!--<attr name="orientation">-->
-            <!--<enum name="top_bottom" value="0" />-->
-            <!--<enum name="tr_bl" value="1" />-->
-            <!--<enum name="right_left" value="2" />-->
-            <!--<enum name="br_tl" value="3" />-->
-            <!--<enum name="bottom_top" value="4" />-->
-            <!--<enum name="bl_tr" value="5" />-->
-            <!--<enum name="left_right" value="6" />-->
-            <!--<enum name="tl_br" value="7" />-->
-            <!--</attr>-->
-            <!--<enum name="status" value="18" />-->
-            <!--<enum name="pressed" value="19" />-->
-            <!--<enum name="enabled" value="20" />-->
-            <!--<enum name="checked" value="21" />-->
-            <!--<enum name="selected" value="22" />-->
+        <!--<enum name="bottomLeftRadius" value="0" />-->
+        <!--<enum name="bottomRightRadius" value="1" />-->
+        <!--<enum name="topLeftRadius" value="2" />-->
+        <!--<enum name="topRightRadius" value="3" />-->
+        <!--<enum name="radius" value="4" />-->
+        <!--<enum name="solidColor" value="5" />-->
+        <!--<enum name="solidColor2" value="6" />-->
+        <!--<enum name="strokeColor" value="7" />-->
+        <!--<enum name="strokeColor2" value="8" />-->
+        <!--<enum name="strokeDashWidth" value="9" />-->
+        <!--<enum name="strokeDashGap" value="10" />-->
+        <!--<enum name="strokeWidth" value="11" />-->
+        <!--<enum name="gradientStartColor" value="12" />-->
+        <!--<enum name="gradientStartColor2" value="13" />-->
+        <!--<enum name="gradientCenterColor" value="14" />-->
+        <!--<enum name="gradientCenterColor2" value="15" />-->
+        <!--<enum name="gradientEndColor" value="16" />-->
+        <!--<enum name="gradientEndColor2" value="17" />-->
+        <!--<attr name="orientation">-->
+        <!--<enum name="top_bottom" value="0" />-->
+        <!--<enum name="tr_bl" value="1" />-->
+        <!--<enum name="right_left" value="2" />-->
+        <!--<enum name="br_tl" value="3" />-->
+        <!--<enum name="bottom_top" value="4" />-->
+        <!--<enum name="bl_tr" value="5" />-->
+        <!--<enum name="left_right" value="6" />-->
+        <!--<enum name="tl_br" value="7" />-->
+        <!--</attr>-->
+        <!--<enum name="status" value="18" />-->
+        <!--<enum name="pressed" value="19" />-->
+        <!--<enum name="enabled" value="20" />-->
+        <!--<enum name="checked" value="21" />-->
+        <!--<enum name="selected" value="22" />-->
         <!--</attr>-->
     </declare-styleable>
     <!--TextView-->
@@ -120,8 +93,8 @@
         <attr name="lib_isExpand" format="boolean" />
     </declare-styleable>
     <declare-styleable name="Lib_ExpandableLayout">
-        <attr name="lib_expDuration" format="integer|reference"/>
-        <attr name="lib_expWithParentScroll" format="boolean"/>
-        <attr name="lib_expExpandScrollTogether" format="boolean"/>
+        <attr name="lib_expDuration" format="integer|reference" />
+        <attr name="lib_expWithParentScroll" format="boolean" />
+        <attr name="lib_expExpandScrollTogether" format="boolean" />
     </declare-styleable>
 </resources>
