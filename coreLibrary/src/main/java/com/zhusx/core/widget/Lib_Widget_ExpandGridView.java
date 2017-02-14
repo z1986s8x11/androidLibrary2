@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.GridView;
+import android.widget.ListAdapter;
 
 import com.zhusx.core.R;
+import com.zhusx.core.adapter.Lib_BaseAdapter;
 
 
 /**
@@ -63,5 +65,13 @@ public class Lib_Widget_ExpandGridView extends GridView {
     public void _setExpand(boolean isExpand) {
         this.isExpand = isExpand;
         invalidate();
+    }
+
+    @Override
+    public void setAdapter(ListAdapter adapter) {
+        super.setAdapter(adapter);
+        if (adapter != null && adapter instanceof Lib_BaseAdapter) {
+            ((Lib_BaseAdapter) adapter)._setExpandListViewOrGridView(true);
+        }
     }
 }
