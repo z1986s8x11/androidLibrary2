@@ -154,6 +154,9 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
             if (errorView != null) {
                 errorView.setVisibility(View.VISIBLE);
             }
+            if (resLayout.getVisibility() == View.VISIBLE) {
+                resLayout.setVisibility(View.GONE);
+            }
         }
         __onError(errorView, request, data, isAPIError, error_message);
     }
@@ -165,7 +168,9 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
                 loadingView.setVisibility(View.GONE);
                 __stopLoadingAnim();
             }
-            resLayout.setVisibility(View.VISIBLE);
+            if (resLayout.getVisibility() != View.VISIBLE) {
+                resLayout.setVisibility(View.VISIBLE);
+            }
         }
         isSuccess = true;
         __onComplete(request, data);
