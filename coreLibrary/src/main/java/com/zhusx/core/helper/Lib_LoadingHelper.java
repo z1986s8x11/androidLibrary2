@@ -78,11 +78,13 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
         if (loadingView != null) {
             helperLayout.removeView(loadingView);
         }
-        if (child.getParent() != null) {
-            ((ViewGroup) child.getParent()).removeView(child);
+        if (child != null) {
+            if (child.getParent() != null) {
+                ((ViewGroup) child.getParent()).removeView(child);
+            }
+            helperLayout.addView(child, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            child.setVisibility(View.GONE);
         }
-        helperLayout.addView(child, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        child.setVisibility(View.GONE);
         loadingView = child;
     }
 
@@ -90,11 +92,13 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
         if (errorView != null) {
             helperLayout.removeView(errorView);
         }
-        if (child.getParent() != null) {
-            ((ViewGroup) child.getParent()).removeView(child);
+        if (child != null) {
+            if (child.getParent() != null) {
+                ((ViewGroup) child.getParent()).removeView(child);
+            }
+            helperLayout.addView(child, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            child.setVisibility(View.GONE);
         }
-        helperLayout.addView(child, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        child.setVisibility(View.GONE);
         errorView = child;
     }
 

@@ -3,9 +3,11 @@ package com.zhusx.core.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.zhusx.core.R;
+import com.zhusx.core.adapter.Lib_BaseAdapter;
 
 /**
  * 由于ListView 嵌套ScrollView 中 高度显示有问题,全部显示的
@@ -62,5 +64,13 @@ public class Lib_Widget_ExpandListView extends ListView {
     public void _setExpand(boolean isExpand) {
         this.isExpand = isExpand;
         invalidate();
+    }
+
+    @Override
+    public void setAdapter(ListAdapter adapter) {
+        super.setAdapter(adapter);
+        if (adapter != null && adapter instanceof Lib_BaseAdapter) {
+            ((Lib_BaseAdapter) adapter)._setExpandListViewOrGridView(true);
+        }
     }
 }
