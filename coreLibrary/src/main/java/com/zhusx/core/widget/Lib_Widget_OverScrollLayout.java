@@ -175,13 +175,16 @@ public class Lib_Widget_OverScrollLayout extends RelativeLayout {
     }
 
     private void checkCanOverScrollDirection() {
-        if (checkListener != null) {
-            int mOrientation = checkListener.getContentViewScrollDirection();
-            canOverScrollHorizontally = RecyclerView.HORIZONTAL == mOrientation;
-            canOverScrollVertical = RecyclerView.VERTICAL == mOrientation;
-        } else if (child instanceof AbsListView || child instanceof ScrollView || child instanceof WebView) {
+        if (child instanceof AbsListView || child instanceof ScrollView || child instanceof WebView) {
             canOverScrollHorizontally = false;
             canOverScrollVertical = true;
+        } else if (child instanceof HorizontalScrollView) {
+            canOverScrollHorizontally = true;
+            canOverScrollVertical = false;
+        } else if (child instanceof ViewPager) {
+            //forbid ViewPager  over scroll
+            canOverScrollHorizontally = false;
+            canOverScrollVertical = false;
         } else if (child instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) child;
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -194,13 +197,6 @@ public class Lib_Widget_OverScrollLayout extends RelativeLayout {
             }
             canOverScrollHorizontally = RecyclerView.HORIZONTAL == mOrientation;
             canOverScrollVertical = RecyclerView.VERTICAL == mOrientation;
-        } else if (child instanceof HorizontalScrollView) {
-            canOverScrollHorizontally = true;
-            canOverScrollVertical = false;
-        } else if (child instanceof ViewPager) {
-            //forbid ViewPager  over scroll
-            canOverScrollHorizontally = false;
-            canOverScrollVertical = false;
         } else {
             canOverScrollHorizontally = false;
             canOverScrollVertical = true;
@@ -463,13 +459,6 @@ public class Lib_Widget_OverScrollLayout extends RelativeLayout {
 
     public interface OverScrollCheckListener {
         /**
-         * return int ,if the direction is {@link Lib_Widget_OverScrollLayout} OverScrollLayout.SCROLL_VERTICAL means the contentView can scroll vertical.
-         * if  the direction is {@link Lib_Widget_OverScrollLayout} OverScrollLayout.SCROLL_HORIZONTAL means the contentView can scroll horizontal.
-         * if other value overScrollLayout will never can over scroll.
-         */
-        int getContentViewScrollDirection();
-
-        /**
          * @param dealtX      the down point to a current point horizontal change,if dealtX is positive drag to left else negative right.
          * @param dealtY      the down point to a current point vertical change,if dealtY is positive drag to top else negative bottom.
          * @param contentView the direct child of OverScrollLayout
@@ -485,6 +474,7 @@ public class Lib_Widget_OverScrollLayout extends RelativeLayout {
 
         boolean canScrollRight();
     }
+
     public interface OnOverScrollListener {
 
         void onTopOverScroll();
