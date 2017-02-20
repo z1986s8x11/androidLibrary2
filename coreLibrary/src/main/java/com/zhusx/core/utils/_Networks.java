@@ -8,9 +8,6 @@ import android.net.NetworkInfo;
 public class _Networks {
     /**
      * 判断MOBILE网络是否可用
-     *
-     * @param context
-     * @return
      */
     public static boolean isMobileConnected(Context context) {
         if (context != null) {
@@ -25,9 +22,6 @@ public class _Networks {
 
     /**
      * 判断Wifi网络是否可用
-     *
-     * @param context
-     * @return boolean
      */
     public static boolean isWifiConnected(Context context) {
         if (context != null) {
@@ -42,8 +36,6 @@ public class _Networks {
 
     /**
      * 获取当前网络连接的类型信息
-     *
-     * @param context
      * @return 无网络连接返回-1
      */
     public static int getConnectedType(Context context) {
@@ -59,9 +51,6 @@ public class _Networks {
 
     /**
      * 判断NetWork网络是否可用
-     *
-     * @param context
-     * @return boolean
      */
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
@@ -84,9 +73,6 @@ public class _Networks {
 
     /**
      * 获取当前的网络状态 -1：没有网络 1：WIFI网络2：wap 网络3：net网络
-     *
-     * @param context
-     * @return
      */
     @SuppressLint("DefaultLocale")
     public static NetType getAPNType(Context context) {
