@@ -9,7 +9,8 @@ import android.os.Bundle;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
-import com.zhusx.core.network.Lib_NetworkStateReceiver;
+import com.zhusx.core.network.P_NetworkStateReceiver;
+import com.zhusx.core.utils._Networks;
 import com.zhusx.core.utils._Sets;
 
 import java.util.Set;
@@ -21,6 +22,7 @@ import java.util.Set;
  * Created       2016/10/13 9:54
  */
 public class ZsxApplicationManager {
+    public static _Networks.NetType _Current_NetWork_Status = _Networks.NetType.Default;
     private ZsxApplicationManager() {
     }
 
@@ -33,7 +35,7 @@ public class ZsxApplicationManager {
         private boolean monitorNet;
         private boolean safety;
         private Application.ActivityLifecycleCallbacks activityCallbacks;
-        private Lib_NetworkStateReceiver receiver;
+        private P_NetworkStateReceiver receiver;
 
         private Builder(Application app) {
             this.context = app;
@@ -68,7 +70,7 @@ public class ZsxApplicationManager {
         private void init() {
             /*监听网络变化*/
             if (monitorNet) {
-                receiver = new Lib_NetworkStateReceiver();
+                receiver = new P_NetworkStateReceiver();
                 receiver.registerNetworkStateReceiver(context);
             }
             if (safety) {

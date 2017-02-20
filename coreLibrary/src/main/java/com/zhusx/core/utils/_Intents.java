@@ -25,7 +25,7 @@ import java.io.File;
  * Email         327270607@qq.com
  * Created       2016/10/13 9:32
  */
-public class _Intents {
+public class  _Intents {
     /**
      * 短信分享
      *

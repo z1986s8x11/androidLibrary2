@@ -1,4 +1,4 @@
-package com.zhusx.core.utils;
+package com.zhusx.others;
 
 import com.zhusx.core.debug.LogUtil;
 

@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.IPageData;
+import com.zhusx.core.manager.ZsxApplicationManager;
 import com.zhusx.core.utils._HttpURLRequests;
 import com.zhusx.core.utils._Networks;
 
@@ -130,7 +131,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         }
         pLastRequestData.lastObjectsParams = objects;
         pLastRequestData.isRefresh = isRefresh;
-        if (Lib_NetworkStateReceiver._Current_NetWork_Status == _Networks.NetType.NoneNet) {
+        if (ZsxApplicationManager._Current_NetWork_Status == _Networks.NetType.NoneNet) {
             if (LogUtil.DEBUG) {
                 LogUtil.e(this, "网络异常,请检查网络设置!" + pId);
             }
