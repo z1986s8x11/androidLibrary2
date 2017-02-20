@@ -69,7 +69,7 @@ import java.util.UUID;
  */
 public class _HttpURLRequests {
     public static int CONNECTION_TIMEOUT_INT = 10000;
-    public static int READ_TIMEOUT_INT = 5000;
+    public static int READ_TIMEOUT_INT = 10000;
 
     public static String post(String requestUrl, Map<String, Object> map) throws IOException, HttpException {
         return httpRequest(HttpParams.POST, requestUrl, map, null, false);
