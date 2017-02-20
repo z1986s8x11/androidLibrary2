@@ -140,6 +140,10 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         }
         HttpParams pParams = getHttpParams(pId, objects);
         onRequestStart(pListeners, pLastRequestData);
+        executeWork(pParams);
+    }
+
+    protected void executeWork(HttpParams pParams) {
         pWorkThread = new HttpWork(pParams, pListeners);
         pWorkThread.start();
     }
@@ -351,7 +355,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
     protected void __onLoadProgress(Id id, String url, int progress, int currentSize, int totalSize) {
     }
 
-    private void onRequestStart(Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners, HttpRequest<Parameter> request) {
+    protected final void onRequestStart(Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners, HttpRequest<Parameter> request) {
         pIsDownding = true;
         __onStart(pId, request);
         for (OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener : listeners) {
@@ -361,7 +365,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         }
     }
 
-    private final void onRequestError(HttpResult<Result> result, boolean isApiError, String error_message, Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
+    protected final void onRequestError(HttpResult<Result> result, boolean isApiError, String error_message, Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
         pIsDownding = false;
         __onError(pId, pLastRequestData, result, isApiError, error_message);
         for (OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener : listeners) {
@@ -371,7 +375,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         }
     }
 
-    private final void onRequestComplete(HttpResult<Result> bean, Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
+    protected final void onRequestComplete(HttpResult<Result> bean, Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
         pIsDownding = false;
         __onComplete(pId, pLastRequestData, bean);
         for (OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener : listeners) {
