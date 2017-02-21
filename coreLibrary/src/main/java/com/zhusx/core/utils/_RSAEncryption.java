@@ -18,7 +18,10 @@ import java.util.Map;
 import javax.crypto.Cipher;
 
 /**
- * rsa 加解密
+ * 加解密
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/2/21 10:36
  */
 public class _RSAEncryption {
     /**

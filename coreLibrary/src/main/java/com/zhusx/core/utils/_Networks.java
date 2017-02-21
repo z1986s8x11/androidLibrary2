@@ -5,6 +5,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/2/21 10:36
+ */
 public class _Networks {
     /**
      * 判断MOBILE网络是否可用
@@ -36,6 +41,7 @@ public class _Networks {
 
     /**
      * 获取当前网络连接的类型信息
+     *
      * @return 无网络连接返回-1
      */
     public static int getConnectedType(Context context) {

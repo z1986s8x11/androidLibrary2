@@ -7,6 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/2/21 10:35
+ */
 public class _Dates {
     /**
      * 字符串转化成日期  y 年 M 月 d 日 H 小时 m 分钟

@@ -2,6 +2,7 @@ package com.zhusx.core.network;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.IPageData;
@@ -397,7 +398,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
      * @return 会在onComplete()中回调出去
      */
     protected abstract HttpResult<Result> parseStr(Id id, String currentDownloadText,
-                                                   HttpResult<Result> lastData) throws Exception;
+                                                   @Nullable HttpResult<Result> lastData) throws Exception;
 
     /**
      * 开始下载

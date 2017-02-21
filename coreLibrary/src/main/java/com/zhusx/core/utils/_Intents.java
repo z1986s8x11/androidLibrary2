@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.IntentCompat;
 import android.text.TextUtils;
@@ -25,11 +26,11 @@ import java.io.File;
  * Email         327270607@qq.com
  * Created       2016/10/13 9:32
  */
-public class  _Intents {
+public class _Intents {
     /**
      * 短信分享
      *
-     * @param smstext  短信分享内容
+     * @param smstext 短信分享内容
      */
     public static void sendSms(Context mContext, String smstext) {
         Uri smsToUri = Uri.parse("smsto:");
@@ -209,6 +210,7 @@ public class  _Intents {
     /**
      * 拨打电话
      */
+    @RequiresPermission(Manifest.permission.CALL_PHONE)
     public static void callPhone(Context activity, String phone) {
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

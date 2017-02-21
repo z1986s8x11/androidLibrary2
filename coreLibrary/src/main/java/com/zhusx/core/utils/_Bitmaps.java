@@ -28,6 +28,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/2/21 10:36
+ */
 public class _Bitmaps {
     /**
      * 转化为Bitmap

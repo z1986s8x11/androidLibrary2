@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Looper;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -216,6 +217,7 @@ public class _Systems {
 
     /**
      * 需要 android.permission.READ_PHONE_STATE
+     *
      * @return 返回手机ICCID号码(国际移动装备辨识码)
      */
     public static String getICCID(Context context) {
@@ -229,9 +231,9 @@ public class _Systems {
     }
 
     /**
-     * 需要 android.permission.READ_PHONE_STATE
      * @return 手机串号
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getIMEI(Context context) {
         TelephonyManager telephonyManager;
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -239,9 +241,9 @@ public class _Systems {
     }
 
     /**
-     * 需要 android.permission.READ_PHONE_STATE
      * @return 获取设备唯一字符串
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getUUID(Context context) {
         String uuid = getIMEI(context);
         if (TextUtils.isEmpty(uuid) || "0".equals(uuid)) {
@@ -272,6 +274,7 @@ public class _Systems {
     /**
      * 使用Wifi时获取IP
      */
+    @RequiresPermission(Manifest.permission.ACCESS_WIFI_STATE)
     public static String getWifiIp(Context context) {
         // 获取wifi服务
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -334,6 +337,7 @@ public class _Systems {
     /**
      * 设置 当前 屏幕超时休眠时间
      */
+    @RequiresPermission(Manifest.permission.WRITE_SETTINGS)
     public static void setScreenTimeOut(Context context, int currentScreen) {
         try {
             if (currentScreenTimeout == -2) {
@@ -355,6 +359,7 @@ public class _Systems {
     /**
      * 恢复 当前 屏幕超时休眠时间
      */
+    @RequiresPermission(Manifest.permission.WRITE_SETTINGS)
     public void restoreScreenTimeOut(Context context) {
         try {
             if (currentScreenTimeout != -2) {
@@ -388,6 +393,7 @@ public class _Systems {
     /**
      * 停止自动亮度调节 需要android.permission.WRITE_SETTINGS
      */
+    @RequiresPermission(Manifest.permission.WRITE_SETTINGS)
     public static void stopAutoBrightness(Context context) {
         Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
     }
@@ -395,6 +401,7 @@ public class _Systems {
     /**
      * 设置自动亮度调节 需要 android.permission.WRITE_SETTINGS
      */
+    @RequiresPermission(Manifest.permission.WRITE_SETTINGS)
     public static void startAutoBrightness(Context context) {
         Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
     }
@@ -441,6 +448,7 @@ public class _Systems {
      * android.hardware.camera.autofocus
      * android.hardware.camera.flash
      */
+    @RequiresPermission(Manifest.permission.CAMERA)
     public static void openFlashlight() {
         if (camera == null) {
             camera = Camera.open();
@@ -655,6 +663,7 @@ public class _Systems {
     /**
      * 需要android.permission.READ_LOGS 拿到过滤过的Log 日志
      */
+    @RequiresPermission(Manifest.permission.READ_LOGS)
     public static List<String> getLogCatForLogUtil() {
         List<String> list = new ArrayList<>();
         list.add("--------LogCat start--------"); // 方法启动

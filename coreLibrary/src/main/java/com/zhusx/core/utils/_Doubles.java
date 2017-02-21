@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
- * Created by Administrator on 2015/12/8.
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/2/21 10:35
  */
 public class _Doubles {
 

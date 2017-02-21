@@ -12,7 +12,8 @@ import com.zhusx.core.utils._Networks;
 import com.zhusx.core.utils._Systems;
 
 /**
- * 需要开启权限 android.permission.CHANGE_NETWORK_STATE
+ * 需要开启权限
+ * android.permission.CHANGE_NETWORK_STATE
  * android.permission.CHANGE_WIFI_STATE
  * android.permission.ACCESS_NETWORK_STATE
  * android.permission.ACCESS_WIFI_STATE
