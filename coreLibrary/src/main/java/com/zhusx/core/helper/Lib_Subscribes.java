@@ -2,7 +2,9 @@ package com.zhusx.core.helper;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
@@ -53,11 +55,14 @@ public class Lib_Subscribes {
     }
 
     public static abstract class Subscriber<T> {
+        @MainThread
         public void onComplete(T t) {
         }
 
+        @WorkerThread
         public abstract T doInBackground();
 
+        @MainThread
         public void onError(Throwable t) {
         }
     }

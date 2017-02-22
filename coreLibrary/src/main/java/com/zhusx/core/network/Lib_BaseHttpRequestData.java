@@ -201,10 +201,10 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
             try {
                 returnStr = __requestProtocol(pId, mParams);
             } catch (HttpException e) {
-                if (e._getErrorCode() > HttpURLConnection.HTTP_OK) {
-                    error_code = e._getErrorCode();
+                error_code = e._getErrorCode();
+                if (error_code > HttpURLConnection.HTTP_OK) {
                     try {
-                        error_message = __parseReadHttpCodeError(pId, e._getErrorMessage());
+                        error_message = __parseReadHttpCodeError(pId, error_code, e._getErrorMessage());
                     } catch (Exception ee) {
                         error_message = e._getErrorMessage();
                     }
@@ -426,8 +426,9 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
 
     /**
      * 解析HttpCode !=200 的错误信息
+     * httpCode  >200  且 不等于HttpException.ERROR_CODE_CANCEL 为http错误码
      */
-    protected String __parseReadHttpCodeError(Id id, String errorMessage) throws Exception {
+    protected String __parseReadHttpCodeError(Id id, int httpCode, String errorMessage) throws Exception {
         return errorMessage;
     }
 
