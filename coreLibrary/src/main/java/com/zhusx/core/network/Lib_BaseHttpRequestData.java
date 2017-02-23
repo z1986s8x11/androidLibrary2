@@ -425,8 +425,8 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
     }
 
     /**
-     * 解析HttpCode !=200 的错误信息
-     * httpCode  >200  且 不等于HttpException.ERROR_CODE_CANCEL 为http错误码
+     * 解析HttpCode 不等于 200 的错误信息
+     * httpCode  大于 200  且 不等于HttpException.ERROR_CODE_CANCEL 为http错误码
      */
     protected String __parseReadHttpCodeError(Id id, int httpCode, String errorMessage) throws Exception {
         return errorMessage;
