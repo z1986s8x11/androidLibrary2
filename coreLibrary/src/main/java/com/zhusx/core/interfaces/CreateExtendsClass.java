@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 public @interface CreateExtendsClass {
     String packageName();
 
-    String ClassName();
+    String className();
 }
