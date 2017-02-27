@@ -23,6 +23,7 @@ public class _Activitys {
     public static final String _EXTRA_Boolean = "extra_boolean";
     public static final String _EXTRA_Double = "extra_double";
     public static final String _EXTRA_String_ID = "extra_id";
+    public static final String _EXTRA_Parcelable = "extra_parcelable";
 
     /**
      * 关闭程序

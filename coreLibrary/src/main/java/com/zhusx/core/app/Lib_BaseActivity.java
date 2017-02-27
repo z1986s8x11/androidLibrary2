@@ -31,7 +31,7 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
     public static final String _EXTRA_Boolean = _Activitys._EXTRA_Boolean;
     public static final String _EXTRA_Double = _Activitys._EXTRA_Double;
     public static final String _EXTRA_String_ID = _Activitys._EXTRA_String_ID;
-
+    public static final String _EXTRA_Parcelable = _Activitys._EXTRA_Parcelable;
     /**
      * 一个Activity 只创建一个Toast
      */
