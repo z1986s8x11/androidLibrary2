@@ -125,7 +125,7 @@ public class _HttpURLRequests {
         }
         try {
             if (LogUtil.DEBUG) {
-                LogUtil.e("requestData params:", String.valueOf(requestUrl) + "[" + String.valueOf(param) + "][" + (requestPropertys == null ? "" : requestPropertys.toString()) + "]");
+                LogUtil.e("[request]", String.valueOf(requestUrl) + "[" + String.valueOf(param) + "][" + (requestPropertys == null ? "" : requestPropertys.toString()) + "]");
             }
             URL url = new URL(requestUrl);
             urlConn = (HttpURLConnection) url.openConnection();
@@ -192,11 +192,11 @@ public class _HttpURLRequests {
                 }
                 result = sb.toString();
                 if (LogUtil.DEBUG) {
-                    LogUtil.e("requestData result:", String.valueOf(result));
+                    LogUtil.e("[result]", String.valueOf(result));
                 }
             } else {
                 if (LogUtil.DEBUG) {
-                    LogUtil.e("requestData result:", "HTTP CODE:" + urlConn.getResponseCode());
+                    LogUtil.e("[result]", "HTTP CODE:" + urlConn.getResponseCode());
                 }
                 result = "HTTP CODE:" + urlConn.getResponseCode();
                 if (isReadHttpCodeError) {
@@ -212,7 +212,7 @@ public class _HttpURLRequests {
                         }
                         result = sb.toString();
                         if (LogUtil.DEBUG) {
-                            LogUtil.e("requestData result:", String.valueOf(result));
+                            LogUtil.e("[result]", String.valueOf(result));
                         }
                     } else {
                         if (in != null) {
