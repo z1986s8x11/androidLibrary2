@@ -233,7 +233,6 @@ public class _Systems {
     /**
      * @return 手机串号
      */
-    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getIMEI(Context context) {
         TelephonyManager telephonyManager;
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -243,7 +242,6 @@ public class _Systems {
     /**
      * @return 获取设备唯一字符串
      */
-    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getUUID(Context context) {
         String uuid = getIMEI(context);
         if (TextUtils.isEmpty(uuid) || "0".equals(uuid)) {

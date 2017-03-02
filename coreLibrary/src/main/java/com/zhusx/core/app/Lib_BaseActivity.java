@@ -1,6 +1,9 @@
+
 package com.zhusx.core.app;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -13,6 +16,7 @@ import com.zhusx.core.interfaces.Lib_OnBackKeyListener;
 import com.zhusx.core.interfaces.Lib_OnCycleListener;
 import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Lists;
+import com.zhusx.core.utils._Permissions;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +26,7 @@ import java.util.Set;
  * Email         327270607@qq.com
  * Created       2016/12/22 14:03
  */
-public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleListener {
+public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleListener, _Permissions.OnPermissionResultListener {
     public static final String _EXTRA_Serializable = _Activitys._EXTRA_Serializable;
     public static final String _EXTRA_String = _Activitys._EXTRA_String;
     public static final String _EXTRA_Strings = _Activitys._EXTRA_Strings;
@@ -46,6 +50,7 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
      */
     private Set<Lib_OnCycleListener> cycleListener = new HashSet<Lib_OnCycleListener>();
     private Lib_OnBackKeyListener onBackKeyListener;
+    private HashSet<ActivityCompat.OnRequestPermissionsResultCallback> pPermissions;
 
     public void _showToast(String message) {
         if (TextUtils.isEmpty(message)) {
@@ -147,5 +152,30 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
 
     public void _setOnBackKeyListener(Lib_OnBackKeyListener onBackKeyListener) {
         this.onBackKeyListener = onBackKeyListener;
+    }
+
+    @Override
+    public void registerPermissionResult(ActivityCompat.OnRequestPermissionsResultCallback listener) {
+        if (pPermissions == null) {
+            pPermissions = new HashSet<>();
+        }
+        pPermissions.add(listener);
+    }
+
+    @Override
+    public void unregisterPermissionResult(ActivityCompat.OnRequestPermissionsResultCallback listener) {
+        if (pPermissions != null) {
+            pPermissions.remove(listener);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (pPermissions != null) {
+            for (ActivityCompat.OnRequestPermissionsResultCallback p : pPermissions) {
+                p.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }
     }
 }
