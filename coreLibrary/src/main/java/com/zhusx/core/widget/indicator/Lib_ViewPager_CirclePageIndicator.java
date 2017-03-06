@@ -74,8 +74,8 @@ public class Lib_ViewPager_CirclePageIndicator extends View implements PageIndic
         int defaultFillColor = res.getColor(R.color.lib_white);
         int defaultOrientation = LinearLayout.HORIZONTAL;
         int defaultStrokeColor = Color.parseColor("#FFDDDDDD");
-        float defaultStrokeWidth = _Densitys.dip2px(context, 2);
-        float defaultRadius = _Densitys.dip2px(context, 3);
+        float defaultStrokeWidth = 1f;
+        float defaultRadius = _Densitys.dip2px(context, 2);
         boolean defaultCentered = true;
         boolean defaultSnap = false;
 
