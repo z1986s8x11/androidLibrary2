@@ -2,10 +2,14 @@ package com.zhusx.core.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.Selection;
+import android.text.Spannable;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -93,5 +97,26 @@ public class _EditTexts {
                 setSelection(mEditText);
             }
         }, time);
+    }
+
+    /**
+     * 插入图片
+     */
+    public void appendBitmap(EditText mEditText, String tag, int res) {
+        Spannable spannable = Spannable.Factory.getInstance().newSpannable(tag);
+        Drawable drawable = mEditText.getResources().getDrawable(res);
+        Paint.FontMetrics FontMetrics = mEditText.getPaint().getFontMetrics();
+        int fontHeight = (int) Math.abs(FontMetrics.ascent - FontMetrics.descent);
+        drawable.setBounds(0, 0, fontHeight, fontHeight);//这里设置图片的大小
+        ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
+        spannable.setSpan(imageSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        spannable.setSpan(new ClickableSpan() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(v.getContext(), "被点击", Toast.LENGTH_SHORT).show();
+//            }
+//        }, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        mEditText.setMovementMethod(LinkMovementMethod.getInstance());
+        mEditText.getText().insert(mEditText.getSelectionStart(), spannable);
     }
 }
