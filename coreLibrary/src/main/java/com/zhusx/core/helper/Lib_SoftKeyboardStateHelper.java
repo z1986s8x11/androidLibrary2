@@ -18,8 +18,7 @@ import java.util.List;
  * Email         327270607@qq.com
  * Created       2016/10/13 9:22
  */
-public class Lib_SoftKeyboardStateHelper implements
-        ViewTreeObserver.OnGlobalLayoutListener {
+public class Lib_SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutListener {
 
     public interface SoftKeyboardStateListener {
         void onSoftKeyboardOpened(int keyboardHeightInPx);
@@ -44,14 +43,10 @@ public class Lib_SoftKeyboardStateHelper implements
     @Override
     public void onGlobalLayout() {
         final Rect r = new Rect();
-        // r will be populated with the coordinates of your view that area still
-        // visible.
         activityRootView.getWindowVisibleDisplayFrame(r);
         final int heightDiff = activityRootView.getRootView().getHeight()
                 - (r.bottom - r.top);
-        if (!isSoftKeyboardOpened && heightDiff > 100) { // if more than 100
-            // pixels, its probably
-            // a keyboard...
+        if (!isSoftKeyboardOpened && heightDiff > 100) {
             isSoftKeyboardOpened = true;
             notifyOnSoftKeyboardOpened(heightDiff);
         } else if (isSoftKeyboardOpened && heightDiff < 100) {

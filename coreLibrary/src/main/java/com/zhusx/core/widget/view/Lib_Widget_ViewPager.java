@@ -11,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.zhusx.core.R;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
@@ -18,10 +19,10 @@ import com.zhusx.core.interfaces.Lib_OnCycleListener;
 
 /**
  * 可禁止滑动的ViewPager
-* Author        zhusx
-* Email         327270607@qq.com
-* Created       2017/1/4 10:28
-*/
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2017/1/4 10:28
+ */
 public class Lib_Widget_ViewPager extends ViewPager {
     private boolean isScrollable = true;//是否可以滑动
     private boolean isAutoScroll;//是否自动滚动
@@ -207,5 +208,42 @@ public class Lib_Widget_ViewPager extends ViewPager {
             }
         }
         super.dispatchDraw(canvas);
+    }
+
+    public static class _ZoomOutPageTransformer implements ViewPager.PageTransformer {
+        private static final float MIN_SCALE = 0.9f;
+        private static final float MIN_ALPHA = 0.5f;
+        private float defaultScale = 0.9f;
+
+        public void transformPage(View view, float position) {
+            int pageWidth = view.getWidth();
+            int pageHeight = view.getHeight();
+            if (position < -1) { // [-Infinity,-1)
+                // This page is way off-screen to the left.
+                view.setAlpha(0);
+                view.setScaleX(defaultScale);
+                view.setScaleY(defaultScale);
+            } else if (position <= 1) { // [-1,1]
+                // Modify the default slide transition to shrink the page as well
+                float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+                float vertMargin = pageHeight * (1 - scaleFactor) / 2;
+                float horzMargin = pageWidth * (1 - scaleFactor) / 2;
+                if (position < 0) {
+                    view.setTranslationX(horzMargin - vertMargin / 2);
+                } else {
+                    view.setTranslationX(-horzMargin + vertMargin / 2);
+                }
+                // Scale the page down (between MIN_SCALE and 1)
+                view.setScaleX(scaleFactor);
+                view.setScaleY(scaleFactor);
+                // Fade the page relative to its size.
+                view.setAlpha(MIN_ALPHA + (scaleFactor - MIN_SCALE) / (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+            } else { // (1,+Infinity]
+                // This page is way off-screen to the right.
+                view.setAlpha(0);
+                view.setScaleX(defaultScale);
+                view.setScaleY(defaultScale);
+            }
+        }
     }
 }
