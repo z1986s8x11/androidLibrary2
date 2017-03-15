@@ -141,7 +141,7 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (onBackKeyListener != null) {
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
                 if (onBackKeyListener.onBackKey()) {
                     return true;
                 }
