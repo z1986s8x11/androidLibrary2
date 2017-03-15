@@ -168,7 +168,7 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
      */
     @Override
     public void _addItemToUpdate(List<T> bean) {
-        if (bean.size() > 0) {
+        if (!_Lists.isEmpty(bean)) {
             p_list.addAll(bean);
             notifyDataSetChanged();
         }
