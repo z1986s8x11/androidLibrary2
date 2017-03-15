@@ -50,6 +50,11 @@ public class Lib_WebViewHelper {
         view.loadDataWithBaseURL(null, sb.toString(), "text/html", "UTF-8", null);
     }
 
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        view.loadUrl(url);
+        return true;
+    }
+
     boolean isFinish = true;
 
     @JavascriptInterface
@@ -70,6 +75,5 @@ public class Lib_WebViewHelper {
                 }, 500);
             }
         });
-
     }
 }
