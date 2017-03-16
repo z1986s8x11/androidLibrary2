@@ -9,8 +9,9 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.AbsListView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.zhusx.core.debug.LogUtil;
 
 /**
  * Author        zhusx
@@ -66,25 +67,22 @@ public class _Views {
     }
 
     /**
-     * 插一个父View
-     *
-     * @return 父View
+     * 在resView 和 父View 之间插入一个ViewGroup
      */
-    public static LinearLayout insertParentLayout(View resLayout) {
-        ViewParent parent = resLayout.getParent();
-        if (parent != null) {
-            ViewGroup.LayoutParams lp = resLayout.getLayoutParams();
-            LinearLayout parentLayout = new LinearLayout(resLayout.getContext());
-            parentLayout.setOrientation(LinearLayout.VERTICAL);
-            parentLayout.setLayoutParams(lp);
+    public static void insertView(ViewGroup resView, ViewGroup insertView) {
+        ViewParent parent = resView.getParent();
+        if (parent != null && parent instanceof ViewGroup) {
+            ViewGroup.LayoutParams lp = resView.getLayoutParams();
             ViewGroup group = (ViewGroup) parent;
-            int index = group.indexOfChild(resLayout);
-            group.removeView(resLayout);
-            group.addView(parentLayout, index, lp);
-            parentLayout.addView(resLayout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-            return parentLayout;
+            int index = group.indexOfChild(resView);
+            group.removeView(resView);
+            group.addView(insertView, index, lp);
+            insertView.addView(resView, lp);
+        } else {
+            if (LogUtil.DEBUG) {
+                LogUtil.e(_Views.class, "parent == null or parent is not ViewGroup");
+            }
         }
-        return null;
     }
 
     /**
