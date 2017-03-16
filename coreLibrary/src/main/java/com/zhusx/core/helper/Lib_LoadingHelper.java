@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.zhusx.core.network.HttpRequest;
 import com.zhusx.core.network.HttpResult;
 import com.zhusx.core.network.OnHttpLoadingListener;
+import com.zhusx.core.utils._Views;
 
 
 /**
@@ -200,6 +201,14 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
                     targetListView.setEmptyView(emptyView);
                 }
             }
+        }
+    }
+
+    protected void inserResLayout(ViewGroup v) {
+        if (_Views.insertView(resLayout, v)) {
+            resLayout.setVisibility(View.VISIBLE);
+            resLayout = v;
+            resLayout.setVisibility(View.GONE);
         }
     }
 }
