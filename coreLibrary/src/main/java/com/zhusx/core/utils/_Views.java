@@ -11,6 +11,8 @@ import android.view.ViewParent;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
+import com.zhusx.core.debug.LogUtil;
+
 /**
  * Author        zhusx
  * Email         327270607@qq.com
@@ -67,18 +69,21 @@ public class _Views {
     /**
      * 在resView 和 父View 之间插入一个ViewGroup
      */
-    public static boolean insertView(View resView, ViewGroup insertView) {
+    public static void insertView(View resView, ViewGroup insertView) {
         ViewParent parent = resView.getParent();
-        if (parent != null && parent instanceof ViewGroup) {
-            ViewGroup.LayoutParams lp = resView.getLayoutParams();
-            ViewGroup group = (ViewGroup) parent;
-            int index = group.indexOfChild(resView);
-            group.removeView(resView);
-            group.addView(insertView, index, lp);
-            insertView.addView(resView, lp);
-            return true;
+        if (parent == null || !(parent instanceof ViewGroup)) {
+            if (LogUtil.DEBUG) {
+                throw new RuntimeException("resView ==null or resView parent is not ViewGroup");
+            }
+            LogUtil.e(_Views.class, "resView == null OR resView parent is not ViewGroup");
+            return;
         }
-        return false;
+        ViewGroup.LayoutParams lp = resView.getLayoutParams();
+        ViewGroup group = (ViewGroup) parent;
+        int index = group.indexOfChild(resView);
+        group.removeView(resView);
+        group.addView(insertView, index, lp);
+        insertView.addView(resView, lp);
     }
 
     /**

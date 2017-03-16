@@ -109,4 +109,30 @@
         <item name="android:windowEnterAnimation">@anim/lib_alpha_in</item>
         <item name="android:windowExitAnimation">@anim/lib_alpha_out</item>
     </style>
+
+    <!--Shape-->
+    <style name="lib_help_shape">
+        <item name="lib_bottomLeftRadius">2dp</item>
+        <item name="lib_bottomRightRadius">2dp</item>
+        <item name="lib_topLeftRadius">2dp</item>
+        <item name="lib_topRightRadius">2dp</item>
+        <item name="lib_radius">2dp</item>
+
+        <item name="lib_solidColor">@android:color/holo_green_dark</item>
+        <item name="lib_solidColor2">@android:color/holo_orange_dark</item>
+        <item name="lib_gradientEndColor">@android:color/holo_blue_bright</item>
+        <item name="lib_gradientStartColor">@android:color/holo_red_dark</item>
+
+        <item name="lib_strokeColor">@android:color/holo_blue_bright</item>
+        <item name="lib_strokeColor2">@android:color/holo_red_light</item>
+        <item name="lib_strokeDashGap">2dp</item>
+        <item name="lib_strokeDashWidth">4dp</item>
+        <item name="lib_strokeWidth">1dp</item>
+
+        <item name="lib_status">pressed</item>
+        <item name="lib_orientation">left_right</item>
+
+        <item name="lib_textColor2">@android:color/black</item>
+        <item name="lib_textColorStatus">enabled</item>
+    </style>
 </resources>
