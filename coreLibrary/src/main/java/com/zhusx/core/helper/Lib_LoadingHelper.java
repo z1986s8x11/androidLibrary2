@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import com.zhusx.core.network.HttpRequest;
 import com.zhusx.core.network.HttpResult;
 import com.zhusx.core.network.OnHttpLoadingListener;
-import com.zhusx.core.utils._Views;
 
 
 /**
@@ -27,7 +26,7 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
     private View loadingView;
     private View errorView;
     private boolean isSuccess = false;
-    private View resLayout;
+    protected View resLayout;
     private Animatable anim;
 
     public Lib_LoadingHelper(View resLayout) {
@@ -203,11 +202,10 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
             }
         }
     }
-
-    protected void inserResLayout(ViewGroup v) {
-        _Views.insertView(resLayout, v);
-        resLayout.setVisibility(View.VISIBLE);
-        resLayout = v;
-        resLayout.setVisibility(View.GONE);
-    }
+//    protected void inserResLayout(ViewGroup v) {
+//        _Views.insertView(resLayout, v);
+//        resLayout.setVisibility(View.VISIBLE);
+//        resLayout = v;
+//        resLayout.setVisibility(View.GONE);
+//    }
 }
