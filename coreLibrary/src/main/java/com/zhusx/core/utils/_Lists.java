@@ -19,6 +19,13 @@ public class _Lists {
         return false;
     }
 
+    public static int size(List list) {
+        if (isEmpty(list)) {
+            return 0;
+        }
+        return list.size();
+    }
+
     public static <T> List<T> filter(List<T> list, Filter<T> filter) {
         List<T> temp = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
