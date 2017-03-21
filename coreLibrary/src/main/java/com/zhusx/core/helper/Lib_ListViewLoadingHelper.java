@@ -30,7 +30,7 @@ import com.zhusx.core.utils._Views;
 public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> implements OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> {
     protected ListView pListView;
     protected Lib_BaseHttpRequestData<Id, Result, Parameter> pLoadData;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
+    protected SwipeRefreshLayout pSwipeRefreshLayout;
 
     protected View pLoadingView;
     protected View pErrorView;
@@ -51,17 +51,17 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
             public boolean onTouch(View vv, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     if (pListView.getFirstVisiblePosition() == 0 && pListView.getChildCount() > 0 && pListView.getChildAt(0).getTop() >= pListView.getListPaddingTop()) {
-                        mSwipeRefreshLayout.setEnabled(true);
-                    } else mSwipeRefreshLayout.setEnabled(false);
+                        pSwipeRefreshLayout.setEnabled(true);
+                    } else pSwipeRefreshLayout.setEnabled(false);
                 }
                 return false;
             }
         });
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        pSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (pLoadData._isLoading()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                    pSwipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 pLoadData._reLoadData(true);
@@ -90,9 +90,9 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
     }
 
     private void createLayout(Context context) {
-        mSwipeRefreshLayout = new SwipeRefreshLayout(context);
-        mSwipeRefreshLayout.setProgressViewOffset(false, 0, 100);
-        _Views.insertView(pListView, mSwipeRefreshLayout);
+        pSwipeRefreshLayout = new SwipeRefreshLayout(context);
+        pSwipeRefreshLayout.setProgressViewOffset(false, 0, 100);
+        _Views.insertView(pListView, pSwipeRefreshLayout);
 
         LinearLayout childRootLayout = new LinearLayout(context);
         childRootLayout.setOrientation(LinearLayout.VERTICAL);
@@ -172,21 +172,18 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
     @Override
     public void onLoadStart(Id id, HttpRequest<Parameter> request) {
         if (request.isRefresh) {
-            if (mSwipeRefreshLayout.isEnabled()) {
-                mSwipeRefreshLayout.setEnabled(false);
-            }
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(true);
+            if (pSwipeRefreshLayout.isRefreshing()) {
+                pSwipeRefreshLayout.setRefreshing(true);
             } else {
                 if (pLoadingView != null) {
                     pLoadingView.setVisibility(View.VISIBLE);
                     __startLoadingAnim(id, request);
                 }
             }
-            if (pEmptyView != null && pEmptyView.getVisibility() == View.VISIBLE) {
+            if (pEmptyView != null && pEmptyView.getVisibility() != View.GONE) {
                 pEmptyView.setVisibility(View.GONE);
             }
-            if (pErrorView != null && pErrorView.getVisibility() == View.VISIBLE) {
+            if (pErrorView != null && pErrorView.getVisibility() != View.GONE) {
                 pErrorView.setVisibility(View.GONE);
             }
         }
@@ -196,18 +193,15 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
     @Override
     public void onLoadError(Id id, HttpRequest<Parameter> request, HttpResult<Result> result, boolean b, String s) {
         if (request.isRefresh) {
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
+            if (pSwipeRefreshLayout.isRefreshing()) {
+                pSwipeRefreshLayout.setRefreshing(false);
             } else {
                 if (pLoadingView != null) {
                     pLoadingView.setVisibility(View.GONE);
                     __stopLoadingAnim();
                 }
             }
-            if (!mSwipeRefreshLayout.isEnabled()) {
-                mSwipeRefreshLayout.setEnabled(true);
-            }
-            if (pErrorView != null && pErrorView.getVisibility() != View.GONE) {
+            if (pErrorView != null && pErrorView.getVisibility() != View.VISIBLE) {
                 pErrorView.setVisibility(View.VISIBLE);
             }
             if (pEmptyView != null && pEmptyView.getVisibility() != View.GONE) {
@@ -228,9 +222,6 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
             adapter = (IChangeAdapter) listAdapter;
         }
         if (request.isRefresh) {
-            if (!mSwipeRefreshLayout.isEnabled()) {
-                mSwipeRefreshLayout.setEnabled(true);
-            }
             if (adapter != null) {
                 adapter._setItemToUpdate(result.getData().getListData());
                 if (adapter._isEmpty()) {
@@ -239,8 +230,8 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
                     }
                 }
             }
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
+            if (pSwipeRefreshLayout.isRefreshing()) {
+                pSwipeRefreshLayout.setRefreshing(false);
             } else {
                 if (pLoadingView != null) {
                     pLoadingView.setVisibility(View.GONE);
