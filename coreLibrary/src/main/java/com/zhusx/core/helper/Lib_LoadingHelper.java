@@ -202,10 +202,4 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
             }
         }
     }
-//    protected void inserResLayout(ViewGroup v) {
-//        _Views.insertView(resLayout, v);
-//        resLayout.setVisibility(View.VISIBLE);
-//        resLayout = v;
-//        resLayout.setVisibility(View.GONE);
-//    }
 }
