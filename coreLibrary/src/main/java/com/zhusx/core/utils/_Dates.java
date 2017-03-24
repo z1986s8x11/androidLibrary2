@@ -1,6 +1,7 @@
 package com.zhusx.core.utils;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.IntRange;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,5 +55,9 @@ public class _Dates {
         a.roll(Calendar.DAY_OF_MONTH, -1);// 天数 -1 但是月份不变
         int maxDate = a.get(Calendar.DAY_OF_MONTH);
         return maxDate;
+    }
+
+    public static String formatTime(@IntRange(from = 0, to = 60) int date) {
+        return date < 10 ? "0" + date : String.valueOf(date);
     }
 }
