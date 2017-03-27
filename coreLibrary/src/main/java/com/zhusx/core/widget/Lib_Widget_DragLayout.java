@@ -28,6 +28,7 @@ public class Lib_Widget_DragLayout extends ViewGroup {
     private static final int DISTANCE_THRESHOLD = 150; // 单位是像素，当上下滑动速度不够时，通过这个阈值来判定是应该粘到顶部还是底部
     private int downTop1; // 手指按下的时候，frameView1的getTop值
     private ShowNextPageNotifier nextPageListener; // 手指松开是否加载下一页的notifier
+    private int index;
 
     public Lib_Widget_DragLayout(Context context) {
         this(context, null);
@@ -146,6 +147,7 @@ public class Lib_Widget_DragLayout extends ViewGroup {
                 // 向上滑动的距离超过某个阈值，就滑动到顶端
                 finalTop = -viewHeight;
                 // 下一页可以初始化了
+                index = 1;
                 if (null != nextPageListener) {
                     nextPageListener.onDragNext();
                 }
@@ -154,6 +156,7 @@ public class Lib_Widget_DragLayout extends ViewGroup {
             if (yvel > VEL_THRESHOLD || (downTop1 == -viewHeight && releasedChild.getTop() > DISTANCE_THRESHOLD)) {
                 // 保持原地不动
                 finalTop = viewHeight;
+                index = 0;
                 if (null != nextPageListener) {
                     nextPageListener.onDragPre();
                 }
@@ -255,6 +258,14 @@ public class Lib_Widget_DragLayout extends ViewGroup {
 
     public void _scroll2Top() {
         animTopOrBottom(frameView2, 200);
+    }
+
+    public void _scroll2Bottom() {
+        animTopOrBottom(frameView1, -200);
+    }
+
+    public int getCurrentIndex() {
+        return index;
     }
 
     public interface ShowNextPageNotifier {
