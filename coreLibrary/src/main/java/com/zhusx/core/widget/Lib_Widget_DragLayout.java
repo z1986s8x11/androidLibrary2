@@ -4,14 +4,11 @@ import android.content.Context;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ScrollView;
 
 /**
  * 这是一个viewGroup容器，实现上下两个frameLayout拖动切换
@@ -272,25 +269,12 @@ public class Lib_Widget_DragLayout extends ViewGroup {
     public static class _DragHelper {
         private float downY, downX;
 
-        public void _dispatchTouchEventDrag(ScrollView v, MotionEvent ev, boolean isInterceptHorizontalMoveEvent) {
-            dispatchTouchEvent(v, ev, isInterceptHorizontalMoveEvent);
-        }
-
-        public void _dispatchTouchEventDrag(RecyclerView v, MotionEvent ev, boolean isInterceptHorizontalMoveEvent) {
-            dispatchTouchEvent(v, ev, isInterceptHorizontalMoveEvent);
-        }
-
-        public void _dispatchTouchEventDrag(ListView v, MotionEvent ev, boolean isInterceptHorizontalMoveEvent) {
-            dispatchTouchEvent(v, ev, isInterceptHorizontalMoveEvent);
-        }
-
-        private void dispatchTouchEvent(View v, MotionEvent ev, boolean isInterceptHorizontalMoveEvent) {
+        public void dispatchTouchEvent(View v, MotionEvent ev, boolean isInterceptHorizontalMoveEvent) {
             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
                 downY = ev.getRawY();
                 downX = ev.getRawX();
                 v.getParent().requestDisallowInterceptTouchEvent(true);
             } else if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-
                 //小米5手机会出现相等的情况。。。
                 if (downY == ev.getRawY()) {
                     v.getParent().requestDisallowInterceptTouchEvent(true);
