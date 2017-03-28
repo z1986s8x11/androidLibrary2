@@ -277,10 +277,20 @@ public class Lib_Widget_DragLayout extends ViewGroup {
     /**
      * 子类滑动列表
      */
-    public static class _DragHelper {
+    public static class _DispatchTouchEvent implements View.OnTouchListener {
         private float downY, downX;
+        private boolean isInterceptHorizontalMoveEvent;
 
-        public void dispatchTouchEvent(View v, MotionEvent ev, boolean isInterceptHorizontalMoveEvent) {
+        public _DispatchTouchEvent(boolean isInterceptHorizontalMoveEvent) {
+            this.isInterceptHorizontalMoveEvent = isInterceptHorizontalMoveEvent;
+        }
+
+        public void dispatchTouchEvent(View v, MotionEvent ev) {
+            onTouch(v, ev);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent ev) {
             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
                 downY = ev.getRawY();
                 downX = ev.getRawX();
@@ -304,6 +314,7 @@ public class Lib_Widget_DragLayout extends ViewGroup {
                     }
                 }
             }
+            return false;
         }
     }
 }
