@@ -2,7 +2,9 @@ package com.zhusx.core.widget.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
@@ -55,5 +57,16 @@ public class Lib_Widget_LinearLayout extends LinearLayout {
             heightMeasureSpec = widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    public void _setDividerDrawable(int dividerHeight, @ColorRes int colorRes) {
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        if (getOrientation() == LinearLayout.HORIZONTAL) {
+            gradientDrawable.setSize(dividerHeight, 0);
+        } else {
+            gradientDrawable.setSize(0, dividerHeight);
+        }
+        gradientDrawable.setColor(getResources().getColor(colorRes));
+        setDividerDrawable(gradientDrawable);
     }
 }
