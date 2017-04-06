@@ -1,9 +1,11 @@
 package com.zhusx.core.widget.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+import com.zhusx.core.R;
 import com.zhusx.core.helper.Lib_ShapeHelper;
 
 /**
@@ -36,6 +38,9 @@ public class Lib_Widget_RelativeLayout extends RelativeLayout {
 
     private void init(Context context, AttributeSet attrs) {
         Lib_ShapeHelper.initBackground(this, context, attrs);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_ViewGroup);
+        isSquare = typedArray.getBoolean(R.styleable.Lib_ViewGroup_lib_isSquare, false);
+        typedArray.recycle();
     }
 
     @Override
