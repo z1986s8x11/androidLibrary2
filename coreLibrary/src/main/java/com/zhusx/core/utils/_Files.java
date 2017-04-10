@@ -36,6 +36,7 @@ import java.util.Comparator;
  * Created       2016/10/13 9:32
  */
 public class _Files {
+    public static final String ASSET_PATH = "file:///android_asset/";
     /**
      * 读取txt文件乱码：
      BufferedReader read = new BufferedReader(new FileReader(new File(filename)));
