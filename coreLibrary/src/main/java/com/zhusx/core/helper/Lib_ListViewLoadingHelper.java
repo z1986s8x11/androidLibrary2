@@ -37,6 +37,7 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
     protected View pEmptyView;
     protected Animatable pAnim;
     protected LinearLayout pStatusLayout;
+    private boolean isRefreshable = true;
 
     public Lib_ListViewLoadingHelper(ListView listView, final Lib_BaseHttpRequestData<Id, Result, Parameter> loadData) {
         this.pListView = listView;
@@ -45,14 +46,23 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
         initListener();
     }
 
+    public void _setRefreshable(boolean isRefreshable) {
+        this.isRefreshable = isRefreshable;
+        if (!isRefreshable) {
+            pSwipeRefreshLayout.setEnabled(false);
+        }
+    }
+
     private void initListener() {
         pListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View vv, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    if (pListView.getFirstVisiblePosition() == 0 && pListView.getChildCount() > 0 && pListView.getChildAt(0).getTop() >= pListView.getListPaddingTop()) {
-                        pSwipeRefreshLayout.setEnabled(true);
-                    } else pSwipeRefreshLayout.setEnabled(false);
+                if (isRefreshable) {
+                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        if (pListView.getFirstVisiblePosition() == 0 && pListView.getChildCount() > 0 && pListView.getChildAt(0).getTop() >= pListView.getListPaddingTop()) {
+                            pSwipeRefreshLayout.setEnabled(true);
+                        } else pSwipeRefreshLayout.setEnabled(false);
+                    }
                 }
                 return false;
             }
