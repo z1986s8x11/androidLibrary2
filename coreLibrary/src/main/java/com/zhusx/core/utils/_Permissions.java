@@ -77,6 +77,9 @@ public class _Permissions {
         activity.startActivity(intent);
     }
 
+    /**
+     * 是否开启 允许通知的权限  -- 主要在华为机型上部分应用默认是关闭的
+     */
     public static boolean isNotificationEnabled(Context context) {
         return NotificationManagerCompat.from(context).areNotificationsEnabled();
 //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
