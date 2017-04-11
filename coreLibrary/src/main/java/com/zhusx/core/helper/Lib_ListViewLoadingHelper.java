@@ -40,10 +40,15 @@ public class Lib_ListViewLoadingHelper<Id, Result extends IPageData, Parameter> 
     private boolean isRefreshable = true;
 
     public Lib_ListViewLoadingHelper(ListView listView, final Lib_BaseHttpRequestData<Id, Result, Parameter> loadData) {
+        this(listView, loadData, true);
+    }
+
+    public Lib_ListViewLoadingHelper(ListView listView, final Lib_BaseHttpRequestData<Id, Result, Parameter> loadData, boolean isRefresh) {
         this.pListView = listView;
         this.pLoadData = loadData;
         createLayout(listView.getContext());
         initListener();
+        _setRefreshable(isRefresh);
     }
 
     public void _setRefreshable(boolean isRefreshable) {
