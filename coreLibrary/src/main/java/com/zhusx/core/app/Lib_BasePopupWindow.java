@@ -1,7 +1,9 @@
 package com.zhusx.core.app;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.PopupWindow;
 
@@ -62,5 +64,25 @@ public class Lib_BasePopupWindow extends PopupWindow {
         } else {
             super.showAtLocation(parent, gravity, x, y);
         }
+    }
+
+
+    public void _setOutsideDismiss() {
+        if (getBackground() == null) {
+            setBackgroundDrawable(new BitmapDrawable());
+        }
+        setOutsideTouchable(true);
+        setFocusable(true);
+        setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }
