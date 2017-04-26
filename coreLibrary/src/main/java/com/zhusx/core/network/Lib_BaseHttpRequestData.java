@@ -196,46 +196,45 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         @Override
         public void run() {
             String returnStr = null;
-            String error_message = null;
-            int error_code = 0;
+            HttpReturn http = new HttpReturn();
             try {
                 returnStr = __requestProtocol(pId, mParams);
             } catch (HttpException e) {
-                error_code = e._getErrorCode();
-                if (error_code > HttpURLConnection.HTTP_OK) {
+                http.code = e._getErrorCode();
+                if (http.code > HttpURLConnection.HTTP_OK) {
                     try {
-                        error_message = __parseReadHttpCodeError(pId, error_code, e._getErrorMessage());
+                        __parseReadHttpCodeError(pId, http, e._getErrorMessage());
                     } catch (Exception ee) {
-                        error_message = e._getErrorMessage();
+                        http.message = e._getErrorMessage();
                     }
                 } else {
-                    error_message = e._getErrorMessage();
+                    http.message = e._getErrorMessage();
                 }
             } catch (ClassCastException e) {
                 LogUtil.e(e);
-                error_message = "参数类型错误";
+                http.message = "参数类型错误";
             } catch (URISyntaxException e) {
                 LogUtil.w(e);
-                error_message = "网络地址错误";
+                http.message = "网络地址错误";
             } catch (SocketTimeoutException e) {
-                error_message = "请求超时";
+                http.message = "请求超时";
                 LogUtil.w(e);
             } catch (IOException e) {
-                error_message = "发生未知异常";
+                http.message = "发生未知异常";
                 LogUtil.e(e);
             } catch (Exception e) {
-                error_message = "发生未知异常";
+                http.message = "发生未知异常";
                 LogUtil.e(e);
             }
-            if (error_message != null) {
+            if (http.message != null) {
                 HttpResult<Result> xx = null;
-                if (error_code != 0) {
+                if (http.code != 0) {
                     xx = new HttpResult<>();
                     xx.setSuccess(false);
-                    xx.setMessage(error_message);
-                    xx.setErrorCode(error_code);
+                    xx.setMessage(http.message);
+                    xx.setErrorCode(http.code);
                 }
-                onPostError(xx, false, error_message, mListeners);
+                onPostError(xx, false, http.message, mListeners);
                 return;
             }
             boolean isError = false;
@@ -428,8 +427,8 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
      * 解析HttpCode 不等于 200 的错误信息
      * httpCode  大于 200  且 不等于HttpException.ERROR_CODE_CANCEL 为http错误码
      */
-    protected String __parseReadHttpCodeError(Id id, int httpCode, String errorMessage) throws Exception {
-        return errorMessage;
+    protected void __parseReadHttpCodeError(Id id, HttpReturn http, String errorMessage) throws Exception {
+        http.message = errorMessage;
     }
 
     /**
