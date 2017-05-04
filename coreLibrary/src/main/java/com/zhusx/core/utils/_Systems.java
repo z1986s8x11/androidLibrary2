@@ -244,7 +244,7 @@ public class _Systems {
      */
     public static String getUUID(Context context) {
         String uuid = getIMEI(context);
-        if (TextUtils.isEmpty(uuid) || "0".equals(uuid)) {
+        if (TextUtils.isEmpty(uuid) || "0".equals(uuid) || "000000000000000".equals(uuid)) {
             uuid = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
             if (TextUtils.isEmpty(uuid) || "9774d56d682e549c".equals(uuid)) {
                 SharedPreferences prefs = context.getSharedPreferences("lib_device_id", 0);
