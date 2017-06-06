@@ -459,7 +459,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         HttpResult<Result> result = _getLastData();
         if (result.getData() instanceof IPageData) {
             IPageData impl = (IPageData) result.getData();
-            if (impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= _getNextPage()) {
+            if (impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= (result.getCurrentDataIndex() + 1)) {
                 return true;
             }
             return false;
