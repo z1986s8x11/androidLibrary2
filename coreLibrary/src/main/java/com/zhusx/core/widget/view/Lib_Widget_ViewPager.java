@@ -26,9 +26,9 @@ import com.zhusx.core.interfaces.Lib_OnCycleListener;
 public class Lib_Widget_ViewPager extends ViewPager {
     private boolean isScrollable = true;//是否可以滑动
     private boolean isAutoScroll;//是否自动滚动
+    private boolean isAllowScroll = true; //是否本父类拦截子类ViewPager等控件滑动事件
     private Bitmap mBigBitmap;
     private Paint b;
-
     private AutoScroll autoScroll;
 
     public Lib_Widget_ViewPager(Context context) {
@@ -65,8 +65,18 @@ public class Lib_Widget_ViewPager extends ViewPager {
         this.isScrollable = isScrollable;
     }
 
+    /**
+     * 是否允许不拦截子类滑动
+     */
+    public void _setAllowScroll(boolean isAllowScroll) {
+        this.isAllowScroll = isAllowScroll;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent arg0) {
+        if (!isAllowScroll) {
+            return false;
+        }
         if (isScrollable) {
             return super.onTouchEvent(arg0);
         }
@@ -77,6 +87,9 @@ public class Lib_Widget_ViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent arg0) {
+        if (!isAllowScroll) {
+            return false;
+        }
         if (isScrollable) {
             return super.onInterceptTouchEvent(arg0);
         }
