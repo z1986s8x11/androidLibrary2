@@ -68,7 +68,7 @@ public class Lib_Widget_ViewPager extends ViewPager {
     /**
      * 是否允许不拦截子类滑动
      */
-    public void _setAllowScroll(boolean isAllowScroll) {
+    public void _setAllowChildScroll(boolean isAllowScroll) {
         this.isAllowScroll = isAllowScroll;
     }
 
