@@ -16,7 +16,11 @@ import java.util.Locale;
 public class Lib_WebViewHelper {
     private WebView mWebView;
     public String errorMessage = "网络不稳定或已断开";
-    public String retryButtonText = "您可以点击刷新按钮，再次加载";
+    public String errorMessageSub = "您可以点击刷新按钮，再次加载";
+    public String retryButton = "刷新页面";
+    public String errorMessageColor = "#a5a5a5";
+    public String buttonBackgroundColor = "#e42a2d";
+    public String buttonTextColor = "#ffffff";
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public Lib_WebViewHelper(WebView mWebView) {
@@ -43,8 +47,8 @@ public class Lib_WebViewHelper {
         sb.append("<body style=\"position:fixed;top:50%;left:50%;text-align:center;-webkit-transform:translateX(-50%) translateY(-50%);\">");
         //sb.append("<img src=\"file:///android_res/drawable/netbreak.png\" style=\"width:40%\"/>");
         sb.append("<p style=\"margin-bottom:0px\">" + errorMessage + "</p>");
-        sb.append("<p style=\"margin-top:10px;color:#a5a5a5;font-size:80%;width:200px;\">" + retryButtonText + "</p>");
-        sb.append("<p style=\"margin-top:10px;padding:10px;-webkit-border-radius:5px;background-color:#e42a2d;color:#ffffff;\" onclick=\"reLoad()\">刷新页面</p>");
+        sb.append("<p style=\"margin-top:10px;color:" + errorMessageColor + ";font-size:80%;width:200px;\">" + errorMessageSub + "</p>");
+        sb.append("<p style=\"margin-top:10px;padding:10px;-webkit-border-radius:5px;background-color:" + buttonBackgroundColor + ";color:" + buttonTextColor + ";\" onclick=\"reLoad()\">" + retryButton + "</p>");
         sb.append("</body>");
         sb.append("</html>");
         view.loadDataWithBaseURL(null, sb.toString(), "text/html", "UTF-8", null);
