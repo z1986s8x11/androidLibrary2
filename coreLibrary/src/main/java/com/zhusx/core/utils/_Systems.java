@@ -224,19 +224,25 @@ public class _Systems {
         if (context == null) {
             return null;
         }
-        TelephonyManager telephonyManager;
-        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        // 返回唯一的用户ID;就是这张卡的IMSI编号
-        return telephonyManager.getSimSerialNumber();
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            // 返回唯一的用户ID;就是这张卡的IMSI编号
+            return telephonyManager.getSimSerialNumber();
+        } catch (SecurityException e) {
+            return null;
+        }
     }
 
     /**
      * @return 手机串号
      */
     public static String getIMEI(Context context) {
-        TelephonyManager telephonyManager;
-        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            return telephonyManager.getDeviceId();
+        } catch (SecurityException e) {
+            return null;
+        }
     }
 
     /**
