@@ -6,7 +6,6 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -174,32 +173,5 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
         }
         isSuccess = true;
         __onComplete(request, data);
-    }
-
-    protected void _setEmptyView(AbsListView targetListView, View emptyView) {
-        if (targetListView == null) {
-            return;
-        }
-        if (targetListView.getEmptyView() == null) {
-            ViewParent parent = emptyView.getParent();
-            ViewParent targetParent = targetListView.getParent();
-            if (targetParent == parent) {
-                targetListView.setEmptyView(emptyView);
-                return;
-            }
-            if (parent != null) {
-                if (parent instanceof ViewGroup) {
-                    ((ViewGroup) parent).removeView(emptyView);
-                } else {
-                    return;
-                }
-            }
-            if (targetParent != null) {
-                if (targetParent instanceof ViewGroup) {
-                    ((ViewGroup) targetParent).addView(emptyView, targetListView.getLayoutParams());
-                    targetListView.setEmptyView(emptyView);
-                }
-            }
-        }
     }
 }
