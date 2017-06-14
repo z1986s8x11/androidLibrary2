@@ -2,7 +2,9 @@ package com.zhusx.retrofit2;
 
 
 import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.interfaces.IPageData;
 import com.zhusx.core.network.HttpRequest;
+import com.zhusx.core.network.HttpResult;
 import com.zhusx.core.network.OnHttpLoadingListener;
 
 import org.json.JSONException;
@@ -21,16 +23,17 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
+ * Retrofit 请求基类
  * Author       zhusx
  * Email        327270607@qq.com
  * Created      2016/9/27 9:27
  */
 
-public abstract class BaseLoadData<Id, Result, Parameter> {
+public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
     private Id pId;
-    private Result pBean;
+    private HttpResult<Result> pBean;
     private boolean pIsDownding = false;
-    private OnHttpLoadingListener<Id, Result, Parameter> listener;
+    private OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener;
     private HttpRequest<Parameter> pLastRequestData;
     private CompositeSubscription mCompositeSubscription;
     int currentPage = -1;
@@ -39,11 +42,11 @@ public abstract class BaseLoadData<Id, Result, Parameter> {
         return this.pLastRequestData != null ? this.pLastRequestData : null;
     }
 
-    public void _setOnLoadingListener(OnHttpLoadingListener<Id, Result, Parameter> listener) {
+    public void _setOnLoadingListener(OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener) {
         this.listener = listener;
     }
 
-    public BaseLoadData(Id id) {
+    public BaseRetrofitLoadData(Id id) {
         this.pId = id;
         this.mCompositeSubscription = new CompositeSubscription();
     }
@@ -88,7 +91,7 @@ public abstract class BaseLoadData<Id, Result, Parameter> {
         this.pBean = null;
     }
 
-    public Result _getLastData() {
+    public HttpResult<Result> _getLastData() {
         return this.pBean;
     }
 
@@ -115,7 +118,7 @@ public abstract class BaseLoadData<Id, Result, Parameter> {
         __requestProtocol(pId, getHttpParams(pId, objects));
     }
 
-    protected String __requestProtocol(final Id id, Observable<Result> observable) {
+    protected void __requestProtocol(final Id id, Observable<JSONResult<Result>> observable) {
         if (observable == null) {
             throw new NullPointerException("getHttpParams(pId, objects) at" + String.valueOf(pId) + " = null");
         }
@@ -128,10 +131,9 @@ public abstract class BaseLoadData<Id, Result, Parameter> {
                 observable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<Result>() {
+                        .subscribe(new Subscriber<JSONResult<Result>>() {
                             @Override
                             public void onCompleted() {
-                                pIsDownding = false;
                             }
 
                             @Override
@@ -164,9 +166,14 @@ public abstract class BaseLoadData<Id, Result, Parameter> {
                             }
 
                             @Override
-                            public void onNext(Result data) {
-                                if (isSuccess(id, data)) {
-                                    pBean = data;
+                            public void onNext(JSONResult<Result> data) {
+                                pIsDownding = false;
+                                if (data.code == 200) {
+                                    HttpResult<Result> result = new HttpResult<>();
+                                    result.setSuccess(true);
+                                    result.setData(data.data);
+                                    result.setMessage(data.message);
+                                    pBean = result;
                                     if (pLastRequestData.isRefresh) {
                                         currentPage = getDefaultPage();
                                     } else {
@@ -177,21 +184,20 @@ public abstract class BaseLoadData<Id, Result, Parameter> {
                                         }
                                     }
                                     if (listener != null) {
-                                        listener.onLoadComplete(id, pLastRequestData, data);
+                                        listener.onLoadComplete(id, pLastRequestData, pBean);
                                     }
-                                    onLoadComplete(id, pLastRequestData, data);
+                                    onLoadComplete(id, pLastRequestData, pBean);
                                 } else {
                                     if (listener != null) {
-                                        listener.onLoadError(id, pLastRequestData, null, false, getMessage(id, data));
+                                        listener.onLoadError(id, pLastRequestData, null, false, data.message);
                                     }
-                                    onLoadError(id, pLastRequestData, null, false, getMessage(id, data));
+                                    onLoadError(id, pLastRequestData, null, false, data.message);
                                 }
                             }
                         }));
-        return null;
     }
 
-    protected abstract Observable<Result> getHttpParams(Id var1, Parameter... var2);
+    protected abstract Observable<JSONResult<Result>> getHttpParams(Id var1, Parameter... var2);
 
     protected int getNextPage() {
         if (currentPage == -1) {
@@ -207,16 +213,32 @@ public abstract class BaseLoadData<Id, Result, Parameter> {
         return 1;
     }
 
-    protected abstract boolean isSuccess(Id id, Result data);
-
-    protected abstract String getMessage(Id id, Result data);
 
     protected void onLoadStart(Id id, HttpRequest<Parameter> request) {
     }
 
-    protected void onLoadError(Id id, HttpRequest<Parameter> request, Result result, boolean var4, String errorMessage) {
+    protected void onLoadError(Id id, HttpRequest<Parameter> request, HttpResult<Result> result, boolean var4, String errorMessage) {
     }
 
-    protected void onLoadComplete(Id id, HttpRequest<Parameter> request, Result result) {
+    protected void onLoadComplete(Id id, HttpRequest<Parameter> request, HttpResult<Result> result) {
+    }
+
+    public boolean hasMoreData() {
+        if (_isLoading()) {
+            return false;
+        } else if (!_hasCache()) {
+            return true;
+        } else {
+            HttpResult result = _getLastData();
+            if (result.getData() instanceof IPageData) {
+                IPageData impl = (IPageData) result.getData();
+                return impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= (currentPage + 1);
+            } else {
+                if (LogUtil.DEBUG) {
+                    LogUtil.e(this, this._getRequestID() + "T 必须实现 IPageData 接口");
+                }
+                return true;
+            }
+        }
     }
 }
