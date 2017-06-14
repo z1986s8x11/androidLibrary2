@@ -27,6 +27,7 @@ public class Lib_Widget_ViewPager extends ViewPager {
     private boolean isScrollable = true;//是否可以滑动
     private boolean isAutoScroll;//是否自动滚动
     private boolean isAllowScroll = true; //是否本父类拦截子类ViewPager等控件滑动事件
+    private boolean isRefreshViewParent = false;//父类中是否有可以下拉刷新的View
     private Bitmap mBigBitmap;
     private Paint b;
     private AutoScroll autoScroll;
@@ -59,6 +60,13 @@ public class Lib_Widget_ViewPager extends ViewPager {
     }
 
     /**
+     * 解决轮播图滑动和下拉刷新滑动冲突问题（左右滑动很容易触发下拉刷新bug）
+     */
+    public void setParentIsRefreshView(boolean isRefreshViewParent) {
+        this.isRefreshViewParent = isRefreshViewParent;
+    }
+
+    /**
      * 是否可以滑动
      */
     public void _setScrollable(boolean isScrollable) {
@@ -73,30 +81,40 @@ public class Lib_Widget_ViewPager extends ViewPager {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent arg0) {
+    public boolean onTouchEvent(MotionEvent e) {
         if (!isAllowScroll) {
             return false;
         }
         if (isScrollable) {
-            return super.onTouchEvent(arg0);
+            if (isRefreshViewParent) {
+                if (this.getParent() != null && e.getAction() != MotionEvent.ACTION_UP) {
+                    this.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+            }
+            return super.onTouchEvent(e);
         }
         getParent().requestDisallowInterceptTouchEvent(true);
-        super.onTouchEvent(arg0);
+        super.onTouchEvent(e);
         return false;
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent arg0) {
+    public boolean onInterceptTouchEvent(MotionEvent e) {
         if (!isAllowScroll) {
             return false;
         }
         if (isScrollable) {
-            return super.onInterceptTouchEvent(arg0);
+            if (isRefreshViewParent) {
+                if (this.getParent() != null && e.getAction() != MotionEvent.ACTION_UP) {
+                    this.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+            }
+            return super.onInterceptTouchEvent(e);
         }
-        switch (arg0.getAction()) {
+        switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_UP:
-                super.onInterceptTouchEvent(arg0);
+                super.onInterceptTouchEvent(e);
                 return false;
             default:
                 break;
@@ -107,6 +125,11 @@ public class Lib_Widget_ViewPager extends ViewPager {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (isScrollable) {
+            if (isRefreshViewParent) {
+                if (this.getParent() != null && ev.getAction() != MotionEvent.ACTION_UP) {
+                    this.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+            }
             if (isAutoScroll) {
                 switch (ev.getAction()) {
                     case MotionEvent.ACTION_DOWN:
