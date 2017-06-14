@@ -73,9 +73,6 @@ public class _Strings {
 
     /**
      * 转换当前byteSize大小 保留两位
-     *
-     * @param byteSize
-     * @return
      */
     public static String toFileSize(long byteSize) {
         DecimalFormat fmt = new DecimalFormat("0.#");
@@ -100,9 +97,6 @@ public class _Strings {
 
     /**
      * 验证是否有汉字
-     *
-     * @param str
-     * @return
      */
     public static boolean isChineseChar(CharSequence str) {
         boolean temp = false;
@@ -116,9 +110,6 @@ public class _Strings {
 
     /**
      * 验证是否全数字
-     *
-     * @param str
-     * @return
      */
     public static boolean isNumber(String str) {
         Pattern p = Pattern.compile("^\\d+$");
@@ -128,9 +119,6 @@ public class _Strings {
 
     /**
      * 判断是不是一个合法的电子邮件地址
-     *
-     * @param email
-     * @return
      */
     public static boolean isEmail(String email) {
         if (email == null || email.trim().length() == 0)
@@ -155,6 +143,22 @@ public class _Strings {
             return false;
         else
             return mobiles.matches(telRegex);
+    }
+
+    /**
+     * 隐藏超过2倍长度的字符串,中间显示***
+     * 用于隐藏电话号码
+     */
+    public static String hideMiddleText(String phone, int startEndShowLength) {
+        if (TextUtils.isEmpty(phone)) {
+            return "";
+        }
+        int length = phone.length();
+        if (length >= 2 * startEndShowLength + 1) {
+            phone = phone.subSequence(0, startEndShowLength) + "***"
+                    + phone.subSequence(length - startEndShowLength, length);
+        }
+        return phone;
     }
 
     /**
