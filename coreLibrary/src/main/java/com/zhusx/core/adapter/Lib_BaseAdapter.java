@@ -31,7 +31,6 @@ import java.util.List;
 public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeAdapter<T> {
     protected List<T> p_list = new ArrayList<>();
     protected LayoutInflater inflater;
-    private boolean isExpandListViewOrGridView = false;
 
     public Lib_BaseAdapter() {
         this(null, null);
@@ -72,18 +71,6 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (isExpandListViewOrGridView) {
-            if (position != parent.getChildCount()) {
-                if (convertView != null) {
-                    return convertView;
-                } else {
-                    View childView = parent.getChildAt(position);
-                    if (childView != null) {
-                        return childView;
-                    }
-                }
-            }
-        }
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());
         }
@@ -293,13 +280,6 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
 
     protected CheckBox _toCheckBox(View v) {
         return (CheckBox) v;
-    }
-
-    /**
-     * 是否是ScrollView 嵌套的ListView 或者 GridView
-     */
-    public void _setExpandListViewOrGridView(boolean isExpandListViewOrGridView) {
-        this.isExpandListViewOrGridView = isExpandListViewOrGridView;
     }
 
     /**

@@ -66,12 +66,4 @@ public class Lib_Widget_ExpandGridView extends GridView {
         this.isExpand = isExpand;
         invalidate();
     }
-
-    @Override
-    public void setAdapter(ListAdapter adapter) {
-        super.setAdapter(adapter);
-        if (adapter != null && adapter instanceof Lib_BaseAdapter) {
-            ((Lib_BaseAdapter) adapter)._setExpandListViewOrGridView(true);
-        }
-    }
 }
