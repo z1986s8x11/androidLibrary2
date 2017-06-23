@@ -70,7 +70,7 @@ public class _Systems {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
-            if (versionName == null || versionName.length() <= 0) {
+            if (TextUtils.isEmpty(versionName)) {
                 return "";
             }
         } catch (NameNotFoundException e) {
@@ -84,18 +84,19 @@ public class _Systems {
     /**
      * 拿到app 的名称
      */
-    public static String getApplicationName(Context context) {
+    public static CharSequence getApplicationName(Context context) {
         PackageManager packageManager = null;
         ApplicationInfo applicationInfo = null;
         try {
             packageManager = context.getApplicationContext().getPackageManager();
             applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+            return packageManager.getApplicationLabel(applicationInfo);
         } catch (NameNotFoundException e) {
-            applicationInfo = null;
+            if (LogUtil.DEBUG) {
+                LogUtil.e(e);
+            }
         }
-        String applicationName =
-                (String) packageManager.getApplicationLabel(applicationInfo);
-        return applicationName;
+        return "";
     }
 
     /**
