@@ -139,25 +139,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
                             @Override
                             public void onError(Throwable e) {
                                 LogUtil.e(e);
-                                String errorMessage = "服务繁忙,请稍后重试";
-                                if (e instanceof HttpException) {
-                                    Response<?> response = ((HttpException) e).response();
-                                    if (response != null) {
-                                        ResponseBody responseBody = response.errorBody();
-                                        if (responseBody != null) {
-                                            try {
-                                                JSONObject json = new JSONObject(responseBody.string());
-                                                errorMessage = json.getString("message");
-                                            } catch (JSONException e1) {
-                                                e1.printStackTrace();
-                                            } catch (IOException e1) {
-                                                e1.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                } else if (e instanceof SocketException) {
-                                    errorMessage = "网络错误，请检查网络";
-                                }
+                                String errorMessage = parseErrorMessage(e);
                                 pIsDownding = false;
                                 if (listener != null) {
                                     listener.onLoadError(id, pLastRequestData, null, false, errorMessage);
@@ -169,11 +151,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
                             public void onNext(JSONResult<Result> data) {
                                 pIsDownding = false;
                                 if (data.code == 200) {
-                                    HttpResult<Result> result = new HttpResult<>();
-                                    result.setSuccess(true);
-                                    result.setData(data.data);
-                                    result.setMessage(data.message);
-                                    pBean = result;
+                                    pBean = switchResult(data);
                                     if (pLastRequestData.isRefresh) {
                                         currentPage = getDefaultPage();
                                     } else {
@@ -197,7 +175,38 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
                         }));
     }
 
+    protected String parseErrorMessage(Throwable e) {
+        String errorMessage = "服务繁忙,请稍后重试";
+        if (e instanceof HttpException) {
+            Response<?> response = ((HttpException) e).response();
+            if (response != null) {
+                ResponseBody responseBody = response.errorBody();
+                if (responseBody != null) {
+                    try {
+                        JSONObject json = new JSONObject(responseBody.string());
+                        errorMessage = json.getString("message");
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        } else if (e instanceof SocketException) {
+            errorMessage = "网络错误，请检查网络";
+        }
+        return errorMessage;
+    }
+
     protected abstract Observable<JSONResult<Result>> getHttpParams(Id var1, Parameter... var2);
+
+    protected HttpResult<Result> switchResult(JSONResult<Result> data) {
+        HttpResult<Result> result = new HttpResult<>();
+        result.setSuccess(true);
+        result.setData(data.data);
+        result.setMessage(data.message);
+        return result;
+    }
 
     protected int getNextPage() {
         if (currentPage == -1) {

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.IPageData;
+import com.zhusx.core.interfaces.Lib_LoadingListener;
 import com.zhusx.core.manager.ZsxApplicationManager;
 import com.zhusx.core.utils._HttpURLRequests;
 import com.zhusx.core.utils._Networks;
@@ -27,7 +28,7 @@ import java.util.Set;
  * Email         327270607@qq.com
  * Created       2017/1/4 10:18
  */
-public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
+public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements Lib_LoadingListener {
     private HttpWork pWorkThread;
     private Handler pHandler = new Handler(Looper.getMainLooper());
     private Id pId;
@@ -81,6 +82,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         }
     }
 
+    @Override
     public void _reLoadData(boolean isRefresh) {
         if (pLastRequestData != null) {
             requestData(isRefresh, pLastRequestData.lastObjectsParams);
@@ -91,10 +93,12 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         }
     }
 
+    @Override
     public boolean _isLoading() {
         return pIsDownding;
     }
 
+    @Override
     public boolean _hasCache() {
         return pBean != null;
     }
@@ -434,6 +438,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
     /**
      * 拿到下一页 页码
      */
+    @Override
     public final int _getNextPage() {
         if (pLastRequestData.isRefresh || !_hasCache()) {
             return __getDefaultPage(pId);
@@ -448,7 +453,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> {
         return 1;
     }
 
-
+    @Override
     public boolean hasMoreData() {
         if (_isLoading()) {
             return false;
