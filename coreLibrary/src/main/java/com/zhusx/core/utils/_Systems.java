@@ -37,16 +37,13 @@ import android.view.WindowManager;
 
 import com.zhusx.core.debug.LogUtil;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
@@ -663,67 +660,6 @@ public class _Systems {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * 需要android.permission.READ_LOGS 拿到过滤过的Log 日志
-     */
-    @RequiresPermission(Manifest.permission.READ_LOGS)
-    public static List<String> getLogCatForLogUtil() {
-        List<String> list = new ArrayList<>();
-        list.add("--------LogCat start--------"); // 方法启动
-        BufferedReader bufferedReader = null;
-        try {
-             /*
-             * Logcat 命名
-             * -s 设置过滤器
-             * -f 输出到日志文件
-             * -c 清除日志
-             * -d 获取日志
-             * -g 获取日志的大小
-             * -v 设置日志打印格式
-             */
-            ArrayList<String> cmdLine = new ArrayList<String>();   //设置命令   logcat -d 读取日志
-            cmdLine.add("logcat");
-            cmdLine.add("-d");
-            cmdLine.add(" *:E");
-            ArrayList<String> clearLog = new ArrayList<String>();  //设置命令  logcat -c 清除日志
-            clearLog.add("logcat");
-            clearLog.add("-c");
-            Process process = Runtime.getRuntime().exec(cmdLine.toArray(new String[cmdLine.size()]));   //捕获日志
-            bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));    //将捕获内容转换为BufferedReader
-            //Runtime.runFinalizersOnExit(true);
-            String str = null;
-            //开始读取日志，每次读取一行
-            while ((str = bufferedReader.readLine()) != null) {
-                Runtime.getRuntime().exec(clearLog.toArray(new String[clearLog.size()])).destroy();  //清理日志....这里至关重要，不清理的话，任何操作都将产生新的日志，代码进入死循环，直到bufferreader满
-                if (str.contains("[Log]")) {
-                    list.add(str);    //输出，在logcat中查看效果，也可以是其他操作，比如发送给服务器..
-                }
-            }
-            process.destroy();
-            list.add("--------LogCat end--------");
-        } catch (Exception e) {
-            list.add("--------LogCat error  android.permission.READ_LOGS ? --------");
-            e.printStackTrace();
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return list;
-    }
-
-    public static void clearLogCat() {
-        try {
-            Runtime.getRuntime().exec("logcat -c");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static int getCPUCount() {

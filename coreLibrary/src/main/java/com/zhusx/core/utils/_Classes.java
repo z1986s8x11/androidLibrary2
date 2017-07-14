@@ -62,8 +62,9 @@ public class _Classes {
                 }
             }
         }
-        m = instanceClass.getClass().getDeclaredMethod(methodName,
-                paramTypes);
+        m = instanceClass.getClass().getDeclaredMethod(methodName, paramTypes);
+        // 抑制Java的访问控制检查
+        // Class test.Main can not access a member of class test.Main$A with modifiers "private"
         m.setAccessible(true);
         return m.invoke(instanceClass, params);
     }

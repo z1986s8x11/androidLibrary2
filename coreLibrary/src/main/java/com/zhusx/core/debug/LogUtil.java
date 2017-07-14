@@ -20,17 +20,16 @@ public class LogUtil {
      * @param message
      */
     public static void e(Object cls, String message) {
-        e(cls.getClass().getSimpleName(), message);
+        e(message);
     }
 
     /**
-     * @param tag
      * @param message
      */
-    public static void e(String tag, String message) {
+    public static void e(String message) {
         if (DEBUG) {
             if (TextUtils.isEmpty(message)) {
-                Log.e(TAG + tag, String.valueOf(message));
+                Log.e(TAG, String.valueOf(message));
                 return;
             }
             int index = 0;
@@ -44,7 +43,7 @@ public class LogUtil {
                     sub = message.substring(index, maxLength + index);
                 }
                 index += maxLength;
-                Log.e(TAG + tag, sub.trim());
+                Log.e(TAG, sub.trim());
             }
         }
     }
@@ -54,7 +53,7 @@ public class LogUtil {
      * @param message
      */
     public static void e(Class<?> cls, String message) {
-        e(cls.getSimpleName(), message);
+        e(message);
     }
 
     /**
@@ -62,24 +61,31 @@ public class LogUtil {
      * @param message
      */
     public static void d(Object cls, String message) {
-        if (DEBUG) {
-            if (message == null) {
-                return;
-            }
-            Log.e(TAG + cls.getClass().getSimpleName(), message);
-        }
+        d(message);
     }
 
     /**
-     * @param tag
      * @param message
      */
-    public static void d(String tag, String message) {
+    public static void d(String message) {
         if (DEBUG) {
-            if (message == null) {
+            if (TextUtils.isEmpty(message)) {
+                Log.d(TAG, String.valueOf(message));
                 return;
             }
-            Log.e(TAG + tag, message);
+            int index = 0;
+            int maxLength = 4000;
+            String sub;
+            while (index < message.length()) {
+                // java的字符不允许指定超过总的长度end
+                if (message.length() <= index + maxLength) {
+                    sub = message.substring(index);
+                } else {
+                    sub = message.substring(index, maxLength + index);
+                }
+                index += maxLength;
+                Log.d(TAG, sub.trim());
+            }
         }
     }
 
@@ -88,24 +94,31 @@ public class LogUtil {
      * @param message
      */
     public static void i(Object cls, String message) {
-        if (DEBUG) {
-            if (message == null) {
-                return;
-            }
-            Log.i(TAG + cls.getClass().getSimpleName(), message);
-        }
+        i(message);
     }
 
     /**
-     * @param tag
      * @param message
      */
-    public static void i(String tag, String message) {
+    public static void i(String message) {
         if (DEBUG) {
-            if (message == null) {
+            if (TextUtils.isEmpty(message)) {
+                Log.i(TAG, String.valueOf(message));
                 return;
             }
-            Log.i(TAG + tag, message);
+            int index = 0;
+            int maxLength = 4000;
+            String sub;
+            while (index < message.length()) {
+                // java的字符不允许指定超过总的长度end
+                if (message.length() <= index + maxLength) {
+                    sub = message.substring(index);
+                } else {
+                    sub = message.substring(index, maxLength + index);
+                }
+                index += maxLength;
+                Log.i(TAG, sub.trim());
+            }
         }
     }
 
