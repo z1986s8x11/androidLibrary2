@@ -23,6 +23,14 @@ public class LogUtil {
         e(message);
     }
 
+    public static void e(String cls, String message) {
+        e(message);
+    }
+
+    public static void e(Class<?> cls, String message) {
+        e(message);
+    }
+
     /**
      * @param message
      */
@@ -46,14 +54,6 @@ public class LogUtil {
                 Log.e(TAG, sub.trim());
             }
         }
-    }
-
-    /**
-     * @param cls
-     * @param message
-     */
-    public static void e(Class<?> cls, String message) {
-        e(message);
     }
 
     /**

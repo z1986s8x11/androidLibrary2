@@ -41,6 +41,7 @@ public class Lib_Widget_ViewPager extends ViewPager {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_ViewPager);
         isScrollable = typedArray.getBoolean(R.styleable.Lib_ViewPager_lib_scrollable, isScrollable);
         isAutoScroll = typedArray.getBoolean(R.styleable.Lib_ViewPager_lib_autoScroll, isAutoScroll);
+        isRefreshViewParent = typedArray.getBoolean(R.styleable.Lib_ViewPager_lib_parentIsRefresh, isRefreshViewParent);
         if (isAutoScroll) {
             int interval = typedArray.getInt(R.styleable.Lib_ViewPager_lib_interval, 5000);
             autoScroll = new AutoScroll(interval);
