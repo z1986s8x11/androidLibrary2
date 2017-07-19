@@ -112,7 +112,7 @@ public class Retrofits {
             @Override
             public void log(String message) {
                 if (LogUtil.DEBUG) {
-                    LogUtil.e(this, message);
+                    LogUtil.e(message);
                 }
             }
         });

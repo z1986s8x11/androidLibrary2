@@ -67,7 +67,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
         if (this.pLastRequestData != null) {
             this._reLoadData(this.pLastRequestData.isRefresh);
         } else if (LogUtil.DEBUG) {
-            LogUtil.e(this, "requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
+            LogUtil.e("requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
         if (this.pLastRequestData != null) {
             this.requestData(isRefresh, this.pLastRequestData.lastObjectsParams);
         } else if (LogUtil.DEBUG) {
-            LogUtil.e(this, "requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
+            LogUtil.e("requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
         }
     }
 
@@ -106,7 +106,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
     private synchronized void requestData(boolean isRefresh, Parameter... objects) {
         if (this.pIsDownding) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "id:" + this.pId + "\t 上一个请求正在进行时");
+                LogUtil.e("id:" + this.pId + "\t 上一个请求正在进行时");
             }
             return;
         }
@@ -244,7 +244,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
                 return impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= (currentPage + 1);
             } else {
                 if (LogUtil.DEBUG) {
-                    LogUtil.e(this, this._getRequestID() + "T 必须实现 IPageData 接口");
+                    LogUtil.e(this._getRequestID() + "T 必须实现 IPageData 接口");
                 }
                 return true;
             }

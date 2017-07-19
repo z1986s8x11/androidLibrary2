@@ -125,7 +125,7 @@ public class _HttpURLRequests {
         }
         try {
             if (LogUtil.DEBUG) {
-                LogUtil.e("[request]", String.valueOf(requestUrl) + "[" + String.valueOf(param) + "][" + (requestPropertys == null ? "" : requestPropertys.toString()) + "]");
+                LogUtil.e(String.valueOf(requestUrl) + "[" + String.valueOf(param) + "][" + (requestPropertys == null ? "" : requestPropertys.toString()) + "]");
             }
             URL url = new URL(requestUrl);
             urlConn = (HttpURLConnection) url.openConnection();
@@ -148,7 +148,7 @@ public class _HttpURLRequests {
                     urlConn.setRequestMethod("DELETE");
                     if (LogUtil.DEBUG) {
                         if (!TextUtils.isEmpty(param)) {
-                            LogUtil.e(_HttpURLRequests.class, "DELETE 不支持提交参数");
+                            LogUtil.e("DELETE 不支持提交参数");
                         }
                     }
                     param = "";//DELETE 不支持提交参数
@@ -192,11 +192,11 @@ public class _HttpURLRequests {
                 }
                 result = sb.toString();
                 if (LogUtil.DEBUG) {
-                    LogUtil.e("[result]", String.valueOf(result));
+                    LogUtil.e(String.valueOf(result));
                 }
             } else {
                 if (LogUtil.DEBUG) {
-                    LogUtil.e("[result]", "HTTP CODE:" + urlConn.getResponseCode());
+                    LogUtil.e("HTTP CODE:" + urlConn.getResponseCode());
                 }
                 result = "HTTP CODE:" + urlConn.getResponseCode();
                 if (isReadHttpCodeError) {
@@ -212,7 +212,7 @@ public class _HttpURLRequests {
                         }
                         result = sb.toString();
                         if (LogUtil.DEBUG) {
-                            LogUtil.e("[result]", String.valueOf(result));
+                            LogUtil.e(String.valueOf(result));
                         }
                     } else {
                         if (in != null) {
@@ -374,7 +374,7 @@ public class _HttpURLRequests {
             if (!file.getParentFile().exists()) {
                 if (!file.getParentFile().mkdirs()) {
                     if (LogUtil.DEBUG) {
-                        LogUtil.e(_HttpURLRequests.class, "创建文件夹失败:"
+                        LogUtil.e("创建文件夹失败:"
                                 + file.getParentFile().getPath()
                                 + "\n检查是否加入android.permission.WRITE_EXTERNAL_STORAGE和android.permission.MOUNT_UNMOUNT_FILESYSTEMS");
                     }
@@ -400,7 +400,7 @@ public class _HttpURLRequests {
                 start = raf.length();
                 conn.setRequestProperty("Range", "bytes=" + start + "-");
                 if (LogUtil.DEBUG) {
-                    LogUtil.e(_HttpURLRequests.class, "start Range:" + start);
+                    LogUtil.e("start Range:" + start);
                 }
             }
             // 设置方法为 GET
@@ -413,7 +413,7 @@ public class _HttpURLRequests {
                 if (fileTemp.exists()) {
                     if (!fileTemp.delete()) {
                         if (LogUtil.DEBUG) {
-                            LogUtil.e(_HttpURLRequests.class, "删除文件失败:" + fileTemp.getPath());
+                            LogUtil.e("删除文件失败:" + fileTemp.getPath());
                         }
                         throw new HttpException("删除文件失败");
                     }
@@ -422,7 +422,7 @@ public class _HttpURLRequests {
                 String contentLength = conn.getHeaderField("Content-Length");
                 if (contentLength == null) {
                     if (LogUtil.DEBUG) {
-                        LogUtil.e(_HttpURLRequests.class, "Content-Length 文件大小获取失败");
+                        LogUtil.e("Content-Length 文件大小获取失败");
                     }
                 } else {
                     totalByte = Integer.parseInt(contentLength);
@@ -454,13 +454,13 @@ public class _HttpURLRequests {
                 return true;
             } else if (conn.getResponseCode() == HttpURLConnection.HTTP_PARTIAL) {
                 if (LogUtil.DEBUG) {
-                    LogUtil.e(_HttpURLRequests.class, "服务器返回 206");
+                    LogUtil.e("服务器返回 206");
                 }
                 raf.seek(start);
                 String contentLength = conn.getHeaderField("Content-Length");
                 if (contentLength == null) {
                     if (LogUtil.DEBUG) {
-                        LogUtil.e(_HttpURLRequests.class, "Content-Length 文件大小获取失败");
+                        LogUtil.e("Content-Length 文件大小获取失败");
                     }
                 } else {
                     //contentLength 是剩余下载大小的长度

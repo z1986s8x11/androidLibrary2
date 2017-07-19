@@ -77,7 +77,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
             _reLoadData(pLastRequestData.isRefresh);
         } else {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
+                LogUtil.e("requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
             }
         }
     }
@@ -88,7 +88,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
             requestData(isRefresh, pLastRequestData.lastObjectsParams);
         } else {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
+                LogUtil.e("requestData(Objects... objs) 从未主动加载过数据 不能直接刷新");
             }
         }
     }
@@ -127,7 +127,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
                                           Parameter... objects) {
         if (pIsDownloading) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "id:" + pId + "\t 正在下载");
+                LogUtil.e("id:" + pId + "\t 正在下载");
             }
             return;
         }
@@ -138,7 +138,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
         pLastRequestData.isRefresh = isRefresh;
         if (ZsxApplicationManager._Current_NetWork_Status == _Networks.NetType.NoneNet) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "网络异常,请检查网络设置!" + pId);
+                LogUtil.e("网络异常,请检查网络设置!" + pId);
             }
             onRequestStart(pListeners, pLastRequestData);
             onRequestError(null, false, "网络异常,请检查网络设置!", pListeners);
@@ -475,7 +475,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
             return false;
         } else {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, String.valueOf(_getRequestID()) + "T 必须实现 IPageData 接口");
+                LogUtil.e(String.valueOf(_getRequestID()) + "T 必须实现 IPageData 接口");
             }
         }
         return true;

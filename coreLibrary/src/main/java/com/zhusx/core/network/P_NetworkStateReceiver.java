@@ -55,7 +55,7 @@ public class P_NetworkStateReceiver extends BroadcastReceiver {
             mContext.getApplicationContext().registerReceiver(this, filter);
         } else {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "需要权限:" + Manifest.permission.ACCESS_NETWORK_STATE);
+                LogUtil.e("需要权限:" + Manifest.permission.ACCESS_NETWORK_STATE);
             }
         }
     }

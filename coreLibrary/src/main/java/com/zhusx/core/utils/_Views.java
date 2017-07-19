@@ -75,7 +75,6 @@ public class _Views {
             if (LogUtil.DEBUG) {
                 throw new RuntimeException("resView ==null or resView parent is not ViewGroup");
             }
-            LogUtil.e(_Views.class, "resView == null OR resView parent is not ViewGroup");
             return;
         }
         ViewGroup.LayoutParams lp = resView.getLayoutParams();

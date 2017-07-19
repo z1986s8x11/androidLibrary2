@@ -279,10 +279,12 @@ public class _Systems {
     @RequiresPermission(Manifest.permission.ACCESS_WIFI_STATE)
     public static String getWifiIp(Context context) {
         // 获取wifi服务
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         // 判断wifi是否开启
         if (!wifiManager.isWifiEnabled()) {
-            LogUtil.e(_Systems.class, "wifi 未开启!");
+            if (LogUtil.DEBUG) {
+                LogUtil.e("wifi 未开启!");
+            }
             //boolean b = wifiManager.setWifiEnabled(true);
             return null;
         }
@@ -292,7 +294,9 @@ public class _Systems {
             String ip = (ipAddress & 0xFF) + "." + ((ipAddress >> 8) & 0xFF) + "." + ((ipAddress >> 16) & 0xFF) + "." + (ipAddress >> 24 & 0xFF);
             return ip;
         } else {
-            LogUtil.e(_Systems.class, " 没有添加权限 permission.ACCESS_WIFI_STATE");
+            if (LogUtil.DEBUG) {
+                LogUtil.e(" 没有添加权限 permission.ACCESS_WIFI_STATE");
+            }
             return null;
         }
     }
@@ -302,7 +306,7 @@ public class _Systems {
      */
     public static boolean openWifeConnect(Context context) {
         // 获取wifi服务
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         // 判断wifi是否开启
         if (!wifiManager.isWifiEnabled()) {
             return wifiManager.setWifiEnabled(true);
@@ -317,7 +321,7 @@ public class _Systems {
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                        return inetAddress.getHostAddress().toString();
+                        return inetAddress.getHostAddress();
                     }
                 }
             }
@@ -353,7 +357,7 @@ public class _Systems {
         } catch (Exception e) {
             LogUtil.w(e);
             if (LogUtil.DEBUG) {
-                LogUtil.e(_Systems.class, "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/> ");
+                LogUtil.e("<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/> ");
             }
         }
     }
@@ -374,7 +378,7 @@ public class _Systems {
         } catch (Exception e) {
             LogUtil.w(e);
             if (LogUtil.DEBUG) {
-                LogUtil.e(_Systems.class, " 需要权限:<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/> ");
+                LogUtil.e(" 需要权限:<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/> ");
             }
         }
     }
@@ -526,7 +530,7 @@ public class _Systems {
             }
         } catch (NameNotFoundException e) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(_Systems.class.getSimpleName(), "包名不存在");
+                LogUtil.e("包名不存在");
                 LogUtil.w(e);
             }
 

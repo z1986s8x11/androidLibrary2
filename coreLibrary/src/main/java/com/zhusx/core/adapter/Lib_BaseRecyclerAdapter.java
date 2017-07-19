@@ -137,7 +137,7 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     public void _addItemToUpdate(int position, T t) {
         if (position < 0 || position > mList.size()) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "_addItemToUpdate 失败! 当前List.size():+" + mList.size() + ";position:" + position);
+                LogUtil.e("_addItemToUpdate 失败! 当前List.size():+" + mList.size() + ";position:" + position);
             }
             return;
         }

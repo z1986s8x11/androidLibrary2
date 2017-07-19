@@ -87,7 +87,7 @@ public class Lib_Widget_ScaleImageView extends ImageView {
             center(true, true);
         } else {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "getBackground() is null!!!!");
+                LogUtil.e("getBackground() is null!!!!");
             }
         }
     }
@@ -99,7 +99,7 @@ public class Lib_Widget_ScaleImageView extends ImageView {
             gintama.recycle();
         }
         if (LogUtil.DEBUG) {
-            LogUtil.e(this, "onDetachedFromWindow");
+            LogUtil.e("onDetachedFromWindow");
         }
     }
 

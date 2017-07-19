@@ -31,7 +31,7 @@ public class Lib_WebViewHelper {
 
     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         if (LogUtil.DEBUG) {
-            LogUtil.e(this, String.format(Locale.CHINA, "%d:%s:%s", errorCode, description, failingUrl));
+            LogUtil.e(String.format(Locale.CHINA, "%d:%s:%s", errorCode, description, failingUrl));
         }
         StringBuffer sb = new StringBuffer();
         sb.append("<html>");

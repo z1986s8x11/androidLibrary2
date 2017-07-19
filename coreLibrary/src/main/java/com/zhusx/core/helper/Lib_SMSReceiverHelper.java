@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* 监听短信
-* Author        zhusx
-* Email         327270607@qq.com
-* Created       2016/10/13 9:27
-*/
+ * 监听短信
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/10/13 9:27
+ */
 public class Lib_SMSReceiverHelper {
     private Uri uri = Uri.parse("content://sms/inbox");
     public static final String EXTRA__ID = "_id";
@@ -40,7 +40,7 @@ public class Lib_SMSReceiverHelper {
         this.context = context;
         if (!_Systems.isPermission(context, Manifest.permission.READ_SMS)) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, " please AndroidManifest.xml add  'android.permission.READ_SMS '");
+                LogUtil.e(" please AndroidManifest.xml add  'android.permission.READ_SMS '");
             }
             return;
         }
@@ -95,7 +95,7 @@ public class Lib_SMSReceiverHelper {
                 map.put(EXTRA_DATE, cur.getString(cur.getColumnIndex(EXTRA_DATE)));
                 map.put(EXTRA_TYPE, cur.getString(cur.getColumnIndex(EXTRA_TYPE)));
                 if (LogUtil.DEBUG) {
-                    LogUtil.e(this, String.valueOf(map));
+                    LogUtil.e(String.valueOf(map));
                 }
                 list.add(map);
             }

@@ -27,10 +27,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
-* Author        zhusx
-* Email         327270607@qq.com
-* Created       2016/10/13 9:21
-*/
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/10/13 9:21
+ */
 public class Lib_DownloadHelper {
     public final int requestCode = 0x583;
     public final int notifyId = 0x432;
@@ -48,7 +48,7 @@ public class Lib_DownloadHelper {
 
     private Notification createNotification(Context context, String text, int progress) {
         PendingIntent intent = PendingIntent.getActivity(context, requestCode, new Intent(), PendingIntent.FLAG_NO_CREATE);
-        String title = _Systems.getApplicationName(context);
+        CharSequence title = _Systems.getApplicationName(context);
         if (title == null) {
             title = "";
         }

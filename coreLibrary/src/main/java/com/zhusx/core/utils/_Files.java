@@ -526,7 +526,7 @@ public class _Files {
         }
         if (!_Systems.isPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(_Files.class, "需要权限:" + Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                LogUtil.e("需要权限:" + Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             return;
         }
@@ -548,7 +548,7 @@ public class _Files {
             if (!cacheFile.exists() || !cacheFile.isDirectory()) {
                 if (!cacheFile.mkdir()) {
                     if (LogUtil.DEBUG) {
-                        LogUtil.e(_Files.class, "mkdir() is Error,Path:" + cacheFile.getPath());
+                        LogUtil.e("mkdir() is Error,Path:" + cacheFile.getPath());
                     }
                 }
             }

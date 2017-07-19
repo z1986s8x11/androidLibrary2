@@ -124,7 +124,7 @@ public class _PinYins {
             }
         } catch (Exception e) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(_PinYins.class.getSimpleName(), "中文转换AscII 失败");
+                LogUtil.e("中文转换AscII 失败");
                 LogUtil.w(e);
             }
         }

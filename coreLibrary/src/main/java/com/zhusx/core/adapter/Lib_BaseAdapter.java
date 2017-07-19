@@ -133,7 +133,7 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
             notifyDataSetChanged();
         } else {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "_addItemToUpdate 失败!");
+                LogUtil.e("_addItemToUpdate 失败!");
             }
         }
     }
@@ -142,7 +142,7 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
     public void _addItemToUpdate(int position, T bean) {
         if (position < 0 || position > p_list.size()) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(this, "_addItemToUpdate 失败! 当前List.size():+" + p_list.size() + ";position:" + position);
+                LogUtil.e("_addItemToUpdate 失败! 当前List.size():+" + p_list.size() + ";position:" + position);
             }
             return;
         }

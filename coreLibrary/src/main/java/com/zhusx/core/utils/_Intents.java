@@ -117,7 +117,7 @@ public class _Intents {
     public static void startInstallAPK(Context context, String apkPath) {
         File apk = new File(apkPath);
         if (!apk.exists()) {
-            LogUtil.e(_Intents.class, "文件不存在，安装失败：" + apkPath);
+            LogUtil.e("文件不存在，安装失败：" + apkPath);
             return;
         }
         Intent intent = null;
@@ -165,7 +165,7 @@ public class _Intents {
     private void createShortCut(Context context, int titleRes, int iconRes) {
         if (!_Systems.isPermission(context, Manifest.permission.INSTALL_SHORTCUT)) {
             if (LogUtil.DEBUG) {
-                LogUtil.e(_Intents.class, "need usePermission uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"");
+                LogUtil.e("need usePermission uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"");
             }
             return;
         }
