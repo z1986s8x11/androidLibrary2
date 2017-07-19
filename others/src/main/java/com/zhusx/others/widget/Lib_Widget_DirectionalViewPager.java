@@ -1,4 +1,4 @@
-package com.zhusx.core.widget;
+package com.zhusx.others.widget;
 
 import android.content.Context;
 import android.database.DataSetObserver;
