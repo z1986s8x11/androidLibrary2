@@ -1,6 +1,8 @@
 package com.zhusx.core.network;
 
 
+import android.support.annotation.Nullable;
+
 public interface OnHttpLoadingListener<Id, Result, Parameter> {
     /**
      * 开始下载
@@ -19,7 +21,7 @@ public interface OnHttpLoadingListener<Id, Result, Parameter> {
      *                      </ul>
      * @param error_message 错误消息
      */
-    void onLoadError(Id id, HttpRequest<Parameter> request, Result result, boolean isAPIError, String error_message);
+    void onLoadError(Id id, HttpRequest<Parameter> request, @Nullable Result result, boolean isAPIError, String error_message);
 
     /**
      * @param id     id

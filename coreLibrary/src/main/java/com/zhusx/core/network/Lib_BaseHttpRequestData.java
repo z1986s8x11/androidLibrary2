@@ -33,7 +33,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
     private Handler pHandler = new Handler(Looper.getMainLooper());
     private Id pId;
     private HttpResult<Result> pBean;
-    private boolean pIsDownding = false;
+    private boolean pIsDownloading = false;
     private Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> pListeners = new LinkedHashSet<>();
     private HttpRequest<Parameter> pLastRequestData;
 
@@ -95,7 +95,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
 
     @Override
     public boolean _isLoading() {
-        return pIsDownding;
+        return pIsDownloading;
     }
 
     @Override
@@ -115,8 +115,8 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
      * 不成功
      */
     public void _cancelLoadData() {
-        if (pIsDownding) {
-            pIsDownding = false;
+        if (pIsDownloading) {
+            pIsDownloading = false;
             if (pWorkThread != null) {
                 pWorkThread.cancel();
             }
@@ -125,7 +125,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
 
     private synchronized void requestData(boolean isRefresh,
                                           Parameter... objects) {
-        if (pIsDownding) {
+        if (pIsDownloading) {
             if (LogUtil.DEBUG) {
                 LogUtil.e(this, "id:" + pId + "\t 正在下载");
             }
@@ -169,9 +169,9 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
         }
 
 
-        private void onPostError(final HttpResult<Result> result, final boolean isApiError, final String error_message, final Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
+        private void onPostError(@Nullable final HttpResult<Result> result, final boolean isApiError, final String error_message, final Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
             if (this.mParams.isCancel) {
-                pIsDownding = false;
+                pIsDownloading = false;
                 return;
             }
             pHandler.post(new Runnable() {
@@ -185,7 +185,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
 
         private void onPostComplete(final HttpResult<Result> bean, final Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
             if (this.mParams.isCancel) {
-                pIsDownding = false;
+                pIsDownloading = false;
                 return;
             }
             pHandler.post(new Runnable() {
@@ -361,7 +361,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
     }
 
     protected final void onRequestStart(Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners, HttpRequest<Parameter> request) {
-        pIsDownding = true;
+        pIsDownloading = true;
         __onStart(pId, request);
         for (OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener : listeners) {
             if (listener != null) {
@@ -370,8 +370,8 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
         }
     }
 
-    protected final void onRequestError(HttpResult<Result> result, boolean isApiError, String error_message, Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
-        pIsDownding = false;
+    protected final void onRequestError(@Nullable HttpResult<Result> result, boolean isApiError, String error_message, Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
+        pIsDownloading = false;
         __onError(pId, pLastRequestData, result, isApiError, error_message);
         for (OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener : listeners) {
             if (listener != null) {
@@ -381,7 +381,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
     }
 
     protected final void onRequestComplete(HttpResult<Result> bean, Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> listeners) {
-        pIsDownding = false;
+        pIsDownloading = false;
         __onComplete(pId, pLastRequestData, bean);
         for (OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener : listeners) {
             if (listener != null) {
@@ -400,7 +400,8 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
      * @param lastData            上一次 parseStr()方法返回的数据
      * @return 会在onComplete()中回调出去
      */
-    protected abstract HttpResult<Result> parseStr(Id id, String currentDownloadText,
+    protected abstract HttpResult<Result> parseStr(Id id,
+                                                   String currentDownloadText,
                                                    @Nullable HttpResult<Result> lastData) throws Exception;
 
     /**
@@ -419,11 +420,15 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
      * @param result        当前请求解析返回 如果false result ==null;
      * @param error_message 错误消息
      */
-    protected void __onError(Id id, HttpRequest<Parameter> requestData,
-                             HttpResult<Result> result, boolean isAPIError, String error_message) {
+    protected void __onError(Id id,
+                             HttpRequest<Parameter> requestData,
+                             @Nullable HttpResult<Result> result,
+                             boolean isAPIError,
+                             String error_message) {
     }
 
-    protected void __onComplete(Id id, HttpRequest<Parameter> requestData,
+    protected void __onComplete(Id id,
+                                HttpRequest<Parameter> requestData,
                                 HttpResult<Result> b) {
     }
 
