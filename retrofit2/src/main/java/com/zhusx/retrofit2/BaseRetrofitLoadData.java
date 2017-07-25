@@ -3,6 +3,7 @@ package com.zhusx.retrofit2;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.IPageData;
+import com.zhusx.core.interfaces.Lib_LoadingListener;
 import com.zhusx.core.network.HttpRequest;
 import com.zhusx.core.network.HttpResult;
 import com.zhusx.core.network.OnHttpLoadingListener;
@@ -29,7 +30,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created      2016/9/27 9:27
  */
 
-public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
+public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> implements Lib_LoadingListener {
     private Id pId;
     private HttpResult<Result> pBean;
     private boolean pIsDownding = false;
@@ -63,6 +64,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
         this.requestData(true, objects);
     }
 
+
     public void _reLoadData() {
         if (this.pLastRequestData != null) {
             this._reLoadData(this.pLastRequestData.isRefresh);
@@ -71,6 +73,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
         }
     }
 
+    @Override
     public void _reLoadData(boolean isRefresh) {
         if (this.pLastRequestData != null) {
             this.requestData(isRefresh, this.pLastRequestData.lastObjectsParams);
@@ -79,10 +82,12 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
         }
     }
 
+    @Override
     public boolean _isLoading() {
         return this.pIsDownding;
     }
 
+    @Override
     public boolean _hasCache() {
         return this.pBean != null;
     }
@@ -118,7 +123,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
         __requestProtocol(pId, getHttpParams(pId, objects));
     }
 
-    protected void __requestProtocol(final Id id, Observable<JSONResult<Result>> observable) {
+    protected void __requestProtocol(final Id id, Observable<Transform> observable) {
         if (observable == null) {
             throw new NullPointerException("getHttpParams(pId, objects) at" + String.valueOf(pId) + " = null");
         }
@@ -131,15 +136,17 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
                 observable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<JSONResult<Result>>() {
+                        .subscribe(new Subscriber<Transform>() {
                             @Override
                             public void onCompleted() {
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                LogUtil.e(e);
-                                String errorMessage = parseErrorMessage(e);
+                                if (LogUtil.DEBUG) {
+                                    LogUtil.e(e);
+                                }
+                                String errorMessage = __parseErrorMessage(e);
                                 pIsDownding = false;
                                 if (listener != null) {
                                     listener.onLoadError(id, pLastRequestData, null, false, errorMessage);
@@ -148,10 +155,10 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
                             }
 
                             @Override
-                            public void onNext(JSONResult<Result> data) {
+                            public void onNext(Transform data) {
                                 pIsDownding = false;
-                                if (data.code == 200) {
-                                    pBean = switchResult(data);
+                                pBean = switchResult(data);
+                                if (pBean.isSuccess()) {
                                     if (pLastRequestData.isRefresh) {
                                         currentPage = getDefaultPage();
                                     } else {
@@ -167,15 +174,36 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
                                     onLoadComplete(id, pLastRequestData, pBean);
                                 } else {
                                     if (listener != null) {
-                                        listener.onLoadError(id, pLastRequestData, null, false, data.message);
+                                        listener.onLoadError(id, pLastRequestData, null, false, pBean.getMessage());
                                     }
-                                    onLoadError(id, pLastRequestData, null, false, data.message);
+                                    onLoadError(id, pLastRequestData, null, false, pBean.getMessage());
                                 }
+//                                if (data.code == 200) {
+//                                    pBean = switchResult(data);
+//                                    if (pLastRequestData.isRefresh) {
+//                                        currentPage = getDefaultPage();
+//                                    } else {
+//                                        if (currentPage == -1) {
+//                                            currentPage = getDefaultPage();
+//                                        } else {
+//                                            currentPage++;
+//                                        }
+//                                    }
+//                                    if (listener != null) {
+//                                        listener.onLoadComplete(id, pLastRequestData, pBean);
+//                                    }
+//                                    onLoadComplete(id, pLastRequestData, pBean);
+//                                } else {
+//                                    if (listener != null) {
+//                                        listener.onLoadError(id, pLastRequestData, null, false, data.message);
+//                                    }
+//                                    onLoadError(id, pLastRequestData, null, false, data.message);
+//                                }
                             }
                         }));
     }
 
-    protected String parseErrorMessage(Throwable e) {
+    protected String __parseErrorMessage(Throwable e) {
         String errorMessage = "服务繁忙,请稍后重试";
         if (e instanceof HttpException) {
             Response<?> response = ((HttpException) e).response();
@@ -198,17 +226,12 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
         return errorMessage;
     }
 
-    protected abstract Observable<JSONResult<Result>> getHttpParams(Id var1, Parameter... var2);
+    protected abstract Observable<Transform> getHttpParams(Id var1, Parameter... var2);
 
-    protected HttpResult<Result> switchResult(JSONResult<Result> data) {
-        HttpResult<Result> result = new HttpResult<>();
-        result.setSuccess(true);
-        result.setData(data.data);
-        result.setMessage(data.message);
-        return result;
-    }
+    protected abstract HttpResult<Result> switchResult(Transform data);
 
-    protected int getNextPage() {
+    @Override
+    public int _getNextPage() {
         if (currentPage == -1) {
             return getDefaultPage();
         }
@@ -232,6 +255,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter> {
     protected void onLoadComplete(Id id, HttpRequest<Parameter> request, HttpResult<Result> result) {
     }
 
+    @Override
     public boolean hasMoreData() {
         if (_isLoading()) {
             return false;
