@@ -131,7 +131,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
         if (listener != null) {
             listener.onLoadStart(id, pLastRequestData);
         }
-        onLoadStart(id, pLastRequestData);
+        __onStart(id, pLastRequestData);
         this.mCompositeSubscription.add(
                 observable
                         .subscribeOn(Schedulers.io())
@@ -151,7 +151,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
                                 if (listener != null) {
                                     listener.onLoadError(id, pLastRequestData, null, false, errorMessage);
                                 }
-                                onLoadError(id, pLastRequestData, null, false, errorMessage);
+                                __onError(id, pLastRequestData, null, false, errorMessage);
                             }
 
                             @Override
@@ -171,12 +171,12 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
                                     if (listener != null) {
                                         listener.onLoadComplete(id, pLastRequestData, pBean);
                                     }
-                                    onLoadComplete(id, pLastRequestData, pBean);
+                                    __onComplete(id, pLastRequestData, pBean);
                                 } else {
                                     if (listener != null) {
                                         listener.onLoadError(id, pLastRequestData, null, false, pBean.getMessage());
                                     }
-                                    onLoadError(id, pLastRequestData, null, false, pBean.getMessage());
+                                    __onError(id, pLastRequestData, null, false, pBean.getMessage());
                                 }
 //                                if (data.code == 200) {
 //                                    pBean = switchResult(data);
@@ -246,13 +246,13 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
     }
 
 
-    protected void onLoadStart(Id id, HttpRequest<Parameter> request) {
+    protected void __onStart(Id id, HttpRequest<Parameter> request) {
     }
 
-    protected void onLoadError(Id id, HttpRequest<Parameter> request, HttpResult<Result> result, boolean var4, String errorMessage) {
+    protected void __onError(Id id, HttpRequest<Parameter> request, HttpResult<Result> result, boolean var4, String errorMessage) {
     }
 
-    protected void onLoadComplete(Id id, HttpRequest<Parameter> request, HttpResult<Result> result) {
+    protected void __onComplete(Id id, HttpRequest<Parameter> request, HttpResult<Result> result) {
     }
 
     @Override
