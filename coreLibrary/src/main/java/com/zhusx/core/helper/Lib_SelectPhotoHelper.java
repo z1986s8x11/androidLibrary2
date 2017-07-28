@@ -245,6 +245,7 @@ public class Lib_SelectPhotoHelper {
 //
 //    获取 虚拟文件 流
 //    url : https://developer.android.google.cn/about/versions/nougat/android-7.0.html#gles_32
+//          https://developer.android.com/about/versions/nougat/android-7.0.html
 //
 //    final static private int REQUEST_CODE = 64;
 //    // We listen to the OnActivityResult event to respond to the user's selection.

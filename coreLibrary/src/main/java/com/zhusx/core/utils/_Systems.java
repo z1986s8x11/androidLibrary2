@@ -21,6 +21,8 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -455,26 +457,50 @@ public class _Systems {
      * android.hardware.camera.flash
      */
     @RequiresPermission(Manifest.permission.CAMERA)
-    public static void openFlashlight() {
-        if (camera == null) {
-            camera = Camera.open();
-            camera.startPreview();
-            Parameters parameters = camera.getParameters();
-            parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-            camera.setParameters(parameters);
+    public static void openFlashlight(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                CameraManager manager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                String[] ids = manager.getCameraIdList();
+                if (ids.length > 0) {
+                    manager.setTorchMode(ids[0], true);
+                }
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (camera == null) {
+                camera = Camera.open();
+                camera.startPreview();
+                Parameters parameters = camera.getParameters();
+                parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
+                camera.setParameters(parameters);
+            }
         }
     }
 
     /**
      * 关闭闪光灯
      */
-    public static void closeFlashlight() {
-        if (camera != null) {
-            Parameters parameters = camera.getParameters();
-            parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-            camera.setParameters(parameters);
-            camera.release();
-            camera = null;
+    public static void closeFlashlight(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                CameraManager manager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                String[] ids = manager.getCameraIdList();
+                if (ids.length > 0) {
+                    manager.setTorchMode(ids[0], false);
+                }
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (camera != null) {
+                Parameters parameters = camera.getParameters();
+                parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
+                camera.setParameters(parameters);
+                camera.release();
+                camera = null;
+            }
         }
     }
 
