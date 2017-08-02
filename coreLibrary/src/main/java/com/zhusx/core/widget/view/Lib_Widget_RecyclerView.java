@@ -2,7 +2,6 @@ package com.zhusx.core.widget.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -34,9 +33,9 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
     /**
      * 调用方式
      * view.setOnTouchListener((v, event) -> {
-     *      if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN)
-     *          mItemTouchHelper.startDrag(holder);
-     *      return false;
+     * if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN)
+     * mItemTouchHelper.startDrag(holder);
+     * return false;
      * });
      */
     public void _startDrag(ViewHolder viewHolder) {
@@ -51,9 +50,9 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
     /**
      * 调用方式
      * view.setOnTouchListener((v, event) -> {
-     *      if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN)
-     *          mItemTouchHelper.startDrag(holder);
-     *      return false;
+     * if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN)
+     * mItemTouchHelper.startDrag(holder);
+     * return false;
      * });
      */
     public class _DragItemTouchHelper extends ItemTouchHelper.Callback {
@@ -95,16 +94,18 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
 
         @Override
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE)
-                viewHolder.itemView.setBackgroundColor(Color.LTGRAY);
+            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+//                viewHolder.itemView.setBackgroundColor(Color.LTGRAY);
+            }
             super.onSelectedChanged(viewHolder, actionState);
         }
 
         @Override
         public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             super.clearView(recyclerView, viewHolder);
+            //拖动后会回调
             viewHolder.itemView.setAlpha(1.0f);
-            viewHolder.itemView.setBackgroundColor(0);
+//            viewHolder.itemView.setBackgroundColor(Color.BLACK);
         }
     }
 }
