@@ -1,6 +1,7 @@
 package com.zhusx.core.utils;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,6 +20,11 @@ import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
+import android.support.annotation.IntRange;
 import android.view.View;
 
 import com.zhusx.core.debug.LogUtil;
@@ -216,6 +222,27 @@ public class _Bitmaps {
 
         overlay = doBlur(overlay, (int) radius, true);
         toView.setBackground(new BitmapDrawable(overlay));
+    }
+    /**
+     * RenderScript 是在android4.2引入
+     * 如果需要支持低版本需要在
+     * Gradle 中加入
+     * defaultConfig {
+     *      renderscriptTargetApi 17
+     *      renderscriptSupportModeEnabled true  //引入Support lib
+     *  }
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public Bitmap doBlur(Context context, @IntRange(from = 1, to = 25) int radius, Bitmap original) {
+        RenderScript renderScript =RenderScript.create(context);
+        Allocation input = Allocation.createFromBitmap(renderScript, original);
+        Allocation output = Allocation.createTyped(renderScript, input.getType());
+        ScriptIntrinsicBlur scriptIntrinsicBlur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+        scriptIntrinsicBlur.setRadius(radius);
+        scriptIntrinsicBlur.setInput(input);
+        scriptIntrinsicBlur.forEach(output);
+        output.copyTo(original);
+        return original;
     }
 
     /**
