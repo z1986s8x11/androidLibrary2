@@ -1,5 +1,6 @@
 package com.zhusx.core.debug;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -135,5 +136,25 @@ public class LogUtil {
         if (DEBUG) {
             Log.e(TAG, "ERROR:", tr);
         }
+    }
+
+    @Nullable
+    public static StackTraceElement getCurrentStackTrace() {
+        StackTraceElement[] stackTraceElement = Thread.currentThread()
+                .getStackTrace();
+        if (stackTraceElement == null) {
+            return null;
+        }
+        boolean lastExit = false;
+        for (int i = 0; i < stackTraceElement.length; i++) {
+            if (lastExit) {
+                //Log.e(TAG,String.format("at %s.%s(%s.java:%s)",stackTraceElement[i].getClassName(),stackTraceElement[i].getMethodName(),stackTraceElement[i].getClassName(),stackTraceElement[i].getLineNumber()));
+                return stackTraceElement[i];
+            }
+            if ("getStackTrace".equals(stackTraceElement[i].getMethodName())) {
+                lastExit = true;
+            }
+        }
+        return null;
     }
 }
