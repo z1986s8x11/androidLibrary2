@@ -12,20 +12,6 @@ import android.net.NetworkInfo;
  */
 public class _Networks {
     /**
-     * 判断MOBILE网络是否可用
-     */
-    public static boolean isMobileConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mMobileNetworkInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            if (mMobileNetworkInfo != null) {
-                return mMobileNetworkInfo.isAvailable();
-            }
-        }
-        return false;
-    }
-
-    /**
      * 判断Wifi网络是否可用
      */
     public static boolean isWifiConnected(Context context) {

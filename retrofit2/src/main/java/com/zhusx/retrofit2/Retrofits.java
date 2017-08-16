@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.utils._Encryptions;
+import com.zhusx.core.utils._Networks;
 import com.zhusx.core.utils._Systems;
 
 import java.io.EOFException;
@@ -13,6 +14,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -116,9 +118,38 @@ public class Retrofits {
                 }
             }
         });
+        Interceptor cacheInterceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                if (!_Networks.isNetworkConnected(application)) {
+                    request = request.newBuilder()
+                            .cacheControl(CacheControl.FORCE_CACHE)
+                            .build();
+                }
+
+                Response originalResponse = chain.proceed(request);
+                if (_Networks.isNetworkConnected(application)) {
+                    //有网的时候读接口上的@Headers里的配置，你可以在这里进行统一的设置
+                    String cacheControl = request.cacheControl().toString();
+                    return originalResponse.newBuilder()
+                            .header("Cache-Control", cacheControl)
+                            .removeHeader("Pragma")
+                            .build();
+                } else {
+                    return originalResponse.newBuilder()
+                            .header("Cache-Control", "public, only-if-cached, max-stale=2419200")
+                            .removeHeader("Pragma")
+                            .build();
+                }
+            }
+        };
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         retrofit = new Retrofit.Builder()
-                .client(client.addInterceptor(logging).build())
+                .client(client.addInterceptor(logging)
+                        .addInterceptor(cacheInterceptor) //两个都必须设置  才生效
+                        .addNetworkInterceptor(cacheInterceptor)//两个都必须设置  才生效
+                        .build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(BASE_HOST)
