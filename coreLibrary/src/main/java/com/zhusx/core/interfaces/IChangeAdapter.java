@@ -26,4 +26,6 @@ public interface IChangeAdapter<T> {
     boolean _removeItemToUpdate(int position);
 
     boolean _isEmpty();
+
+    void _moveItemToUpdate(int from, int to);
 }

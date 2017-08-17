@@ -21,6 +21,7 @@ import com.zhusx.core.interfaces.IChangeAdapter;
 import com.zhusx.core.utils._Lists;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -178,6 +179,12 @@ public abstract class Lib_BaseAdapter<T> extends BaseAdapter implements IChangeA
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void _moveItemToUpdate(int from, int to) {
+        Collections.swap(p_list, from, to);
+        notifyDataSetChanged();
     }
 
     @Override

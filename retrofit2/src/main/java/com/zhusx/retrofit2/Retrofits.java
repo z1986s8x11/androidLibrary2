@@ -9,11 +9,13 @@ import com.zhusx.core.utils._Networks;
 import com.zhusx.core.utils._Systems;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -118,6 +120,10 @@ public class Retrofits {
                 }
             }
         });
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        /**
+         * https://werb.github.io/2016/07/29/%E4%BD%BF%E7%94%A8Retrofit2+OkHttp3%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E5%A4%84%E7%90%86/
+         */
         Interceptor cacheInterceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -144,11 +150,15 @@ public class Retrofits {
                 }
             }
         };
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        File httpCacheDirectory = new File(application.getExternalCacheDir(), "responses");
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+
         retrofit = new Retrofit.Builder()
                 .client(client.addInterceptor(logging)
                         .addInterceptor(cacheInterceptor) //两个都必须设置  才生效
                         .addNetworkInterceptor(cacheInterceptor)//两个都必须设置  才生效
+                        .cache(cache)
                         .build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
