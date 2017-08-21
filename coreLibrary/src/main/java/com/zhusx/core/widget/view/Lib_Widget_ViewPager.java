@@ -92,10 +92,19 @@ public class Lib_Widget_ViewPager extends ViewPager {
                     this.getParent().requestDisallowInterceptTouchEvent(true);
                 }
             }
-            return super.onTouchEvent(e);
+            try {
+                return super.onTouchEvent(e);
+            } catch (IllegalArgumentException ex) {
+                ex.printStackTrace();
+                return false;
+            }
         }
         getParent().requestDisallowInterceptTouchEvent(true);
-        super.onTouchEvent(e);
+        try {
+            return super.onTouchEvent(e);
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
         return false;
     }
 
@@ -110,12 +119,21 @@ public class Lib_Widget_ViewPager extends ViewPager {
                     this.getParent().requestDisallowInterceptTouchEvent(true);
                 }
             }
-            return super.onInterceptTouchEvent(e);
+            try {
+                return super.onInterceptTouchEvent(e);
+            } catch (IllegalArgumentException ex) {
+                ex.printStackTrace();
+                return false;
+            }
         }
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_UP:
-                super.onInterceptTouchEvent(e);
+                try {
+                    super.onInterceptTouchEvent(e);
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                }
                 return false;
             default:
                 break;
