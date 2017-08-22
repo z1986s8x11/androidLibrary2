@@ -60,7 +60,7 @@ public class Lib_Subscribes {
         }
 
         @WorkerThread
-        public abstract T doInBackground();
+        public abstract T doInBackground() throws Exception;
 
         @MainThread
         public void onError(Throwable t) {
