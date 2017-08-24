@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
 
@@ -18,7 +19,7 @@ import com.zhusx.core.interfaces.IChangeAdapter;
 
 public class Lib_Widget_RecyclerView extends RecyclerView {
     private ItemTouchHelper pTouchHelper;
-    private PagerSnapHelper pPagerSnapHelper;
+    private SnapHelper pSnapHelper;
 
     public Lib_Widget_RecyclerView(Context context) {
         super(context);
@@ -37,10 +38,10 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
      */
     public void _setPagerSnap() {
         //new LinearSnapHelper().attachToRecyclerView(mRecyclerView);
-        if (pPagerSnapHelper == null) {
-            pPagerSnapHelper = new PagerSnapHelper();
+        if (pSnapHelper == null) {
+            pSnapHelper = new PagerSnapHelper();
         }
-        pPagerSnapHelper.attachToRecyclerView(this);
+        pSnapHelper.attachToRecyclerView(this);
     }
 
     /************************************滑动 删除*************************************/

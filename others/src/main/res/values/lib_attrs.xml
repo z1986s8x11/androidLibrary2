@@ -4,4 +4,9 @@
         <attr name="lib_divider" format="color|reference" />
         <attr name="lib_dividerWidth" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="SwipeMenuView">
+        <attr name="swipeEnable" format="boolean" />
+        <attr name="ios" format="boolean" />
+        <attr name="leftSwipe" format="boolean" />
+    </declare-styleable>
 </resources>
