@@ -19,6 +19,10 @@ public class HttpParams {
     public static final String DELETE = "DELETE";
     public static final String UPLOAD = "UPLOAD";
     public static final String DOWNLOAD = "DOWNLOAD";
+    public static final String CONTENT_TYPE_JSON = "application/json";
+    public static final String CONTENT_TYPE_URLENCODED = "application/x-www-form-urlencoded";
+    public static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
+
     private String apiUrl;
     private String method = POST;
     private Object param;
