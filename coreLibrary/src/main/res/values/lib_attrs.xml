@@ -73,4 +73,9 @@
     <declare-styleable name="Lib_ViewGroup">
         <attr name="lib_isSquare" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="Lib_SwipeMenuLayout">
+        <attr name="lib_swipeEnable" format="boolean" />
+        <attr name="lib_ios" format="boolean" />
+        <attr name="lib_leftSwipe" format="boolean" />
+    </declare-styleable>
 </resources>

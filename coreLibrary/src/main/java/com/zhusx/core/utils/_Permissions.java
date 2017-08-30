@@ -1,14 +1,20 @@
 package com.zhusx.core.utils;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationManagerCompat;
+import android.text.TextUtils;
 
 /**
  * 用户Android 6.0权限验证
@@ -18,11 +24,34 @@ import android.support.v4.app.NotificationManagerCompat;
  */
 public class _Permissions {
     public static <T extends Activity & OnPermissionResultListener> void _requestPermission(final T activity, final String requestPermission, final PermissionRequest listener) {
+        final int requestId = activity.hashCode() & 0xFFFF;
         if (ActivityCompat.checkSelfPermission(activity, requestPermission) == PackageManager.PERMISSION_GRANTED) {
-            listener.allowPermission(requestPermission);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (isMIUI()) {
+                    AppOpsManager appOpsManager = (AppOpsManager) activity.getSystemService(Context.APP_OPS_SERVICE);
+                    int checkOp = appOpsManager.checkOpNoThrow(opsPermissionToManifestPermission(requestPermission), Binder.getCallingUid(), activity.getPackageName());
+                    switch (checkOp) {
+                        //有权限
+                        case AppOpsManager.MODE_ALLOWED:
+                            //出错了
+                        case AppOpsManager.MODE_ERRORED:
+                            //没出现过...估计和4一样
+                        case AppOpsManager.MODE_DEFAULT:
+                            //权限需要询问
+                        case 4:
+                            listener.allowPermission(requestPermission);
+                            break;
+                        //被禁止了
+                        case AppOpsManager.MODE_IGNORED:
+                            ActivityCompat.requestPermissions(activity, new String[]{requestPermission}, requestId);
+                            break;
+                    }
+                }
+            } else {
+                listener.allowPermission(requestPermission);
+            }
             return;
         }
-        final int requestId = activity.hashCode() & 0xFFFF;
         activity.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
             @Override
             public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -45,11 +74,34 @@ public class _Permissions {
     }
 
     public static <T extends Fragment & OnPermissionResultListener> void _requestPermission(final T fragment, final String requestPermission, final PermissionRequest listener) {
+        final int requestId = fragment.hashCode() & 0xFFFF;
         if (ActivityCompat.checkSelfPermission(fragment.getActivity(), requestPermission) == PackageManager.PERMISSION_GRANTED) {
-            listener.allowPermission(requestPermission);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (isMIUI()) {
+                    AppOpsManager appOpsManager = (AppOpsManager) fragment.getActivity().getSystemService(Context.APP_OPS_SERVICE);
+                    int checkOp = appOpsManager.checkOpNoThrow(opsPermissionToManifestPermission(requestPermission), Binder.getCallingUid(), fragment.getActivity().getPackageName());
+                    switch (checkOp) {
+                        //有权限
+                        case AppOpsManager.MODE_ALLOWED:
+                            //出错了
+                        case AppOpsManager.MODE_ERRORED:
+                            //没出现过...估计和4一样
+                        case AppOpsManager.MODE_DEFAULT:
+                            //权限需要询问
+                        case 4:
+                            listener.allowPermission(requestPermission);
+                            break;
+                        //被禁止了
+                        case AppOpsManager.MODE_IGNORED:
+                            fragment.requestPermissions(new String[]{requestPermission}, requestId);
+                            break;
+                    }
+                }
+            } else {
+                listener.allowPermission(requestPermission);
+            }
             return;
         }
-        final int requestId = fragment.hashCode() & 0xFFFF;
         fragment.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
             @Override
             public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -75,6 +127,13 @@ public class _Permissions {
         Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
         intent.setData(Uri.parse("package:" + activity.getPackageName()));
         activity.startActivity(intent);
+    }
+
+    private static boolean isMIUI() {
+        if (TextUtils.isEmpty(Build.HOST)) {
+            return false;
+        }
+        return Build.HOST.contains("-miui-");
     }
 
     /**
@@ -108,6 +167,61 @@ public class _Permissions {
 //            }
 //        }
 //        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private static String opsPermissionToManifestPermission(String permission) {
+        String checkStr;
+        switch (permission) {
+            case Manifest.permission.CAMERA:
+                checkStr = AppOpsManager.OPSTR_CAMERA;
+                break;
+            case Manifest.permission.READ_EXTERNAL_STORAGE:
+                checkStr = AppOpsManager.OPSTR_READ_EXTERNAL_STORAGE;
+                break;
+            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                checkStr = AppOpsManager.OPSTR_WRITE_EXTERNAL_STORAGE;
+                break;
+            case Manifest.permission.ACCESS_COARSE_LOCATION:
+                checkStr = AppOpsManager.OPSTR_COARSE_LOCATION;
+                break;
+            case Manifest.permission.ACCESS_FINE_LOCATION:
+                checkStr = AppOpsManager.OPSTR_FINE_LOCATION;
+                break;
+            case Manifest.permission.READ_PHONE_STATE:
+                checkStr = AppOpsManager.OPSTR_READ_PHONE_STATE;
+                break;
+            case Manifest.permission.RECORD_AUDIO:
+                checkStr = AppOpsManager.OPSTR_RECORD_AUDIO;
+                break;
+            case Manifest.permission.MODIFY_AUDIO_SETTINGS:
+                checkStr = AppOpsManager.OPSTR_RECORD_AUDIO;
+                break;
+            case Manifest.permission.CALL_PHONE:
+                checkStr = AppOpsManager.OPSTR_CALL_PHONE;
+                break;
+            case Manifest.permission.READ_CONTACTS:
+                checkStr = AppOpsManager.OPSTR_READ_CONTACTS;
+                break;
+            case Manifest.permission.WRITE_CONTACTS:
+                checkStr = AppOpsManager.OPSTR_WRITE_CONTACTS;
+                break;
+            case Manifest.permission.SYSTEM_ALERT_WINDOW:
+                checkStr = AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW;
+                break;
+            case Manifest.permission.WRITE_SETTINGS:
+                checkStr = AppOpsManager.OPSTR_WRITE_SETTINGS;
+                break;
+            case Manifest.permission.READ_SMS:
+                checkStr = AppOpsManager.OPSTR_READ_SMS;
+                break;
+            case Manifest.permission.SEND_SMS:
+                checkStr = AppOpsManager.OPSTR_SEND_SMS;
+                break;
+            default:
+                throw new NullPointerException("未收集到对应[" + permission + "]的AppOpsManager.OPSTR 常量");
+        }
+        return checkStr;
     }
 
     public interface PermissionRequest {
