@@ -51,7 +51,7 @@ public class Request {
         this.header = header;
     }
 
-    public static Builder createRequest() {
+    public static Builder create() {
         return new Builder();
     }
 
