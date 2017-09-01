@@ -1,6 +1,7 @@
 package com.zhusx.core.network;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.text.TextUtils;
 
 import com.zhusx.core.debug.LogUtil;
@@ -29,6 +30,7 @@ public class Request {
     public static final String CONTENT_TYPE_JSON = "application/json";
     public static final String CONTENT_TYPE_URLENCODED = "application/x-www-form-urlencoded";
     public static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
+    public static final String CONTENT_TYPE_IMAGE = "image/jpeg";
 
     public String url;
     public String method;
@@ -53,6 +55,14 @@ public class Request {
 
     public static Builder create() {
         return new Builder();
+    }
+
+    @StringDef({GET, POST, PUT, DELETE, UPLOAD, DOWNLOAD})
+    @interface RequestMethod {
+    }
+
+    @StringDef({CONTENT_TYPE_JSON, CONTENT_TYPE_URLENCODED, CONTENT_TYPE_TEXT_PLAIN, CONTENT_TYPE_IMAGE})
+    @interface RequestContentType {
     }
 
     public static class Builder {
@@ -85,12 +95,12 @@ public class Request {
             return this;
         }
 
-        public Builder setMethod(@NonNull String method) {
+        public Builder setMethod(@RequestMethod @NonNull String method) {
             this.method = method.toUpperCase();
             return this;
         }
 
-        public Builder setContentType(String contentType) {
+        public Builder setContentType(@RequestContentType String contentType) {
             this.contentType = contentType;
             return this;
         }
@@ -150,7 +160,7 @@ public class Request {
                 case Request.POST:
                 case Request.PUT:
                     StringBuffer sb = new StringBuffer();
-                    if (TextUtils.isEmpty(contentType) || "application/x-www-form-urlencoded".equals(contentType)) {
+                    if (TextUtils.isEmpty(contentType) || CONTENT_TYPE_URLENCODED.equals(contentType)) {
                         if (bodyMap != null && !bodyMap.isEmpty()) {
                             Iterator iterator = bodyMap.keySet().iterator();
                             while (iterator.hasNext()) {
