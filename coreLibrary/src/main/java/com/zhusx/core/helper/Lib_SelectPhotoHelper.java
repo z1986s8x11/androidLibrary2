@@ -1,6 +1,5 @@
 package com.zhusx.core.helper;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -160,11 +159,9 @@ public class Lib_SelectPhotoHelper {
         startActivityForResult(intent, ActivityClopPhotoRequestCode);
     }
 
-    @SuppressLint("NewApi")
     private String getPath(final Context context, final Uri uri) {
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         // Whether the Uri authority is ExternalStorageProvider.
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
             if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
