@@ -145,7 +145,7 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
     /************************************拖动 交换*************************************/
     /**
      * 调用方式
-     * view.setOnTouchListener((v, event) -> {
+     * view.setOnTouchListener((v, event) - {
      * if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN)
      * mItemTouchHelper.startDrag(holder);
      * return false;
@@ -162,7 +162,7 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
 
     /**
      * 调用方式
-     * view.setOnTouchListener((v, event) -> {
+     * view.setOnTouchListener((v, event) - {
      * if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN)
      * mItemTouchHelper.startDrag(holder);
      * return false;

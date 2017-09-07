@@ -20,18 +20,18 @@ import com.zhusx.core.R;
 /**
  * List Item 滑动Layout
  * 如:
- *  <com.zhusx.core.widget.Lib_Widget_SwipeMenuLayout
+ *  [com.zhusx.core.widget.Lib_Widget_SwipeMenuLayout]
  *      android:layout_width="match_parent"
- *      android:layout_height="wrap_content">
- *      <TextView
+ *      android:layout_height="wrap_content"
+ *      [TextView
  *      android:id="@android:id/text1"
  *      android:layout_width="match_parent"
- *      android:layout_height="wrap_content" />
- *      <Button
+ *      android:layout_height="wrap_content" /]
+ *      [Button
  *      android:layout_width="wrap_content"
  *      android:layout_height="wrap_content"
- *      android:text="删除" />
- *  </com.zhusx.core.widget.SwipeMenuView>
+ *      android:text="删除" /]
+ *  [/com.zhusx.core.widget.SwipeMenuView]
  */
 public class Lib_Widget_SwipeMenuLayout extends ViewGroup {
 

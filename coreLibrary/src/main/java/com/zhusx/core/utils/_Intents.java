@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.RawRes;
 import android.support.annotation.RequiresPermission;
@@ -245,7 +246,7 @@ public class _Intents {
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileSuffix.toLowerCase());
     }
 
-    public static Uri parseUri(Context context, @RawRes @DrawableRes int id) {
+    public static Uri parseUri(Context context,@ColorRes @RawRes @DrawableRes int id) {
         Resources res = context.getResources();
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(id) + "/" + res.getResourceTypeName(id) + "/" + res.getResourceEntryName(id));
     }
