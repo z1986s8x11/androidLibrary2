@@ -37,7 +37,7 @@ public class _Request {
         }
         try {
             if (LogUtil.DEBUG) {
-                LogUtil.e(String.valueOf(request.url) + "[" + String.valueOf(request.body) + "][" + (request.header == null ? "" : request.header.toString()) + "]");
+                LogUtil.e(String.valueOf(request.url) + "[" + request.method + "]" + "[" + String.valueOf(request.body) + "][" + (request.header == null ? "" : request.header.toString()) + "]");
             }
             URL url = new URL(request.url);
             urlConn = (HttpURLConnection) url.openConnection();
