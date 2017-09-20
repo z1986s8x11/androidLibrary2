@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- ViewPager -->
-    <declare-styleable name="Lib_ViewPager">
+    <declare-styleable name="Lib_Widget_ViewPager">
         <attr name="lib_scrollable" format="boolean" />
         <attr name="lib_autoScroll" format="boolean" />
         <attr name="lib_interval" format="integer" />
