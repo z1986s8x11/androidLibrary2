@@ -1,19 +1,19 @@
 package com.zhusx.core.helper;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.utils._Files;
 
 import java.io.File;
@@ -96,7 +96,13 @@ public class Lib_SelectPhotoHelper {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(saveFile));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", saveFile));
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } else {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(saveFile));
+            }
+
             startActivityForResult(intent, ActivityCameraRequestCode);
         } else {
             Toast.makeText(context, "请插入SD卡", Toast.LENGTH_SHORT).show();
@@ -113,18 +119,25 @@ public class Lib_SelectPhotoHelper {
             switch (requestCode) {
                 case ActivityCameraRequestCode:
                     if (isClop) {
-                        gotoClop(Uri.fromFile(saveFile), photoWidth, photoHeight);
+                        gotoClop(saveFile, photoWidth, photoHeight);
                     } else {
                         listener.onPhoto(saveFile);
                     }
                     break;
                 case ActivityPhotoRequestCode:
                     Uri uri = data.getData();
-                    if (isClop) {
-                        gotoClop(Uri.fromFile(new File(getPath(context, uri))), photoWidth, photoHeight);
+                    String filePath = _Files.getUriPath(context, uri);
+                    if (!TextUtils.isEmpty(filePath)) {
+                        if (isClop) {
+                            gotoClop(new File(filePath), photoWidth, photoHeight);
+                        } else {
+                            File file = new File(filePath);
+                            listener.onPhoto(file);
+                        }
                     } else {
-                        File file = new File(getPath(context, uri));
-                        listener.onPhoto(file);
+                        if (LogUtil.DEBUG) {
+                            LogUtil.e("_Files.getUriPath(context, uri) at" + String.valueOf(uri) + " is null");
+                        }
                     }
                     break;
                 case ActivityClopPhotoRequestCode:
@@ -146,9 +159,15 @@ public class Lib_SelectPhotoHelper {
         }
     }
 
-    private void gotoClop(Uri uri, int width, int height) {
+    private void gotoClop(File file, int width, int height) {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setData(FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", file));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "image/*");
+        }
         intent.putExtra("crop", "true");
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("aspectX", 1);
@@ -157,86 +176,6 @@ public class Lib_SelectPhotoHelper {
         intent.putExtra("outputY", height);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, ActivityClopPhotoRequestCode);
-    }
-
-    private String getPath(final Context context, final Uri uri) {
-        // Whether the Uri authority is ExternalStorageProvider.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
-            if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-            }
-            // Whether the Uri authority is DownloadsProvider.
-            else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // Whether the Uri authority is MediaProvider.
-            else if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            // Whether the Uri authority is Google Photos.
-            if ("com.google.android.apps.photos.content".equals(uri.getAuthority())) {
-                return uri.getLastPathSegment();
-            }
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-        return null;
-    }
-
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    private String getDataColumn(Context context, Uri uri, String selection,
-                                 String[] selectionArgs) {
-        Cursor cursor = null;
-        try {
-            cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                return cursor.getString(index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
     }
 
 //

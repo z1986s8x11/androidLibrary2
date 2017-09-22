@@ -17,6 +17,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.RawRes;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.IntentCompat;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
@@ -101,7 +102,13 @@ public class _Intents {
                 intent.setType("image/jpg");
                 //当用户选择短信时使用sms_body取得文字
                 intent.putExtra("sms_body", msgText);
-                Uri u = Uri.fromFile(f);
+                Uri u;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    u = FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", f);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                } else {
+                    u = Uri.fromFile(f);
+                }
                 intent.putExtra(Intent.EXTRA_STREAM, u);
             }
         }
@@ -122,7 +129,12 @@ public class _Intents {
             return;
         }
         Intent intent = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+            intent.setData(FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", apk));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(Uri.fromFile(apk));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -246,7 +258,7 @@ public class _Intents {
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileSuffix.toLowerCase());
     }
 
-    public static Uri parseUri(Context context,@ColorRes @RawRes @DrawableRes int id) {
+    public static Uri parseUri(Context context, @ColorRes @RawRes @DrawableRes int id) {
         Resources res = context.getResources();
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(id) + "/" + res.getResourceTypeName(id) + "/" + res.getResourceEntryName(id));
     }
