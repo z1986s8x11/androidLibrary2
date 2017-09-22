@@ -97,7 +97,7 @@ public class Lib_SelectPhotoHelper {
                 e.printStackTrace();
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", saveFile));
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, saveFile));
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(saveFile));
@@ -163,7 +163,7 @@ public class Lib_SelectPhotoHelper {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setData(FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", file));
+            intent.setData(FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, file));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             intent.setDataAndType(Uri.fromFile(file), "image/*");

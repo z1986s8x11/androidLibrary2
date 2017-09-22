@@ -104,7 +104,7 @@ public class _Intents {
                 intent.putExtra("sms_body", msgText);
                 Uri u;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    u = FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", f);
+                    u = FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, f);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 } else {
                     u = Uri.fromFile(f);
@@ -131,7 +131,7 @@ public class _Intents {
         Intent intent = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            intent.setData(FileProvider.getUriForFile(context, "com.zhusx.core.fileProvider", apk));
+            intent.setData(FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, apk));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
