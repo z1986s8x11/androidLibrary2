@@ -43,6 +43,24 @@ public class _Permissions {
                             break;
                         //被禁止了
                         case AppOpsManager.MODE_IGNORED:
+                            activity.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
+                                @Override
+                                public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+                                    if (requestId != requestCode) {
+                                        return;
+                                    }
+                                    for (int i = 0; i < grantResults.length; i++) {
+                                        if (permissions[i].equals(requestPermission)) {
+                                            activity.unregisterPermissionResult(this);
+                                            if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                                                listener.allowPermission(permissions);
+                                            } else {
+                                                listener.notAllowedPermission(permissions);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
                             ActivityCompat.requestPermissions(activity, new String[]{requestPermission}, requestId);
                             break;
                     }

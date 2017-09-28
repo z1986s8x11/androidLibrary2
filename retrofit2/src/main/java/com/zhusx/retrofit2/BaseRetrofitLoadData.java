@@ -178,27 +178,6 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
                                     }
                                     __onError(id, pLastRequestData, null, false, pBean.getMessage());
                                 }
-//                                if (data.code == 200) {
-//                                    pBean = switchResult(data);
-//                                    if (pLastRequestData.isRefresh) {
-//                                        currentPage = getDefaultPage();
-//                                    } else {
-//                                        if (currentPage == -1) {
-//                                            currentPage = getDefaultPage();
-//                                        } else {
-//                                            currentPage++;
-//                                        }
-//                                    }
-//                                    if (listener != null) {
-//                                        listener.onLoadComplete(id, pLastRequestData, pBean);
-//                                    }
-//                                    onLoadComplete(id, pLastRequestData, pBean);
-//                                } else {
-//                                    if (listener != null) {
-//                                        listener.onLoadError(id, pLastRequestData, null, false, data.message);
-//                                    }
-//                                    onLoadError(id, pLastRequestData, null, false, data.message);
-//                                }
                             }
                         }));
     }
