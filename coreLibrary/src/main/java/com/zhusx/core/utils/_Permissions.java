@@ -24,7 +24,7 @@ import android.text.TextUtils;
  */
 public class _Permissions {
     public static <T extends Activity & OnPermissionResultListener> void _requestPermission(final T activity, final String requestPermission, final PermissionRequest listener) {
-        final int requestId = activity.hashCode() & 0xFFFF;
+        final int requestId = listener.hashCode() & 0xFFFF;
         if (ActivityCompat.checkSelfPermission(activity, requestPermission) == PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (isMIUI()) {
@@ -49,13 +49,18 @@ public class _Permissions {
                                     if (requestId != requestCode) {
                                         return;
                                     }
-                                    for (int i = 0; i < grantResults.length; i++) {
-                                        if (permissions[i].equals(requestPermission)) {
-                                            activity.unregisterPermissionResult(this);
-                                            if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                                                listener.allowPermission(permissions);
-                                            } else {
-                                                listener.notAllowedPermission(permissions);
+                                    if (permissions.length == 0 || grantResults.length == 0) {
+                                        activity.unregisterPermissionResult(this);
+                                        listener.notAllowedPermission(permissions);
+                                    } else {
+                                        for (int i = 0; i < grantResults.length; i++) {
+                                            if (permissions[i].equals(requestPermission)) {
+                                                activity.unregisterPermissionResult(this);
+                                                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                                                    listener.allowPermission(permissions);
+                                                } else {
+                                                    listener.notAllowedPermission(permissions);
+                                                }
                                             }
                                         }
                                     }
