@@ -62,10 +62,10 @@ public class Lib_Widget_ExpandableLayout extends LinearLayout {
         this.setClipToPadding(false);
         mExpandState = PREINIT;
         if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.Lib_ExpandableLayout);
-            mExpandDuration = typedArray.getInt(R.styleable.Lib_ExpandableLayout_lib_expDuration, EXPAND_DURATION);
-            mExpandWithParentScroll = typedArray.getBoolean(R.styleable.Lib_ExpandableLayout_lib_expWithParentScroll, false);
-            mExpandScrollTogether = typedArray.getBoolean(R.styleable.Lib_ExpandableLayout_lib_expExpandScrollTogether, false);
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.Lib_Widget_ExpandableLayout);
+            mExpandDuration = typedArray.getInt(R.styleable.Lib_Widget_ExpandableLayout_lib_expDuration, EXPAND_DURATION);
+            mExpandWithParentScroll = typedArray.getBoolean(R.styleable.Lib_Widget_ExpandableLayout_lib_expWithParentScroll, false);
+            mExpandScrollTogether = typedArray.getBoolean(R.styleable.Lib_Widget_ExpandableLayout_lib_expExpandScrollTogether, false);
             typedArray.recycle();
         }
     }

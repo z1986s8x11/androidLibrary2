@@ -162,22 +162,20 @@ public class Lib_Widget_SwipeMenuLayout extends ViewGroup {
         isIos = true;
         //左滑右滑的开关,默认左滑打开菜单
         isLeftSwipe = true;
-        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Lib_SwipeMenuLayout, defStyleAttr, 0);
+        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Lib_Widget_SwipeMenuLayout, defStyleAttr, 0);
         int count = ta.getIndexCount();
         for (int i = 0; i < count; i++) {
             int attr = ta.getIndex(i);
             //如果引用成AndroidLib 资源都不是常量，无法使用switch case
-            if (attr == R.styleable.Lib_SwipeMenuLayout_lib_swipeEnable) {
+            if (attr == R.styleable.Lib_Widget_SwipeMenuLayout_lib_swipeEnable) {
                 isSwipeEnable = ta.getBoolean(attr, true);
-            } else if (attr == R.styleable.Lib_SwipeMenuLayout_lib_ios) {
+            } else if (attr == R.styleable.Lib_Widget_SwipeMenuLayout_lib_ios) {
                 isIos = ta.getBoolean(attr, true);
-            } else if (attr == R.styleable.Lib_SwipeMenuLayout_lib_leftSwipe) {
+            } else if (attr == R.styleable.Lib_Widget_SwipeMenuLayout_lib_leftSwipe) {
                 isLeftSwipe = ta.getBoolean(attr, true);
             }
         }
         ta.recycle();
-
-
     }
 
     @Override

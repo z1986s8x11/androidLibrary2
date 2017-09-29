@@ -22,14 +22,14 @@ import com.zhusx.core.R;
  * Created       2016/10/12 16:56
  */
 public class Lib_ShapeHelper {
-    public static void initBackground(View view, Context context, AttributeSet attrs) {
+    public static void initShapeDrawable(View view, Context context, AttributeSet attrs) {
         if (view == null || context == null || attrs == null) {
             return;
         }
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_ShapeBackground);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_Widget_TextView);
         GradientDrawable gradientDrawable = new GradientDrawable();
         GradientDrawable gradientDrawable2 = null;
-        int status = typedArray.getInt(R.styleable.Lib_ShapeBackground_lib_status, -1);
+        int status = typedArray.getInt(R.styleable.Lib_Widget_TextView_lib_status, -1);
         if (status != -1) {
             switch (status) {
                 case 0:
@@ -50,7 +50,7 @@ public class Lib_ShapeHelper {
             }
             view.setClickable(true);
             if (status != -1) {
-                Drawable background2 = typedArray.getDrawable(R.styleable.Lib_ShapeBackground_lib_background2);
+                Drawable background2 = typedArray.getDrawable(R.styleable.Lib_Widget_TextView_lib_background2);
                 Drawable background = view.getBackground();
                 if (background2 != null && background != null) {
                     StateListDrawable stateListDrawable = new StateListDrawable();
@@ -76,9 +76,9 @@ public class Lib_ShapeHelper {
             gradientDrawable2 = new GradientDrawable();
         }
         if (status == -1) {
-            int solidColor = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_solidColor, -1);
-            int strokeWidth = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_strokeWidth, -1);
-            int gradientStartColor = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientStartColor, -1);
+            int solidColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_solidColor, -1);
+            int strokeWidth = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_strokeWidth, -1);
+            int gradientStartColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientStartColor, -1);
             if (solidColor == -1 && strokeWidth == -1 && gradientStartColor == -1) {
             /*没有颜色改变,默认不进行任何操作*/
                 typedArray.recycle();
@@ -89,17 +89,17 @@ public class Lib_ShapeHelper {
         if (gradientDrawable2 != null) {
             gradientDrawable2.setShape(GradientDrawable.RECTANGLE);
         }
-        int radius = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_radius, 0);
+        int radius = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_radius, 0);
         if (radius != 0) {
             gradientDrawable.setCornerRadius(radius);
             if (gradientDrawable2 != null) {
                 gradientDrawable2.setCornerRadius(radius);
             }
         } else {
-            int bottomLeftRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_bottomLeftRadius, 0);
-            int bottomRightRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_bottomRightRadius, 0);
-            int topLeftRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_topLeftRadius, 0);
-            int topRightRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_topRightRadius, 0);
+            int bottomLeftRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_bottomLeftRadius, 0);
+            int bottomRightRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_bottomRightRadius, 0);
+            int topLeftRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_topLeftRadius, 0);
+            int topRightRadius = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_topRightRadius, 0);
             if (bottomLeftRadius != 0 && bottomRightRadius != 0 && topLeftRadius != 0 && topRightRadius != 0) {
                 //1、2两个参数表示左上角，3、4表示右上角，5、6表示右下角，7、8表示左下角
                 gradientDrawable.setCornerRadii(new float[]{topLeftRadius, topLeftRadius, topRightRadius, topRightRadius, bottomRightRadius, bottomRightRadius, bottomLeftRadius, bottomLeftRadius});
@@ -108,23 +108,23 @@ public class Lib_ShapeHelper {
                 }
             }
         }
-        int strokeColor = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_strokeColor, Color.GRAY);
-        int strokeDashGap = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_strokeDashGap, 0);
-        int strokeDashWidth = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_strokeDashWidth, 0);
-        int strokeWidth = typedArray.getDimensionPixelSize(R.styleable.Lib_ShapeBackground_lib_strokeWidth, -1);
+        int strokeColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_strokeColor, Color.GRAY);
+        int strokeDashGap = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_strokeDashGap, 0);
+        int strokeDashWidth = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_strokeDashWidth, 0);
+        int strokeWidth = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_strokeWidth, -1);
         if (strokeWidth > 0) {
             gradientDrawable.setStroke(strokeWidth, strokeColor, strokeDashWidth, strokeDashGap);
             if (gradientDrawable2 != null) {
-                int strokeColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_strokeColor2, strokeColor);
+                int strokeColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_strokeColor2, strokeColor);
                 gradientDrawable2.setStroke(strokeWidth, strokeColor2, strokeDashWidth, strokeDashGap);
             }
         }
-        int gradientStartColor = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientStartColor, -1);
-        int gradientEndColor = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientEndColor, -1);
+        int gradientStartColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientStartColor, -1);
+        int gradientEndColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientEndColor, -1);
         if (gradientStartColor != -1 && gradientEndColor != -1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                int gradientCenterColor = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientCenterColor, -1);
-                int orientation = typedArray.getInt(R.styleable.Lib_ShapeBackground_lib_orientation, -1);
+                int gradientCenterColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientCenterColor, -1);
+                int orientation = typedArray.getInt(R.styleable.Lib_Widget_TextView_lib_orientation, -1);
                 if (orientation != -1) {
                     switch (orientation) {
                         case 0:
@@ -159,23 +159,23 @@ public class Lib_ShapeHelper {
                 if (gradientCenterColor == -1) {
                     gradientDrawable.setColors(new int[]{gradientStartColor, gradientEndColor});
                     if (gradientDrawable2 != null) {
-                        int gradientStartColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientStartColor, gradientStartColor);
-                        int gradientEndColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientEndColor, gradientEndColor);
+                        int gradientStartColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientStartColor, gradientStartColor);
+                        int gradientEndColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientEndColor, gradientEndColor);
                         gradientDrawable2.setColors(new int[]{gradientStartColor2, gradientEndColor2});
                     }
                 } else {
                     gradientDrawable.setColors(new int[]{gradientStartColor, gradientCenterColor, gradientEndColor});
                     if (gradientDrawable2 != null) {
-                        int gradientStartColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientStartColor, gradientStartColor);
-                        int gradientEndColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientEndColor, gradientEndColor);
-                        int gradientCenterColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientCenterColor, gradientCenterColor);
+                        int gradientStartColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientStartColor, gradientStartColor);
+                        int gradientEndColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientEndColor, gradientEndColor);
+                        int gradientCenterColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientCenterColor, gradientCenterColor);
                         gradientDrawable2.setColors(new int[]{gradientStartColor2, gradientCenterColor2, gradientEndColor2});
                     }
                 }
             } else {
                 gradientDrawable.setColor(gradientStartColor);
                 if (gradientDrawable2 != null) {
-                    int gradientStartColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_gradientStartColor, gradientStartColor);
+                    int gradientStartColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientStartColor, gradientStartColor);
                     gradientDrawable2.setColor(gradientStartColor2);
                 }
             }
@@ -186,10 +186,10 @@ public class Lib_ShapeHelper {
                     backgroundColor = ((ColorDrawable) view.getBackground()).getColor();
                 }
             }
-            int solidColor = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_solidColor, backgroundColor);
+            int solidColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_solidColor, backgroundColor);
             gradientDrawable.setColor(solidColor);
             if (gradientDrawable2 != null) {
-                int solidColor2 = typedArray.getColor(R.styleable.Lib_ShapeBackground_lib_solidColor2, solidColor);
+                int solidColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_solidColor2, solidColor);
                 gradientDrawable2.setColor(solidColor2);
             }
         }
@@ -213,52 +213,23 @@ public class Lib_ShapeHelper {
         } else {
             _setBackgroundDrawable(view, gradientDrawable);
         }
-        typedArray.recycle();
-    }
 
-    public static void initTextColor(TextView view, Context context, AttributeSet attrs) {
-        if (view == null || context == null || attrs == null) {
-            return;
-        }
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_TextViewColor);
-        int textColorStatus = typedArray.getInt(R.styleable.Lib_TextViewColor_lib_textColorStatus, -1);
-        if (textColorStatus != -1) {
-            switch (textColorStatus) {
-                case 0:
-                    textColorStatus = android.R.attr.state_pressed;
-                    break;
-                case 1:
-                    textColorStatus = android.R.attr.state_enabled;
-                    break;
-                case 2:
-                    textColorStatus = android.R.attr.state_checked;
-                    break;
-                case 3:
-                    textColorStatus = android.R.attr.state_selected;
-                    break;
-                default:
-                    textColorStatus = -1;
-                    break;
-            }
-            view.setClickable(true);
-        }
-        if (textColorStatus != -1) {
-            int textColor = view.getCurrentTextColor();
-            int textColor2 = typedArray.getColor(R.styleable.Lib_TextViewColor_lib_textColor2, -1);
+        if (view instanceof TextView) {
+            int textColor = ((TextView) view).getCurrentTextColor();
+            int textColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_textColor2, -1);
             if (textColor2 != -1) {
                 ColorStateList colorStateList = null;
-                switch (textColorStatus) {
+                switch (status) {
                     case android.R.attr.state_pressed:
                     case android.R.attr.state_selected:
                     case android.R.attr.state_checked:
-                        colorStateList = new ColorStateList(new int[][]{new int[]{textColorStatus}, new int[]{-textColorStatus}, new int[]{}}, new int[]{textColor2, textColor, textColor});
+                        colorStateList = new ColorStateList(new int[][]{new int[]{status}, new int[]{-status}, new int[]{}}, new int[]{textColor2, textColor, textColor});
                         break;
                     case android.R.attr.state_enabled:
-                        colorStateList = new ColorStateList(new int[][]{new int[]{textColorStatus}, new int[]{-textColorStatus}, new int[]{}}, new int[]{textColor, textColor2, textColor2});
+                        colorStateList = new ColorStateList(new int[][]{new int[]{status}, new int[]{-status}, new int[]{}}, new int[]{textColor, textColor2, textColor2});
                         break;
                 }
-
-                view.setTextColor(colorStateList);
+                ((TextView) view).setTextColor(colorStateList);
             }
         }
         typedArray.recycle();
@@ -270,37 +241,5 @@ public class Lib_ShapeHelper {
         } else {
             view.setBackgroundDrawable(drawable);
         }
-    }
-
-    private GradientDrawable.Orientation getOrientation(int gradientOrientation) {
-//        gradientDrawable.setOrientation(getOrientation(gradientOrientation));
-        GradientDrawable.Orientation orientation = null;
-        switch (gradientOrientation) {
-            case 0:
-                orientation = GradientDrawable.Orientation.BL_TR;
-                break;
-            case 1:
-                orientation = GradientDrawable.Orientation.BOTTOM_TOP;
-                break;
-            case 2:
-                orientation = GradientDrawable.Orientation.BR_TL;
-                break;
-            case 3:
-                orientation = GradientDrawable.Orientation.LEFT_RIGHT;
-                break;
-            case 4:
-                orientation = GradientDrawable.Orientation.RIGHT_LEFT;
-                break;
-            case 5:
-                orientation = GradientDrawable.Orientation.TL_BR;
-                break;
-            case 6:
-                orientation = GradientDrawable.Orientation.TOP_BOTTOM;
-                break;
-            case 7:
-                orientation = GradientDrawable.Orientation.TR_BL;
-                break;
-        }
-        return orientation;
     }
 }

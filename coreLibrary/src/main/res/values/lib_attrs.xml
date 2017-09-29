@@ -8,7 +8,7 @@
         <attr name="lib_parentIsRefresh" format="boolean" />
     </declare-styleable>
     <!--Background-->
-    <declare-styleable name="Lib_ShapeBackground">
+    <declare-styleable name="Lib_Widget_TextView">
         <attr name="lib_bottomLeftRadius" format="dimension" />
         <attr name="lib_bottomRightRadius" format="dimension" />
         <attr name="lib_radius" format="dimension" />
@@ -44,15 +44,6 @@
             <enum name="checked" value="2" />
             <enum name="selected" value="3" />
         </attr>
-    </declare-styleable>
-    <!--TextView-->
-    <declare-styleable name="Lib_TextViewColor">
-        <attr name="lib_textColorStatus">
-            <enum name="pressed" value="0" />
-            <enum name="enabled" value="1" />
-            <enum name="checked" value="2" />
-            <enum name="selected" value="3" />
-        </attr>
         <attr name="lib_textColor2" format="color" />
     </declare-styleable>
     <!--AbsListView-->
@@ -60,7 +51,7 @@
         <attr name="lib_isExpand" format="boolean" />
     </declare-styleable>
     <!--ExpandableLayout-->
-    <declare-styleable name="Lib_ExpandableLayout">
+    <declare-styleable name="Lib_Widget_ExpandableLayout">
         <attr name="lib_expDuration" format="integer|reference" />
         <attr name="lib_expWithParentScroll" format="boolean" />
         <attr name="lib_expExpandScrollTogether" format="boolean" />
@@ -73,7 +64,7 @@
     <declare-styleable name="Lib_ViewGroup">
         <attr name="lib_isSquare" format="boolean" />
     </declare-styleable>
-    <declare-styleable name="Lib_SwipeMenuLayout">
+    <declare-styleable name="Lib_Widget_SwipeMenuLayout">
         <attr name="lib_swipeEnable" format="boolean" />
         <attr name="lib_ios" format="boolean" />
         <attr name="lib_leftSwipe" format="boolean" />

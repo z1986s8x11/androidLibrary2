@@ -44,7 +44,7 @@ public class Lib_Widget_LinearLayout extends LinearLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        Lib_ShapeHelper.initBackground(this, context, attrs);
+        Lib_ShapeHelper.initShapeDrawable(this, context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_LinearLayout);
         int dividerInterval = typedArray.getDimensionPixelSize(R.styleable.Lib_LinearLayout_lib_dividerHeight, -1);
         if (dividerInterval > 0) {

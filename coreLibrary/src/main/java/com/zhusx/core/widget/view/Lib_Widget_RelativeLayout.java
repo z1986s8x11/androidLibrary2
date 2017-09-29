@@ -37,7 +37,7 @@ public class Lib_Widget_RelativeLayout extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        Lib_ShapeHelper.initBackground(this, context, attrs);
+        Lib_ShapeHelper.initShapeDrawable(this, context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_ViewGroup);
         isSquare = typedArray.getBoolean(R.styleable.Lib_ViewGroup_lib_isSquare, false);
         typedArray.recycle();

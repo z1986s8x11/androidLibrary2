@@ -37,7 +37,6 @@ public class Lib_Widget_TextView extends TextView {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        Lib_ShapeHelper.initBackground(this, context, attrs);
-        Lib_ShapeHelper.initTextColor(this, context, attrs);
+        Lib_ShapeHelper.initShapeDrawable(this, context, attrs);
     }
 }
