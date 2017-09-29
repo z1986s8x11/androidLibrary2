@@ -17,7 +17,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.RawRes;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.FileProvider;
 import android.support.v4.content.IntentCompat;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
@@ -98,17 +97,14 @@ public class _Intents {
             intent.setType("text/plain"); // 纯文本
         } else {
             File f = new File(imgPath);
-            if (f != null && f.exists() && f.isFile()) {
+            if (f.exists() && f.isFile()) {
                 intent.setType("image/jpg");
                 //当用户选择短信时使用sms_body取得文字
                 intent.putExtra("sms_body", msgText);
-                Uri u;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    u = FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, f);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                } else {
-                    u = Uri.fromFile(f);
                 }
+                Uri u = _Uris.fromFile(context, f);
                 intent.putExtra(Intent.EXTRA_STREAM, u);
             }
         }
@@ -131,7 +127,7 @@ public class _Intents {
         Intent intent = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            intent.setData(FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, apk));
+            intent.setData(_Uris.fromFile(context, apk));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -141,8 +137,7 @@ public class _Intents {
         } else {
             intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(Uri.fromFile(apk),
-                    "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(apk), "application/vnd.android.package-archive");
         }
         context.startActivity(intent);
     }

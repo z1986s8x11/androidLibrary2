@@ -22,7 +22,7 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.BasePostprocessor;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.zhusx.core.utils._Intents;
+import com.zhusx.core.utils._Uris;
 import com.zhusx.retrofit2.R;
 
 /**
@@ -52,7 +52,7 @@ public class _FrescoImageViews {
 
     public void _setAutoPlayImage(SimpleDraweeView imageView, @DrawableRes int id) {
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setUri(_Intents.parseUri(imageView.getContext(), id))
+                .setUri(_Uris.fromResource(imageView.getContext(), id))
                 .setOldController(imageView.getController())
                 .setAutoPlayAnimations(true)
                 .build();

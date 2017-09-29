@@ -146,10 +146,10 @@ public class _Permissions {
         fragment.requestPermissions(new String[]{requestPermission}, requestId);
     }
 
-    public static void goSettingPermission(Activity activity) {
+    public static void goSettingPermission(Context context) {
         Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
-        intent.setData(Uri.parse("package:" + activity.getPackageName()));
-        activity.startActivity(intent);
+        intent.setData(Uri.parse("package:" + context.getPackageName()));
+        context.startActivity(intent);
     }
 
     private static boolean isMIUI() {

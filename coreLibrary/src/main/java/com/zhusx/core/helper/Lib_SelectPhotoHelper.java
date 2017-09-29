@@ -1,20 +1,24 @@
 package com.zhusx.core.helper;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.utils._Files;
+import com.zhusx.core.utils._Permissions;
+import com.zhusx.core.utils._Uris;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +32,9 @@ public class Lib_SelectPhotoHelper {
     public static final int ActivityCameraRequestCode = 0x8A1;
     public static final int ActivityPhotoRequestCode = 0x8B2;
     private final int ActivityClopPhotoRequestCode = 0x8C3;
+    @Nullable
     private Activity activity;
+    @Nullable
     private Fragment fragment;
     private Context context;
     private boolean isClop = false;
@@ -36,30 +42,42 @@ public class Lib_SelectPhotoHelper {
     private File dirFile;
     private File saveFile;
 
-    public Lib_SelectPhotoHelper(Activity activity, String dir, int width, int height) {
-        this(activity, dir);
-        this.photoWidth = width;
-        this.photoHeight = height;
-        this.isClop = true;
-    }
-
-    public Lib_SelectPhotoHelper(Fragment fragment, String dir, int width, int height) {
-        this(fragment, dir);
-        this.photoWidth = width;
-        this.photoHeight = height;
-        this.isClop = true;
-    }
-
-    public Lib_SelectPhotoHelper(Activity activity, String dir) {
+    public Lib_SelectPhotoHelper(@NonNull Activity activity, int width, int height) {
         this.activity = activity;
         this.context = activity;
-        this.dirFile = new File(dir);
+        if (width > 0 && height > 0) {
+            this.photoWidth = width;
+            this.photoHeight = height;
+            this.isClop = true;
+        }
+        if (_Files.isExistSDCard()) {
+            dirFile = context.getExternalCacheDir();
+        } else {
+            dirFile = context.getCacheDir();
+        }
     }
 
-    public Lib_SelectPhotoHelper(Fragment fragment, String dir) {
+    public Lib_SelectPhotoHelper(@NonNull Fragment fragment, int width, int height) {
         this.fragment = fragment;
-        this.context = fragment.getActivity();
-        this.dirFile = new File(dir);
+        this.context = activity;
+        if (width > 0 && height > 0) {
+            this.photoWidth = width;
+            this.photoHeight = height;
+            this.isClop = true;
+        }
+        if (_Files.isExistSDCard()) {
+            dirFile = context.getExternalCacheDir();
+        } else {
+            dirFile = context.getCacheDir();
+        }
+    }
+
+    public Lib_SelectPhotoHelper(@NonNull Activity activity) {
+        this(activity, -1, -1);
+    }
+
+    public Lib_SelectPhotoHelper(@NonNull Fragment fragment) {
+        this(fragment, -1, -1);
     }
 
     private void startActivityForResult(Intent intent, int requestId) {
@@ -70,10 +88,67 @@ public class Lib_SelectPhotoHelper {
         }
     }
 
+    public <T extends Activity & _Permissions.OnPermissionResultListener> void _startSelectPhoto(final T activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            _Permissions._requestPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE, new _Permissions.PermissionRequest() {
+                @Override
+                public void allowPermission(String... strings) {
+                    startSelectPhoto();
+                }
+
+                @Override
+                public void notAllowedPermission(String... strings) {
+                    new AlertDialog.Builder(activity)
+                            .setMessage("程序需要获取相册访问权限,用于获取图片")
+                            .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    _Permissions.goSettingPermission(activity);
+                                }
+                            })
+                            .setNegativeButton("关闭", null)
+                            .create()
+                            .show();
+                }
+            });
+        } else {
+            startSelectPhoto();
+        }
+    }
+
+    public <T extends Fragment & _Permissions.OnPermissionResultListener> void _startSelectPhoto(final T fragment) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            _Permissions._requestPermission(fragment, Manifest.permission.READ_EXTERNAL_STORAGE, new _Permissions.PermissionRequest() {
+                @Override
+                public void allowPermission(String... strings) {
+                    startSelectPhoto();
+                }
+
+                @Override
+                public void notAllowedPermission(String... strings) {
+                    new AlertDialog.Builder(fragment.getActivity())
+                            .setMessage("程序需要获取相册访问权限,用于获取图片")
+                            .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    _Permissions.goSettingPermission(fragment.getActivity());
+                                }
+                            })
+                            .setNegativeButton("关闭", null)
+                            .create()
+                            .show();
+                }
+            });
+        } else {
+            startSelectPhoto();
+        }
+    }
+
     /**
      * 从相册选取
      */
-    public void _startSelectPhoto() {
+    @Deprecated
+    public void startSelectPhoto() {
         saveFile = new File(dirFile, System.currentTimeMillis() + ".jpg");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
         intent.setType("image/*");
@@ -83,30 +158,72 @@ public class Lib_SelectPhotoHelper {
     /**
      * 照像获取图片
      */
-    public void _startTakePhoto() {
-        saveFile = new File(dirFile, System.currentTimeMillis() + ".jpg");
-        if (Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (saveFile.exists()) {
-                saveFile.delete();
-            }
-            try {
-                saveFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, saveFile));
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            } else {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(saveFile));
+    public <T extends Activity & _Permissions.OnPermissionResultListener> void _startTakePhoto(final T activity) {
+        _Permissions._requestPermission(activity, Manifest.permission.CAMERA, new _Permissions.PermissionRequest() {
+            @Override
+            public void allowPermission(String... strings) {
+                startSelectPhoto();
             }
 
-            startActivityForResult(intent, ActivityCameraRequestCode);
-        } else {
-            Toast.makeText(context, "请插入SD卡", Toast.LENGTH_SHORT).show();
+            @Override
+            public void notAllowedPermission(String... strings) {
+                new AlertDialog.Builder(activity).setMessage("程序需要获取相机权限,用于摄像头拍摄")
+                        .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                _Permissions.goSettingPermission(activity);
+                            }
+                        })
+                        .setNegativeButton("关闭", null)
+                        .create()
+                        .show();
+            }
+        });
+    }
+
+    public <T extends Fragment & _Permissions.OnPermissionResultListener> void _startTakePhoto(final T fragment) {
+        _Permissions._requestPermission(fragment, Manifest.permission.CAMERA, new _Permissions.PermissionRequest() {
+            @Override
+            public void allowPermission(String... strings) {
+                startSelectPhoto();
+            }
+
+            @Override
+            public void notAllowedPermission(String... strings) {
+                new AlertDialog.Builder(fragment.getActivity()).setMessage("程序需要获取相机权限,用于摄像头拍摄")
+                        .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                _Permissions.goSettingPermission(fragment.getActivity());
+                            }
+                        })
+                        .setNegativeButton("关闭", null)
+                        .create()
+                        .show();
+            }
+        });
+    }
+
+    /**
+     * 照像获取图片
+     */
+    @Deprecated
+    public void startTakePhoto() {
+        saveFile = new File(dirFile, System.currentTimeMillis() + ".jpg");
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (saveFile.exists()) {
+            saveFile.delete();
         }
+        try {
+            saveFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, _Uris.fromFile(context, saveFile));
+        startActivityForResult(intent, ActivityCameraRequestCode);
     }
 
     public interface onDataListener {
@@ -126,18 +243,33 @@ public class Lib_SelectPhotoHelper {
                     break;
                 case ActivityPhotoRequestCode:
                     Uri uri = data.getData();
-                    String filePath = _Files.getUriPath(context, uri);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        if (isClop) {
-                            gotoClop(new File(filePath), photoWidth, photoHeight);
+                    String filePath;
+                    try {
+                        filePath = _Files.getUriPath(context, uri);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            if (isClop) {
+                                gotoClop(new File(filePath), photoWidth, photoHeight);
+                            } else {
+                                File file = new File(filePath);
+                                listener.onPhoto(file);
+                            }
                         } else {
-                            File file = new File(filePath);
-                            listener.onPhoto(file);
+                            if (LogUtil.DEBUG) {
+                                LogUtil.e("_Files.getUriPath(context, uri) at" + String.valueOf(uri) + " is null");
+                            }
                         }
-                    } else {
-                        if (LogUtil.DEBUG) {
-                            LogUtil.e("_Files.getUriPath(context, uri) at" + String.valueOf(uri) + " is null");
-                        }
+                    } catch (SecurityException e) {
+                        new AlertDialog.Builder(context)
+                                .setMessage("程序需要获取扩展空间访问权限")
+                                .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        _Permissions.goSettingPermission(context);
+                                    }
+                                })
+                                .setNegativeButton("关闭", null)
+                                .create()
+                                .show();
                     }
                     break;
                 case ActivityClopPhotoRequestCode:
@@ -161,13 +293,10 @@ public class Lib_SelectPhotoHelper {
 
     private void gotoClop(File file, int width, int height) {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setData(FileProvider.getUriForFile(context, _Files.LIB_FILE_PROVIDER, file));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        } else {
-            intent.setDataAndType(Uri.fromFile(file), "image/*");
         }
+        intent.setDataAndType(_Uris.fromFile(context, file), "image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("aspectX", 1);

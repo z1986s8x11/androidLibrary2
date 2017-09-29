@@ -41,10 +41,6 @@ import java.util.Comparator;
 public class _Files {
     public static final String ASSET_PATH = "file:///android_asset/";
     /**
-     * 用于适配Android 7.0 文件系统 Provider 对应AndroidManifest 中的provider
-     */
-    public static final String LIB_FILE_PROVIDER = "com.zhusx.core.fileProvider";
-    /**
      * 读取txt文件乱码：
      BufferedReader read = new BufferedReader(new FileReader(new File(filename)));
 
