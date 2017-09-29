@@ -162,7 +162,7 @@ public class Lib_SelectPhotoHelper {
         _Permissions._requestPermission(activity, Manifest.permission.CAMERA, new _Permissions.PermissionRequest() {
             @Override
             public void allowPermission(String... strings) {
-                startSelectPhoto();
+                startTakePhoto();
             }
 
             @Override
@@ -185,7 +185,7 @@ public class Lib_SelectPhotoHelper {
         _Permissions._requestPermission(fragment, Manifest.permission.CAMERA, new _Permissions.PermissionRequest() {
             @Override
             public void allowPermission(String... strings) {
-                startSelectPhoto();
+                startTakePhoto();
             }
 
             @Override
