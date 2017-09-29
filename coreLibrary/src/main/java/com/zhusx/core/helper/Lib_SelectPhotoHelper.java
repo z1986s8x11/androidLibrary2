@@ -41,6 +41,8 @@ public class Lib_SelectPhotoHelper {
     private int photoWidth, photoHeight;
     private File dirFile;
     private File saveFile;
+    public String takePhoto = "程序需要相机拍摄权限,请在 权限管理 允许相机拍摄权限";
+    public String selectPhoto = "程序需要相册访问授权,请在 权限管理 允许相册访问权限";
 
     public Lib_SelectPhotoHelper(@NonNull Activity activity, int width, int height) {
         this.activity = activity;
@@ -99,7 +101,7 @@ public class Lib_SelectPhotoHelper {
                 @Override
                 public void notAllowedPermission(String... strings) {
                     new AlertDialog.Builder(activity)
-                            .setMessage("程序需要获取相册访问权限,用于获取图片")
+                            .setMessage(selectPhoto)
                             .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -127,7 +129,7 @@ public class Lib_SelectPhotoHelper {
                 @Override
                 public void notAllowedPermission(String... strings) {
                     new AlertDialog.Builder(fragment.getActivity())
-                            .setMessage("程序需要获取相册访问权限,用于获取图片")
+                            .setMessage(selectPhoto)
                             .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -167,7 +169,7 @@ public class Lib_SelectPhotoHelper {
 
             @Override
             public void notAllowedPermission(String... strings) {
-                new AlertDialog.Builder(activity).setMessage("程序需要获取相机权限,用于摄像头拍摄")
+                new AlertDialog.Builder(activity).setMessage(takePhoto)
                         .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -190,7 +192,7 @@ public class Lib_SelectPhotoHelper {
 
             @Override
             public void notAllowedPermission(String... strings) {
-                new AlertDialog.Builder(fragment.getActivity()).setMessage("程序需要获取相机权限,用于摄像头拍摄")
+                new AlertDialog.Builder(fragment.getActivity()).setMessage(takePhoto)
                         .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
