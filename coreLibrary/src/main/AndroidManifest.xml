@@ -11,7 +11,7 @@
     <application>
         <provider
             android:name="com.zhusx.core.helper.P_FileProvider"
-            android:authorities="com.zhusx.core.fileProvider"
+            android:authorities="${applicationId}.libFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <!--tools:replace="name,authorities,exported,grantUriPermissions"-->

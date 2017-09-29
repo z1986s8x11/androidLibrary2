@@ -20,16 +20,11 @@ import java.io.File;
 
 public class _Uris {
     /**
-     * 用于适配Android 7.0 文件系统 Provider 对应AndroidManifest 中的provider
-     */
-    public static final String LIB_FILE_PROVIDER = "com.zhusx.core.fileProvider";
-
-    /**
      * 如果是Intent 跳转  需要 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
      */
     public static Uri fromFile(Context context, File file) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return FileProvider.getUriForFile(context, LIB_FILE_PROVIDER, file);
+            return FileProvider.getUriForFile(context, context.getPackageName() + ".libFileProvider", file);
         } else {
             return Uri.fromFile(file);
         }
