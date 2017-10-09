@@ -69,6 +69,8 @@ public class _Permissions {
                             ActivityCompat.requestPermissions(activity, new String[]{requestPermission}, requestId);
                             break;
                     }
+                } else {
+                    listener.allowPermission(requestPermission);
                 }
             } else {
                 listener.allowPermission(requestPermission);
@@ -119,6 +121,8 @@ public class _Permissions {
                             fragment.requestPermissions(new String[]{requestPermission}, requestId);
                             break;
                     }
+                } else {
+                    listener.allowPermission(requestPermission);
                 }
             } else {
                 listener.allowPermission(requestPermission);
