@@ -9,6 +9,7 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.AbsListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.zhusx.core.debug.LogUtil;
@@ -124,6 +125,21 @@ public class _Views {
             }
         } else {
             return ViewCompat.canScrollVertically(mTargetScrollView, 1);
+        }
+    }
+
+    /**
+     * 判断scrollview中某子控件是否可见
+     */
+    public static boolean isVisibilityForChildView(ScrollView scrollView, View childView) {
+        Rect scrollBounds = new Rect();
+        scrollView.getHitRect(scrollBounds);
+        if (childView.getLocalVisibleRect(scrollBounds)) {
+            //子控件至少有一个像素在可视范围内
+            return true;
+        } else {
+            //子控件完全不在可视范围内
+            return false;
         }
     }
 }
