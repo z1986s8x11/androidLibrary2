@@ -253,9 +253,17 @@ public class _Systems {
         if (TextUtils.isEmpty(uuid) || "0".equals(uuid) || "000000000000000".equals(uuid)) {
             uuid = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
             if (TextUtils.isEmpty(uuid) || "unknown".equals(uuid) || "9774d56d682e549c".equals(uuid)) {
+                /*=============兼容老版本==============*/
+                //不做兼容 可删除
+                SharedPreferences prefs = context.getSharedPreferences("lib_device_id", 0);
+                uuid = prefs.getString("device_id", null);
+                if (uuid != null) {
+                    return uuid;
+                }
+               /*=====================================*/
                 uuid = android.os.Build.SERIAL;
                 if (TextUtils.isEmpty(uuid) || "unknown".equals(uuid)) {
-                    SharedPreferences prefs = context.getSharedPreferences("lib_device_id", 0);
+                    //SharedPreferences prefs = context.getSharedPreferences("lib_device_id", 0);
                     uuid = prefs.getString("device_id", null);
                     if (uuid == null) {
                         uuid = UUID.randomUUID().toString();
