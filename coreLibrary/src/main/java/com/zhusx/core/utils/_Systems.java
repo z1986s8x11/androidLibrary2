@@ -252,12 +252,15 @@ public class _Systems {
         String uuid = getIMEI(context);
         if (TextUtils.isEmpty(uuid) || "0".equals(uuid) || "000000000000000".equals(uuid)) {
             uuid = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-            if (TextUtils.isEmpty(uuid) || "9774d56d682e549c".equals(uuid)) {
-                SharedPreferences prefs = context.getSharedPreferences("lib_device_id", 0);
-                uuid = prefs.getString("device_id", null);
-                if (uuid == null) {
-                    uuid = UUID.randomUUID().toString();
-                    prefs.edit().putString("device_id", uuid).apply();
+            if (TextUtils.isEmpty(uuid) || "unknown".equals(uuid) || "9774d56d682e549c".equals(uuid)) {
+                uuid = android.os.Build.SERIAL;
+                if (TextUtils.isEmpty(uuid) || "unknown".equals(uuid)) {
+                    SharedPreferences prefs = context.getSharedPreferences("lib_device_id", 0);
+                    uuid = prefs.getString("device_id", null);
+                    if (uuid == null) {
+                        uuid = UUID.randomUUID().toString();
+                        prefs.edit().putString("device_id", uuid).apply();
+                    }
                 }
             }
         }
