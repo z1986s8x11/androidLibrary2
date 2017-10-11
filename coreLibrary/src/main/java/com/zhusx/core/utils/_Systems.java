@@ -1,7 +1,6 @@
 package com.zhusx.core.utils;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Instrumentation;
@@ -34,8 +33,6 @@ import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.WindowManager;
 
 import com.zhusx.core.debug.LogUtil;
 
@@ -145,41 +142,6 @@ public class _Systems {
     }
 
     /**
-     * 显示或者隐藏 系统状态栏 在OnCreate 中加入
-     * getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
-     * onWindowVisibilityChanged(int visibility){}
-     *
-     * @param fullView 全屏View
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void setNavVisibility(View fullView, boolean visible) {
-        int newVis = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        if (!visible) {
-            newVis |= View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        }
-        fullView.setSystemUiVisibility(newVis);
-    }
-
-    /**
-     * 显示或者隐藏 系统状态栏 在OnCreate 中加入
-     * getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
-     * onWindowVisibilityChanged() onSystemUiVisibilityChange() 显示系统状态栏
-     * onWindowVisibilityChanged() onSystemUiVisibilityChange 隐藏系统状态栏
-     */
-    public static void setSystemFulllScreen(Activity activity, boolean isFullScreen) {
-        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
-        if (isFullScreen) {
-            lp.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-            activity.getWindow().setAttributes(lp);
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        } else {
-            lp.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            activity.getWindow().setAttributes(lp);
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-    }
-
-    /**
      * 返回手机服务商名字
      */
     public static String getProvidersName(Context context) {
@@ -279,11 +241,8 @@ public class _Systems {
      * 返回本地手机号码，这个号码不一定能获取到
      */
     public static String getNativePhoneNumber(Context context) {
-        TelephonyManager telephonyManager;
-        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String NativePhoneNumber = null;
-        NativePhoneNumber = telephonyManager.getLine1Number();
-        return NativePhoneNumber;
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getLine1Number();
     }
 
     /**

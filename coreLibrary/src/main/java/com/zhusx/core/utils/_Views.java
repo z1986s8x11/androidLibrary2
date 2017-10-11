@@ -1,13 +1,17 @@
 package com.zhusx.core.utils;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -140,6 +144,41 @@ public class _Views {
         } else {
             //子控件完全不在可视范围内
             return false;
+        }
+    }
+
+    /**
+     * 显示或者隐藏 系统状态栏 在OnCreate 中加入
+     * getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
+     * onWindowVisibilityChanged(int visibility){}
+     *
+     * @param fullView 全屏View
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void setNavVisibility(View fullView, boolean visible) {
+        int newVis = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        if (!visible) {
+            newVis |= View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        }
+        fullView.setSystemUiVisibility(newVis);
+    }
+
+    /**
+     * 显示或者隐藏 系统状态栏 在OnCreate 中加入
+     * getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
+     * onWindowVisibilityChanged() onSystemUiVisibilityChange() 显示系统状态栏
+     * onWindowVisibilityChanged() onSystemUiVisibilityChange 隐藏系统状态栏
+     */
+    public static void setSystemFulllScreen(Activity activity, boolean isFullScreen) {
+        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+        if (isFullScreen) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+            activity.getWindow().setAttributes(lp);
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        } else {
+            lp.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            activity.getWindow().setAttributes(lp);
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
     }
 }
