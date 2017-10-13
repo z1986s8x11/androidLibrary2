@@ -226,6 +226,7 @@ public class Lib_SelectPhotoHelper {
             e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, _Uris.fromFile(context, saveFile));
@@ -292,6 +293,7 @@ public class Lib_SelectPhotoHelper {
     private void gotoClop(File file, int width, int height) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         intent.setDataAndType(_Uris.fromFile(context, file), "image/*");
@@ -301,11 +303,10 @@ public class Lib_SelectPhotoHelper {
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", width);
         intent.putExtra("outputY", height);
+        intent.putExtra("noFaceDetection", true);
+        intent.putExtra("scale", true);
         intent.putExtra("return-data", false); //true 可能会引起 android.os.TransactionTooLargeException: data parcel size 642356 bytes
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, _Uris.fromFile(context, clopFile));
-        if (clopFile.exists()) {
-            clopFile.delete();
-        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(clopFile));
         startActivityForResult(intent, ActivityClopPhotoRequestCode);
     }
 
