@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.utils._Files;
@@ -43,34 +44,37 @@ public class Lib_SelectPhotoHelper {
     private File saveFile;
     public String takePhoto = "程序需要相机拍摄权限,请在 权限管理 允许相机拍摄权限";
     public String selectPhoto = "程序需要相册访问授权,请在 权限管理 允许相册访问权限";
+    public File clopFile;
 
     public Lib_SelectPhotoHelper(@NonNull Activity activity, int width, int height) {
         this.activity = activity;
         this.context = activity;
-        if (width > 0 && height > 0) {
-            this.photoWidth = width;
-            this.photoHeight = height;
-            this.isClop = true;
-        }
         if (_Files.isExistSDCard()) {
             dirFile = context.getExternalCacheDir();
         } else {
             dirFile = context.getCacheDir();
+        }
+        if (width > 0 && height > 0) {
+            this.photoWidth = width;
+            this.photoHeight = height;
+            this.isClop = true;
+            clopFile = new File(dirFile, "clopTemp");
         }
     }
 
     public Lib_SelectPhotoHelper(@NonNull Fragment fragment, int width, int height) {
         this.fragment = fragment;
         this.context = activity;
-        if (width > 0 && height > 0) {
-            this.photoWidth = width;
-            this.photoHeight = height;
-            this.isClop = true;
-        }
         if (_Files.isExistSDCard()) {
             dirFile = context.getExternalCacheDir();
         } else {
             dirFile = context.getCacheDir();
+        }
+        if (width > 0 && height > 0) {
+            this.photoWidth = width;
+            this.photoHeight = height;
+            this.isClop = true;
+            clopFile = new File(dirFile, "clopTemp");
         }
     }
 
@@ -275,18 +279,10 @@ public class Lib_SelectPhotoHelper {
                     }
                     break;
                 case ActivityClopPhotoRequestCode:
-                    Bitmap bm = data.getParcelableExtra("data");
-                    if (bm != null) {
-                        if (saveFile.exists()) {
-                            saveFile.delete();
-                        }
-                        boolean isSuccess = _Files.saveToFile(bm, saveFile.getPath());
-                        if (!bm.isRecycled()) {
-                            bm.recycle();
-                        }
-                        if (isSuccess) {
-                            listener.onPhoto(saveFile);
-                        }
+                    if (clopFile != null && clopFile.exists()) {
+                        listener.onPhoto(clopFile);
+                    } else {
+                        Toast.makeText(context, "发生未知错误", Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
@@ -305,7 +301,11 @@ public class Lib_SelectPhotoHelper {
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", width);
         intent.putExtra("outputY", height);
-        intent.putExtra("return-data", true);
+        intent.putExtra("return-data", false); //true 可能会引起 android.os.TransactionTooLargeException: data parcel size 642356 bytes
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, _Uris.fromFile(context, clopFile));
+        if (clopFile.exists()) {
+            clopFile.delete();
+        }
         startActivityForResult(intent, ActivityClopPhotoRequestCode);
     }
 
