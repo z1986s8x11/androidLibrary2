@@ -306,7 +306,7 @@ public class Lib_SelectPhotoHelper {
         intent.putExtra("noFaceDetection", true);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false); //true 可能会引起 android.os.TransactionTooLargeException: data parcel size 642356 bytes
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(clopFile));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(clopFile));//必须是  Uri.fromFile 如果使用 FileProvider.getUriForFile 会进入取消
         startActivityForResult(intent, ActivityClopPhotoRequestCode);
     }
 
