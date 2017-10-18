@@ -267,7 +267,7 @@ public class _HttpURLRequests {
         if (contentType == null) {
             contentType = "image/jpeg";// 流  application/octet-stream
         }
-        int res = 0;
+        int responseCode = 0;
         String result = null;
         String BOUNDARY = UUID.randomUUID().toString(); // 边界标识 随机生成
         String PREFIX = "--", LINE_END = "\r\n";
@@ -336,8 +336,8 @@ public class _HttpURLRequests {
         /**
          * 获取响应码 200=成功 当响应成功，获取响应的流
          */
-        res = conn.getResponseCode();
-        if (res >= HttpURLConnection.HTTP_OK && res < HttpURLConnection.HTTP_MULT_CHOICE) {
+        responseCode = conn.getResponseCode();
+        if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) {
             InputStream input = conn.getInputStream();
             StringBuffer sb1 = new StringBuffer();
             int ss;
@@ -346,7 +346,7 @@ public class _HttpURLRequests {
             }
             result = sb1.toString();
         } else {
-            throw new HttpException(res, "HTTP CODE:" + res);
+            throw new HttpException(responseCode, "HTTP CODE:" + responseCode);
         }
         return result;
     }

@@ -167,6 +167,11 @@ public class _Request {
         if (TextUtils.isEmpty(request.contentType)) {
             request.contentType = "image/jpeg";// 流  application/octet-stream
         }
+        if (request.listener != null) {
+            if (request.listener.isCanceled()) {
+                throw new HttpException(HttpException.ERROR_CODE_CANCEL, "取消上传");
+            }
+        }
         Response response = new Response();
         String BOUNDARY = UUID.randomUUID().toString(); // 边界标识 随机生成
         String PREFIX = "--", LINE_END = "\r\n";
@@ -215,7 +220,7 @@ public class _Request {
             dos.write(bytes, 0, len);
             if (request.listener != null) {
                 if (request.listener.isCanceled()) {
-                    throw new HttpException("取消上传");
+                    throw new HttpException(HttpException.ERROR_CODE_CANCEL, "取消上传");
                 }
                 num += len;
                 int current_progress = totalByte > 0 ? (int) ((float) num / totalByte * 100) : 0;

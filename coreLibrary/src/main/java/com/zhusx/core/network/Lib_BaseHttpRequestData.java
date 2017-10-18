@@ -205,7 +205,9 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
                 returnStr = __requestProtocol(pId, mParams);
             } catch (HttpException e) {
                 http.code = e._getErrorCode();
-                if (http.code > HttpURLConnection.HTTP_OK) {
+                if (http.code == HttpException.ERROR_CODE_CANCEL) {
+                    http.message = e._getErrorMessage(); //主动取消 上传or下载
+                } else if (http.code > HttpURLConnection.HTTP_OK) {
                     try {
                         __parseReadHttpCodeError(pId, http, e._getErrorMessage());
                     } catch (Exception ee) {
