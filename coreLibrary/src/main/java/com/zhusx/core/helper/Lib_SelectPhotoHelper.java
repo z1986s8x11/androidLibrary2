@@ -64,7 +64,7 @@ public class Lib_SelectPhotoHelper {
 
     public Lib_SelectPhotoHelper(@NonNull Fragment fragment, int width, int height) {
         this.fragment = fragment;
-        this.context = activity;
+        this.context = fragment.getActivity();
         if (_Files.isExistSDCard()) {
             dirFile = context.getExternalCacheDir();
         } else {
