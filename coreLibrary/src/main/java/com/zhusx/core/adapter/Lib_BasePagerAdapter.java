@@ -1,6 +1,5 @@
 package com.zhusx.core.adapter;
 
-import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
@@ -23,25 +22,24 @@ public abstract class Lib_BasePagerAdapter<T> extends PagerAdapter {
     static final int IGNORE_ITEM_VIEW_TYPE = AdapterView.ITEM_VIEW_TYPE_IGNORE;
     private final RecycleBin recycleBin;
 
-    public Lib_BasePagerAdapter(Context context) {
-        this(context, new ArrayList<T>(), new RecycleBin());
+    public Lib_BasePagerAdapter() {
+        this(new ArrayList<T>(), new RecycleBin());
     }
 
-    public Lib_BasePagerAdapter(Context context, List<T> list) {
-        this(context, list, new RecycleBin());
+    public Lib_BasePagerAdapter(List<T> list) {
+        this(list, new RecycleBin());
     }
 
-    public Lib_BasePagerAdapter(Context context, boolean isCache) {
-        this(context, new ArrayList<T>(), null);
+    public Lib_BasePagerAdapter(boolean isCache) {
+        this(new ArrayList<T>(), null);
     }
 
-    public Lib_BasePagerAdapter(Context context, List<T> list, boolean isCache) {
-        this(context, list, null);
+    public Lib_BasePagerAdapter(List<T> list, boolean isCache) {
+        this(list, null);
     }
 
-    Lib_BasePagerAdapter(Context context, List<T> list, RecycleBin recycleBin) {
+    Lib_BasePagerAdapter(List<T> list, RecycleBin recycleBin) {
         this.mList = list;
-        this.mInflater = LayoutInflater.from(context);
         this.recycleBin = recycleBin;
         if (recycleBin != null) {
             recycleBin.setViewTypeCount(getViewTypeCount());
@@ -64,6 +62,9 @@ public abstract class Lib_BasePagerAdapter<T> extends PagerAdapter {
             if (viewType != IGNORE_ITEM_VIEW_TYPE) {
                 view = recycleBin.getScrapView(position, viewType);
             }
+        }
+        if (mInflater == null) {
+            mInflater = LayoutInflater.from(container.getContext());
         }
         view = getView(mInflater, position, mList.get(position), view, container);
         container.addView(view);
