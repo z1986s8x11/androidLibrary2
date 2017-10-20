@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.zhusx.core.R;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
@@ -31,6 +32,7 @@ public class Lib_Widget_ViewPager extends ViewPager {
     private Bitmap mBigBitmap;
     private Paint b;
     private AutoScroll autoScroll;
+    private float aspectRatio = 0f; //长宽比
 
     public Lib_Widget_ViewPager(Context context) {
         super(context);
@@ -42,6 +44,7 @@ public class Lib_Widget_ViewPager extends ViewPager {
         isScrollable = typedArray.getBoolean(R.styleable.Lib_Widget_ViewPager_lib_scrollable, isScrollable);
         isAutoScroll = typedArray.getBoolean(R.styleable.Lib_Widget_ViewPager_lib_autoScroll, isAutoScroll);
         isRefreshViewParent = typedArray.getBoolean(R.styleable.Lib_Widget_ViewPager_lib_parentIsRefresh, isRefreshViewParent);
+        aspectRatio = typedArray.getFloat(R.styleable.Lib_Widget_ViewPager_lib_aspectRatio, aspectRatio);
         if (isAutoScroll) {
             int interval = typedArray.getInt(R.styleable.Lib_Widget_ViewPager_lib_interval, 5000);
             autoScroll = new AutoScroll(interval);
@@ -263,6 +266,31 @@ public class Lib_Widget_ViewPager extends ViewPager {
             }
         }
         super.dispatchDraw(canvas);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if (aspectRatio <= 0 || layoutParams == null) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            return;
+        }
+        int width = widthMeasureSpec;
+        int height = heightMeasureSpec;
+        int widthPadding = getPaddingLeft() + getPaddingRight();
+        int heightPadding = getPaddingTop() + getPaddingBottom();
+        if (layoutParams.height == 0 || layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            int widthSpecSize = View.MeasureSpec.getSize(width);
+            int desiredHeight = (int) ((widthSpecSize - widthPadding) / aspectRatio + heightPadding);
+            int resolvedHeight = View.resolveSize(desiredHeight, height);
+            height = View.MeasureSpec.makeMeasureSpec(resolvedHeight, View.MeasureSpec.EXACTLY);
+        } else {
+            int heightSpecSize = View.MeasureSpec.getSize(height);
+            int desiredWidth = (int) ((heightSpecSize - heightPadding) * aspectRatio + widthPadding);
+            int resolvedWidth = View.resolveSize(desiredWidth, width);
+            width = View.MeasureSpec.makeMeasureSpec(resolvedWidth, View.MeasureSpec.EXACTLY);
+        }
+        super.onMeasure(width, height);
     }
 
     public static class _ZoomOutPageTransformer implements ViewPager.PageTransformer {

@@ -5,6 +5,7 @@
         <attr name="lib_scrollable" format="boolean" />
         <attr name="lib_autoScroll" format="boolean" />
         <attr name="lib_interval" format="integer" />
+        <attr name="lib_aspectRatio" format="float" />
         <attr name="lib_parentIsRefresh" format="boolean" />
     </declare-styleable>
     <!--Background-->
