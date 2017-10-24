@@ -122,7 +122,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
         __requestProtocol(pId, getHttpParams(pId, objects));
     }
 
-    public static <T> T cast(Object o) {
+    public <T> T cast(Object o) {
         return (T) o;
     }
 

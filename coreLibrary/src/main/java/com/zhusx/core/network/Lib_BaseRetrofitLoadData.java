@@ -119,6 +119,10 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
         __requestProtocol(pId, getHttpParams(pId, objects));
     }
 
+    public <T> T cast(Object o) {
+        return (T) o;
+    }
+
     protected void __requestProtocol(final Id id, Observable<Transform> observable) {
         if (observable == null) {
             throw new NullPointerException("getHttpParams(pId, objects) at" + String.valueOf(pId) + " = null");
