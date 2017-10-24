@@ -24,9 +24,14 @@ public class RetrofitLoadData<Result> extends BaseRetrofitLoadData<Integer, Resu
     @Override
     protected HttpResult<Result> switchResult(JSONResult<Result> data) {
         HttpResult<Result> result = new HttpResult<>();
-        result.setSuccess(true);
+        result.setSuccess(data.code == 200);
         result.setData(data.data);
         result.setMessage(data.message);
         return result;
+    }
+
+    @Override
+    protected String __parseErrorMessage(Throwable e) {
+        return super.__parseErrorMessage(e);
     }
 }

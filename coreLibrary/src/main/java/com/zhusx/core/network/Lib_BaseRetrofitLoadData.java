@@ -1,4 +1,4 @@
-package com.zhusx.retrofit2;
+package com.zhusx.core.network;
 
 
 import android.text.TextUtils;
@@ -6,9 +6,6 @@ import android.text.TextUtils;
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.IPageData;
 import com.zhusx.core.interfaces.Lib_LoadingListener;
-import com.zhusx.core.network.HttpRequest;
-import com.zhusx.core.network.HttpResult;
-import com.zhusx.core.network.OnHttpLoadingListener;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -29,7 +26,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created      2016/9/27 9:27
  */
 
-public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> implements Lib_LoadingListener {
+public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform> implements Lib_LoadingListener {
     private Id pId;
     private HttpResult<Result> pBean;
     private boolean pIsDownding = false;
@@ -46,7 +43,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
         this.listener = listener;
     }
 
-    public BaseRetrofitLoadData(Id id) {
+    public Lib_BaseRetrofitLoadData(Id id) {
         this.pId = id;
         this.mCompositeSubscription = new CompositeSubscription();
     }
@@ -122,17 +119,6 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
         __requestProtocol(pId, getHttpParams(pId, objects));
     }
 
-    public static <T> T cast(Object o) {
-        return (T) o;
-    }
-
-    public String valueOf(Object o) {
-        if (o == null) {
-            return "";
-        }
-        return String.valueOf(o);
-    }
-
     protected void __requestProtocol(final Id id, Observable<Transform> observable) {
         if (observable == null) {
             throw new NullPointerException("getHttpParams(pId, objects) at" + String.valueOf(pId) + " = null");
@@ -178,6 +164,7 @@ public abstract class BaseRetrofitLoadData<Id, Result, Parameter, Transform> imp
                                             currentPage++;
                                         }
                                     }
+                                    pBean.setCurrentDataIndex(currentPage);
                                     if (listener != null) {
                                         listener.onLoadComplete(id, pLastRequestData, pBean);
                                     }

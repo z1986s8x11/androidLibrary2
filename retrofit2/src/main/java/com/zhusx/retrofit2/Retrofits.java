@@ -37,7 +37,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class Retrofits {
     private volatile static Retrofit retrofit;
-    private static final Charset UTF8 = Charset.forName("UTF-8");
     public static Application application;
     public static final String BASE_HOST = "http://stag.api.m.xgqqg.com";
 
@@ -46,6 +45,7 @@ public class Retrofits {
         client.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
+                Charset UTF8 = Charset.forName("UTF-8");
                 String versionName = _Systems.getAppVersionName(application);
                 long time = System.currentTimeMillis();
                 Request request = chain.request();
