@@ -1,10 +1,15 @@
 package com.zhusx.core.helper;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.DrawableRes;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.widget.AbsoluteLayout;
+import android.widget.ProgressBar;
 
 import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.utils._Densitys;
 
 import java.util.Locale;
 
@@ -21,6 +26,8 @@ public class Lib_WebViewHelper {
     public String errorMessageColor = "#a5a5a5";
     public String buttonBackgroundColor = "#e42a2d";
     public String buttonTextColor = "#ffffff";
+    private ProgressBar progressbar;
+    private boolean isFinish = true;
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public Lib_WebViewHelper(WebView mWebView) {
@@ -59,7 +66,29 @@ public class Lib_WebViewHelper {
         return true;
     }
 
-    boolean isFinish = true;
+    public void onProgressChanged(WebView view, int newProgress, @DrawableRes int resId) {
+        if (progressbar == null) {
+            progressbar = new ProgressBar(view.getContext(), null, android.R.attr.progressBarStyleHorizontal);
+            progressbar.setLayoutParams(new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.MATCH_PARENT, _Densitys.dip2px(view.getContext(), 2), 0, 0));
+            progressbar.setMax(100);
+            if (resId > 0) {
+                progressbar.setProgressDrawable(view.getResources().getDrawable(resId));
+            }
+            view.addView(progressbar);
+        }
+        if (newProgress >= 100) {
+            progressbar.setVisibility(View.GONE);
+        } else {
+            if (progressbar.getVisibility() == View.GONE) {
+                progressbar.setVisibility(View.VISIBLE);
+            }
+            progressbar.setProgress(newProgress);
+        }
+    }
+
+    public void onProgressChanged(WebView view, int newProgress) {
+        this.onProgressChanged(view, newProgress, -1);
+    }
 
     @JavascriptInterface
     public void libReLoad(final String url) {
