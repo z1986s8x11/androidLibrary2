@@ -20,13 +20,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'io.reactivex:rxjava:1.1.6'
-    provided 'io.reactivex:rxandroid:1.2.1'
-    //retrofit
-    provided "com.squareup.retrofit2:retrofit:2.1.0"
-    provided "com.squareup.retrofit2:adapter-rxjava:2.1.0"
-    provided 'com.squareup.retrofit2:converter-gson:2.0.1'
-    provided "com.squareup.okhttp3:logging-interceptor:3.4.1"
+    provided "io.reactivex.rxjava2:rxjava:2.1.1"
+    provided 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    provided 'com.squareup.retrofit2:retrofit:2.3.0'
+    provided 'com.squareup.retrofit2:converter-gson:2.3.0'
+    provided 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    provided 'com.squareup.okhttp3:logging-interceptor:3.8.1'
     provided "com.alibaba:fastjson:1.1.54.android"
     provided 'com.facebook.fresco:fresco:1.4.0'
     provided 'com.facebook.fresco:webpsupport:1.4.0'
