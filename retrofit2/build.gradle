@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 14
@@ -26,9 +26,9 @@ dependencies {
     provided 'com.squareup.retrofit2:converter-gson:2.3.0'
     provided 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     provided 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-    provided "com.alibaba:fastjson:1.1.54.android"
-    provided 'com.facebook.fresco:fresco:1.4.0'
-    provided 'com.facebook.fresco:webpsupport:1.4.0'
-    provided 'com.facebook.fresco:animated-gif:1.4.0'
+    provided "com.alibaba:fastjson:1.2.12"
+    provided 'com.facebook.fresco:fresco:1.5.0'
+    provided 'com.facebook.fresco:webpsupport:1.5.0'
+    provided 'com.facebook.fresco:animated-gif:1.5.0'
     compile project(':core')
 }

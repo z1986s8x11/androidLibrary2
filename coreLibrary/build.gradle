@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 14
@@ -19,12 +19,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.android.support:support-v4:25.3.1'
-    provided 'com.android.support:recyclerview-v7:25.3.1'
+    provided 'com.android.support:support-v4:25.4.0'
+    provided 'com.android.support:recyclerview-v7:25.4.0'
     //只为兼容 Retrofit : com.zhusx.core.network.Lib_BaseRetrofitLoadData
-    provided 'io.reactivex:rxjava:1.1.6'
+    provided 'io.reactivex:rxjava:1.2.2'
     provided 'io.reactivex:rxandroid:1.2.1'
-    provided "com.squareup.retrofit2:retrofit:2.1.0"
+    provided "com.squareup.retrofit2:retrofit:2.3.0"
     provided "com.squareup.retrofit2:adapter-rxjava:2.1.0"
 }
 apply from: rootProject.file('gradle/jcenter.gradle')
