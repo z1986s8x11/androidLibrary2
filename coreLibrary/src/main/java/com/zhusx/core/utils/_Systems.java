@@ -3,6 +3,7 @@ package com.zhusx.core.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.app.Instrumentation;
 import android.app.KeyguardManager;
 import android.content.ClipData;
@@ -29,6 +30,7 @@ import android.os.Build;
 import android.os.Looper;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -681,6 +683,24 @@ public class _Systems {
                 new Instrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
             }
         }).start();
+    }
+
+    @Nullable
+    public static Application getApplication() {
+        Application app = null;
+        try {
+            app = (Application) Class.forName("android.app.AppGlobals").getMethod("getInitialApplication").invoke(null);
+            if (app == null) {
+                throw new IllegalStateException("Static initialization of Applications must be on main thread.");
+            }
+            return app;
+        } catch (final Exception e) {
+            try {
+                app = (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null);
+            } catch (final Exception ex) {
+            }
+        }
+        return app;
     }
 
     /**

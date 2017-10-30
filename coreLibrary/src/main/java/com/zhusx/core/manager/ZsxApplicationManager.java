@@ -1,5 +1,6 @@
 package com.zhusx.core.manager;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
@@ -12,6 +13,7 @@ import com.zhusx.core.interfaces.Lib_OnCycleListener;
 import com.zhusx.core.network.P_NetworkStateReceiver;
 import com.zhusx.core.utils._Networks;
 import com.zhusx.core.utils._Sets;
+import com.zhusx.core.utils._Systems;
 
 import java.util.Set;
 
@@ -23,10 +25,21 @@ import java.util.Set;
  */
 public class ZsxApplicationManager {
     public static _Networks.NetType _Current_NetWork_Status = _Networks.NetType.Default;
+    @SuppressLint("StaticFieldLeak")
+    private static Application mApplication;
+
     private ZsxApplicationManager() {
     }
 
+    public static Application getApplication() {
+        if (mApplication == null) {
+            mApplication = _Systems.getApplication();
+        }
+        return mApplication;
+    }
+
     public static ZsxApplicationManager.Builder builder(Application app) {
+        ZsxApplicationManager.mApplication = app;
         return new Builder(app);
     }
 
