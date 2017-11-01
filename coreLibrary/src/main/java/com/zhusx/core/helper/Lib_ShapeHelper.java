@@ -11,6 +11,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhusx.core.R;
@@ -230,6 +231,71 @@ public class Lib_ShapeHelper {
                         break;
                 }
                 ((TextView) view).setTextColor(colorStateList);
+            }
+        }
+        typedArray.recycle();
+    }
+
+    public static void initImageDrawable(ImageView view, Context context, AttributeSet attrs) {
+        if (view == null || context == null || attrs == null) {
+            return;
+        }
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lib_Widget_ImageView);
+        int status = typedArray.getInt(R.styleable.Lib_Widget_ImageView_lib_status, -1);
+        if (status != -1) {
+            switch (status) {
+                case 0:
+                    status = android.R.attr.state_pressed;
+                    break;
+                case 1:
+                    status = android.R.attr.state_enabled;
+                    break;
+                case 2:
+                    status = android.R.attr.state_checked;
+                    break;
+                case 3:
+                    status = android.R.attr.state_selected;
+                    break;
+                default:
+                    status = -1;
+                    break;
+            }
+            if (status != -1) {
+                boolean isBackground = false;
+                Drawable src2 = typedArray.getDrawable(R.styleable.Lib_Widget_ImageView_lib_src2);
+                if (src2 != null) {
+                    Drawable source = view.getDrawable();
+                    if (source == null) {
+                        source = view.getBackground();
+                        isBackground = true;
+                    }
+                    if (source != null) {
+                        StateListDrawable stateListDrawable = new StateListDrawable();
+                        switch (status) {
+                            case android.R.attr.state_pressed:
+                            case android.R.attr.state_selected:
+                            case android.R.attr.state_checked:
+                                stateListDrawable.addState(new int[]{status}, src2);
+                                stateListDrawable.addState(new int[]{-status}, source);
+                                stateListDrawable.addState(new int[]{}, source);
+                                break;
+                            case android.R.attr.state_enabled:
+                                stateListDrawable.addState(new int[]{status}, source);
+                                stateListDrawable.addState(new int[]{-status}, src2);
+                                stateListDrawable.addState(new int[]{}, source);
+                                break;
+                        }
+                        if (isBackground) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                view.setBackground(stateListDrawable);
+                            } else {
+                                view.setBackgroundDrawable(stateListDrawable);
+                            }
+                        } else {
+                            view.setImageDrawable(stateListDrawable);
+                        }
+                    }
+                }
             }
         }
         typedArray.recycle();
