@@ -6,12 +6,13 @@
         <enum name="checked" value="2" />
         <enum name="selected" value="3" />
     </attr>
+    <attr name="lib_aspectRatio" format="float" />
     <!-- ViewPager -->
     <declare-styleable name="Lib_Widget_ViewPager">
         <attr name="lib_scrollable" format="boolean" />
         <attr name="lib_autoScroll" format="boolean" />
         <attr name="lib_interval" format="integer" />
-        <attr name="lib_aspectRatio" format="float" />
+        <attr name="lib_aspectRatio" />
         <attr name="lib_parentIsRefresh" format="boolean" />
     </declare-styleable>
     <declare-styleable name="Lib_Widget_ImageView">
@@ -63,12 +64,16 @@
         <attr name="lib_expExpandScrollTogether" format="boolean" />
     </declare-styleable>
     <!--LinearLayout-->
-    <declare-styleable name="Lib_LinearLayout">
+    <declare-styleable name="Lib_Widget_LinearLayout">
         <attr name="lib_dividerHeight" format="dimension" />
+        <attr name="lib_aspectRatio" />
         <attr name="lib_divider" format="color|reference" />
     </declare-styleable>
-    <declare-styleable name="Lib_ViewGroup">
-        <attr name="lib_isSquare" format="boolean" />
+    <declare-styleable name="Lib_Widget_RelativeLayout">
+        <attr name="lib_aspectRatio" />
+    </declare-styleable>
+    <declare-styleable name="Lib_Widget_FrameLayout">
+        <attr name="lib_aspectRatio" />
     </declare-styleable>
     <declare-styleable name="Lib_Widget_SwipeMenuLayout">
         <attr name="lib_swipeEnable" format="boolean" />

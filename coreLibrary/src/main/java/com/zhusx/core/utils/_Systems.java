@@ -59,7 +59,7 @@ public class _Systems {
     /**
      * 拿到apk版本
      */
-    public static String getAppVersionName(Context context) {
+    public static synchronized String getAppVersionName(Context context) {
         String versionName = "";
         if (context == null) {
             return versionName;
@@ -100,7 +100,7 @@ public class _Systems {
     /**
      * 拿到apk version Code
      */
-    public static int getAppVersionCode(Context context) {
+    public static synchronized int getAppVersionCode(Context context) {
         int versionCode = -1;
         if (context == null) {
             return versionCode;
