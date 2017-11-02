@@ -41,10 +41,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
      * @return 最后一次调教的参数
      */
     public HttpRequest<Parameter> _getRequestParams() {
-        if (pLastRequestData != null) {
-            return pLastRequestData;
-        }
-        return null;
+        return pLastRequestData;
     }
 
     public void _setOnLoadingListener(OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener) {

@@ -36,7 +36,7 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
     int currentPage = -1;
 
     public HttpRequest<Parameter> _getRequestParams() {
-        return this.pLastRequestData != null ? this.pLastRequestData : null;
+        return pLastRequestData;
     }
 
     public void _setOnLoadingListener(OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener) {
