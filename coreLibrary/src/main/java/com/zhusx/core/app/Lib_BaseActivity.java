@@ -1,13 +1,16 @@
 
 package com.zhusx.core.app;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 import android.view.MotionEvent;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
@@ -15,6 +18,7 @@ import com.zhusx.core.interfaces.Lib_OnCycleListener;
 import com.zhusx.core.utils._Activitys;
 import com.zhusx.core.utils._Lists;
 import com.zhusx.core.utils._Permissions;
+import com.zhusx.core.utils._Toast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,10 +58,27 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
             return;
         }
         if (toast == null) {
-            toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+            if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+                toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+            } else {
+                toast = _Toast.makeText(this, message, Toast.LENGTH_SHORT);
+            }
         }
         toast.setText(message);
         toast.show();
+    }
+
+    /**
+     * 在onCreate以前调用,修复虚拟按键挡住底部问题
+     */
+    protected void fixButtomVirtualBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //顶部 状态栏
+            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //底部 导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
     }
 
     /**
