@@ -36,6 +36,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
     private boolean pIsDownloading = false;
     private Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> pListeners = new LinkedHashSet<>();
     private HttpRequest<Parameter> pLastRequestData;
+    private int currentPage;
 
     /**
      * @return 最后一次调教的参数
@@ -55,6 +56,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
 
     public Lib_BaseHttpRequestData(Id id) {
         this.pId = id;
+        this.currentPage = __getDefaultPage(id);
     }
 
     public Id _getRequestID() {
@@ -253,7 +255,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
             }
             if (!isError) {
                 if (bean.isSuccess()) {
-                    bean.setCurrentDataIndex(_getNextPage());
+                    currentPage++;
                     onPostComplete(bean, mListeners);
                 } else {
                     onPostError(bean, true, bean.getMessage(), mListeners);
@@ -447,10 +449,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
         if (pLastRequestData.isRefresh || !_hasCache()) {
             return __getDefaultPage(pId);
         }
-        if (pBean.getCurrentDataIndex() == HttpResult.CURRENT_INDEX_DEFAULT) {
-            return __getDefaultPage(pId);
-        }
-        return pBean.getCurrentDataIndex() + 1;
+        return currentPage + 1;
     }
 
     protected int __getDefaultPage(Id id) {
@@ -468,7 +467,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
         HttpResult<Result> result = _getLastData();
         if (result.getData() instanceof IPageData) {
             IPageData impl = (IPageData) result.getData();
-            if (impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= (result.getCurrentDataIndex() + 1)) {
+            if (impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= (currentPage + 1)) {
                 return true;
             }
             return false;

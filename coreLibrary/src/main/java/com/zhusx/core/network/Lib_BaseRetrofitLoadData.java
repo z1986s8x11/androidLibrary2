@@ -4,6 +4,7 @@ package com.zhusx.core.network;
 import android.text.TextUtils;
 
 import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.interfaces.IHttpResult;
 import com.zhusx.core.interfaces.IPageData;
 import com.zhusx.core.interfaces.Lib_LoadingListener;
 
@@ -26,11 +27,11 @@ import rx.subscriptions.CompositeSubscription;
  * Created      2016/9/27 9:27
  */
 
-public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform> implements Lib_LoadingListener {
+public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform extends IHttpResult<Result>> implements Lib_LoadingListener {
     private Id pId;
-    private HttpResult<Result> pBean;
+    private IHttpResult<Result> pBean;
     private boolean pIsDownding = false;
-    private OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener;
+    private OnHttpLoadingListener<Id, IHttpResult<Result>, Parameter> listener;
     private HttpRequest<Parameter> pLastRequestData;
     private CompositeSubscription mCompositeSubscription;
     int currentPage = -1;
@@ -39,7 +40,7 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
         return pLastRequestData;
     }
 
-    public void _setOnLoadingListener(OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener) {
+    public void _setOnLoadingListener(OnHttpLoadingListener<Id, IHttpResult<Result>, Parameter> listener) {
         this.listener = listener;
     }
 
@@ -92,7 +93,7 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
         this.pBean = null;
     }
 
-    public HttpResult<Result> _getLastData() {
+    public IHttpResult<Result> _getLastData() {
         return this.pBean;
     }
 
@@ -157,7 +158,7 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
                             @Override
                             public void onNext(Transform data) {
                                 pIsDownding = false;
-                                pBean = switchResult(data);
+                                pBean = data;
                                 if (pBean.isSuccess()) {
                                     if (pLastRequestData.isRefresh) {
                                         currentPage = getDefaultPage();
@@ -168,7 +169,6 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
                                             currentPage++;
                                         }
                                     }
-                                    pBean.setCurrentDataIndex(currentPage);
                                     if (listener != null) {
                                         listener.onLoadComplete(id, pLastRequestData, pBean);
                                     }
@@ -206,8 +206,6 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
 
     protected abstract Observable<Transform> getHttpParams(Id var1, Parameter... var2);
 
-    protected abstract HttpResult<Result> switchResult(Transform data);
-
     @Override
     public int _getNextPage() {
         if (currentPage == -1) {
@@ -227,10 +225,10 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
     protected void __onStart(Id id, HttpRequest<Parameter> request) {
     }
 
-    protected void __onError(Id id, HttpRequest<Parameter> request, HttpResult<Result> result, boolean var4, String errorMessage) {
+    protected void __onError(Id id, HttpRequest<Parameter> request, IHttpResult<Result> result, boolean var4, String errorMessage) {
     }
 
-    protected void __onComplete(Id id, HttpRequest<Parameter> request, HttpResult<Result> result) {
+    protected void __onComplete(Id id, HttpRequest<Parameter> request, IHttpResult<Result> result) {
     }
 
     @Override
@@ -240,7 +238,7 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform>
         } else if (!_hasCache()) {
             return true;
         } else {
-            HttpResult result = _getLastData();
+            IHttpResult result = _getLastData();
             if (result.getData() instanceof IPageData) {
                 IPageData impl = (IPageData) result.getData();
                 return impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= (currentPage + 1);

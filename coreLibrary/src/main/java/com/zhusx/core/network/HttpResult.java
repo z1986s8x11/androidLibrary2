@@ -1,12 +1,12 @@
 package com.zhusx.core.network;
 
-public class HttpResult<M> {
+import com.zhusx.core.interfaces.IHttpResult;
+
+public class HttpResult<M> implements IHttpResult<M> {
     private boolean isSuccess;
     private String message;
     private M data;
     private int errorCode = -1;
-    private int currentDataIndex = CURRENT_INDEX_DEFAULT;
-    public static final int CURRENT_INDEX_DEFAULT = -1;
 
     public int getErrorCode() {
         return errorCode;
@@ -14,14 +14,6 @@ public class HttpResult<M> {
 
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
-    }
-
-    public int getCurrentDataIndex() {
-        return currentDataIndex;
-    }
-
-    void setCurrentDataIndex(int currentDataIndex) {
-        this.currentDataIndex = currentDataIndex;
     }
 
     public boolean isSuccess() {
