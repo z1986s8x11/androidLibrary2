@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 
 import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.interfaces.IHttpResult;
 import com.zhusx.core.interfaces.IPageData;
 import com.zhusx.core.interfaces.Lib_LoadingListener;
 import com.zhusx.core.manager.ZsxApplicationManager;
@@ -29,18 +30,16 @@ import java.util.Set;
  * Created       2017/1/4 10:18
  */
 public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements Lib_LoadingListener {
-    private HttpWork pWorkThread;
-    private Handler pHandler = new Handler(Looper.getMainLooper());
     private Id pId;
     private HttpResult<Result> pBean;
     private boolean pIsDownloading = false;
     private Set<OnHttpLoadingListener<Id, HttpResult<Result>, Parameter>> pListeners = new LinkedHashSet<>();
     private HttpRequest<Parameter> pLastRequestData;
-    private int currentPage;
+    int currentPage = -1;
 
-    /**
-     * @return 最后一次调教的参数
-     */
+    private HttpWork pWorkThread;
+    private Handler pHandler = new Handler(Looper.getMainLooper());
+
     public HttpRequest<Parameter> _getRequestParams() {
         return pLastRequestData;
     }
@@ -56,7 +55,6 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
 
     public Lib_BaseHttpRequestData(Id id) {
         this.pId = id;
-        this.currentPage = __getDefaultPage(id);
     }
 
     public Id _getRequestID() {
@@ -255,7 +253,15 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
             }
             if (!isError) {
                 if (bean.isSuccess()) {
-                    currentPage++;
+                    if (pLastRequestData.isRefresh) {
+                        currentPage = __getDefaultPage(pId);
+                    } else {
+                        if (currentPage == -1) {
+                            currentPage = __getDefaultPage(pId);
+                        } else {
+                            currentPage++;
+                        }
+                    }
                     onPostComplete(bean, mListeners);
                 } else {
                     onPostError(bean, true, bean.getMessage(), mListeners);
@@ -406,34 +412,6 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
                                                    @Nullable HttpResult<Result> lastData) throws Exception;
 
     /**
-     * 开始下载
-     */
-    protected void __onStart(Id id, HttpRequest<Parameter> request) {
-    }
-
-    /**
-     * 请求发生错误
-     *
-     * @param isAPIError    <ul>
-     *                      <li>true parStr 解析错误</li>
-     *                      <li>false 请求超时 网络连接异常等</li>
-     *                      </ul>
-     * @param result        当前请求解析返回 如果false result ==null;
-     * @param error_message 错误消息
-     */
-    protected void __onError(Id id,
-                             HttpRequest<Parameter> requestData,
-                             @Nullable HttpResult<Result> result,
-                             boolean isAPIError,
-                             String error_message) {
-    }
-
-    protected void __onComplete(Id id,
-                                HttpRequest<Parameter> requestData,
-                                HttpResult<Result> b) {
-    }
-
-    /**
      * 解析HttpCode 不等于 200 的错误信息
      * httpCode  大于 200  且 不等于HttpException.ERROR_CODE_CANCEL 为http错误码
      */
@@ -441,11 +419,24 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
         http.message = errorMessage;
     }
 
+
+
+    protected void __onStart(Id id, HttpRequest<Parameter> request) {
+    }
+
+    protected void __onError(Id id, HttpRequest<Parameter> request, IHttpResult<Result> result, boolean var4, String errorMessage) {
+    }
+
+    protected void __onComplete(Id id, HttpRequest<Parameter> request, IHttpResult<Result> result) {
+    }
     /**
      * 拿到下一页 页码
      */
     @Override
     public final int _getNextPage() {
+        if (currentPage == -1) {
+            return __getDefaultPage(pId);
+        }
         if (pLastRequestData.isRefresh || !_hasCache()) {
             return __getDefaultPage(pId);
         }

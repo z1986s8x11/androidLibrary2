@@ -33,8 +33,9 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform 
     private boolean pIsDownding = false;
     private OnHttpLoadingListener<Id, IHttpResult<Result>, Parameter> listener;
     private HttpRequest<Parameter> pLastRequestData;
-    private CompositeSubscription mCompositeSubscription;
     int currentPage = -1;
+
+    private CompositeSubscription mCompositeSubscription;
 
     public HttpRequest<Parameter> _getRequestParams() {
         return pLastRequestData;
