@@ -1,24 +1,25 @@
-package com.zhusx.core.network;
+package com.zhusx.retrofit2;
 
 
 import android.text.TextUtils;
 
 import com.zhusx.core.debug.LogUtil;
-import com.zhusx.core.interfaces.IHttpResult;
 import com.zhusx.core.interfaces.IPageData;
 import com.zhusx.core.interfaces.Lib_LoadingListener;
+import com.zhusx.core.network.HttpRequest;
+import com.zhusx.core.network.HttpResult;
+import com.zhusx.core.network.OnHttpLoadingListener;
 
 import java.io.IOException;
 import java.net.SocketException;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Retrofit 请求基类
@@ -27,27 +28,26 @@ import rx.subscriptions.CompositeSubscription;
  * Created      2016/9/27 9:27
  */
 
-public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform extends IHttpResult<Result>> implements Lib_LoadingListener {
+public abstract class Lib_BaseRetrofit2LoadData<Id, Result, Parameter, Transform> implements Lib_LoadingListener {
     private Id pId;
-    private IHttpResult<Result> pBean;
+    private HttpResult<Result> pBean;
     private boolean pIsDownding = false;
-    private OnHttpLoadingListener<Id, IHttpResult<Result>, Parameter> listener;
+    private OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener;
     private HttpRequest<Parameter> pLastRequestData;
+    private CompositeDisposable mCompositeSubscription;
     int currentPage = -1;
 
-    private CompositeSubscription mCompositeSubscription;
-
     public HttpRequest<Parameter> _getRequestParams() {
-        return pLastRequestData;
+        return this.pLastRequestData != null ? this.pLastRequestData : null;
     }
 
-    public void _setOnLoadingListener(OnHttpLoadingListener<Id, IHttpResult<Result>, Parameter> listener) {
+    public void _setOnLoadingListener(OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> listener) {
         this.listener = listener;
     }
 
-    public Lib_BaseRetrofitLoadData(Id id) {
+    public Lib_BaseRetrofit2LoadData(Id id) {
         this.pId = id;
-        this.mCompositeSubscription = new CompositeSubscription();
+        this.mCompositeSubscription = new CompositeDisposable();
     }
 
     public Id _getRequestID() {
@@ -94,13 +94,13 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform 
         this.pBean = null;
     }
 
-    public IHttpResult<Result> _getLastData() {
+    public HttpResult<Result> _getLastData() {
         return this.pBean;
     }
 
     public void _cancelLoadData() {
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
-            mCompositeSubscription.unsubscribe();
+        if (mCompositeSubscription != null && mCompositeSubscription.isDisposed()) {
+            mCompositeSubscription.dispose();
             mCompositeSubscription = null;
         }
         pIsDownding = false;
@@ -134,60 +134,64 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform 
             listener.onLoadStart(id, pLastRequestData);
         }
         __onStart(id, pLastRequestData);
-        this.mCompositeSubscription.add(
-                observable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<Transform>() {
-                            @Override
-                            public void onCompleted() {
-                            }
+        DisposableObserver observer = new DisposableObserver<Transform>() {
 
-                            @Override
-                            public void onError(Throwable e) {
-                                if (LogUtil.DEBUG) {
-                                    LogUtil.e(e);
-                                }
-                                String errorMessage = __parseErrorMessage(e);
-                                pIsDownding = false;
-                                if (listener != null) {
-                                    listener.onLoadError(id, pLastRequestData, null, false, errorMessage);
-                                }
-                                __onError(id, pLastRequestData, null, false, errorMessage);
-                            }
+            @Override
+            public void onError(Throwable e) {
+                if (LogUtil.DEBUG) {
+                    LogUtil.e(e);
+                }
+                String errorMessage = __parseErrorMessage(e);
+                pIsDownding = false;
+                if (listener != null) {
+                    listener.onLoadError(id, pLastRequestData, null, false, errorMessage);
+                }
+                __onError(id, pLastRequestData, null, false, errorMessage);
+            }
 
-                            @Override
-                            public void onNext(Transform data) {
-                                pIsDownding = false;
-                                pBean = data;
-                                if (pBean.isSuccess()) {
-                                    if (pLastRequestData.isRefresh) {
-                                        currentPage = getDefaultPage();
-                                    } else {
-                                        if (currentPage == -1) {
-                                            currentPage = getDefaultPage();
-                                        } else {
-                                            currentPage++;
-                                        }
-                                    }
-                                    if (listener != null) {
-                                        listener.onLoadComplete(id, pLastRequestData, pBean);
-                                    }
-                                    __onComplete(id, pLastRequestData, pBean);
-                                } else {
-                                    if (listener != null) {
-                                        listener.onLoadError(id, pLastRequestData, null, false, pBean.getMessage());
-                                    }
-                                    __onError(id, pLastRequestData, null, false, pBean.getMessage());
-                                }
-                            }
-                        }));
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onNext(Transform data) {
+                pIsDownding = false;
+                pBean = switchResult(data);
+                if (pBean.isSuccess()) {
+                    if (pLastRequestData.isRefresh) {
+                        currentPage = getDefaultPage();
+                    } else {
+                        if (currentPage == -1) {
+                            currentPage = getDefaultPage();
+                        } else {
+                            currentPage++;
+                        }
+                    }
+                    //TODO pBean.setCurrentDataIndex(currentPage);
+                    if (listener != null) {
+                        listener.onLoadComplete(id, pLastRequestData, pBean);
+                    }
+                    __onComplete(id, pLastRequestData, pBean);
+                } else {
+                    if (listener != null) {
+                        listener.onLoadError(id, pLastRequestData, null, false, pBean.getMessage());
+                    }
+                    __onError(id, pLastRequestData, null, false, pBean.getMessage());
+                }
+            }
+        };
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        this.mCompositeSubscription.add(observer);
     }
 
     protected String __parseErrorMessage(Throwable e) {
         String errorMessage = null;
-        if (e instanceof HttpException) {
-            Response<?> response = ((HttpException) e).response();
+        if (e instanceof retrofit2.HttpException) {
+            Response<?> response = ((retrofit2.HttpException) e).response();
             if (response != null) {
                 ResponseBody responseBody = response.errorBody();
                 try {
@@ -206,6 +210,8 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform 
     }
 
     protected abstract Observable<Transform> getHttpParams(Id var1, Parameter... var2);
+
+    protected abstract HttpResult<Result> switchResult(Transform data);
 
     @Override
     public int _getNextPage() {
@@ -226,10 +232,10 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform 
     protected void __onStart(Id id, HttpRequest<Parameter> request) {
     }
 
-    protected void __onError(Id id, HttpRequest<Parameter> request, IHttpResult<Result> result, boolean var4, String errorMessage) {
+    protected void __onError(Id id, HttpRequest<Parameter> request, HttpResult<Result> result, boolean var4, String errorMessage) {
     }
 
-    protected void __onComplete(Id id, HttpRequest<Parameter> request, IHttpResult<Result> result) {
+    protected void __onComplete(Id id, HttpRequest<Parameter> request, HttpResult<Result> result) {
     }
 
     @Override
@@ -239,7 +245,7 @@ public abstract class Lib_BaseRetrofitLoadData<Id, Result, Parameter, Transform 
         } else if (!_hasCache()) {
             return true;
         } else {
-            IHttpResult result = _getLastData();
+            HttpResult result = _getLastData();
             if (result.getData() instanceof IPageData) {
                 IPageData impl = (IPageData) result.getData();
                 return impl.getTotalPageCount() > 0 && impl.getTotalPageCount() >= (currentPage + 1);

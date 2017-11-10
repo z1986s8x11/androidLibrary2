@@ -34,23 +34,7 @@ public class Lib_Subscribes {
             return;
         }
         subscribes.add(subscriber);
-        final CancelRunnable<T> runnable = new CancelRunnable<T>(subscriber);
-        if (lifeCycle != null) {
-            lifeCycle._addOnCycleListener(new Lib_OnCycleListener() {
-                @Override
-                public void onResume() {
-                }
-
-                @Override
-                public void onPause() {
-                }
-
-                @Override
-                public void onDestroy() {
-                    runnable._setCancel();
-                }
-            });
-        }
+        final CancelRunnable<T> runnable = new CancelRunnable<T>(subscriber, lifeCycle);
         executor.execute(runnable);
     }
 
@@ -67,12 +51,42 @@ public class Lib_Subscribes {
         }
     }
 
-    private static class CancelRunnable<T> extends Lib_Runnable {
+    private static class CancelRunnable<T> extends Lib_Runnable implements Lib_OnCycleListener {
         final Handler mHandler = new Handler(Looper.getMainLooper());
         private Subscriber<T> subscriber;
+        private Lib_LifeCycleListener lifeCycle;
 
-        public CancelRunnable(Subscriber<T> subscriber) {
+        public CancelRunnable(Subscriber<T> subscriber, Lib_LifeCycleListener lifeCycle) {
             this.subscriber = subscriber;
+            this.lifeCycle = lifeCycle;
+            if (lifeCycle != null) {
+                lifeCycle._addOnCycleListener(this);
+            }
+        }
+
+        @Override
+        public void onResume() {
+        }
+
+        @Override
+        public void onPause() {
+        }
+
+        @Override
+        public void onDestroy() {
+            _setCancel();
+        }
+
+        @Override
+        public void _setCancel() {
+            super._setCancel();
+            if (lifeCycle != null) {
+                lifeCycle._removeOnCycleListener(this);
+                lifeCycle = null;
+            }
+            if (subscriber != null) {
+                subscribes.remove(subscriber);
+            }
         }
 
         @Override
@@ -105,7 +119,16 @@ public class Lib_Subscribes {
                     });
                 }
             } finally {
-                subscribes.remove(subscriber);
+                if (!_isCancel()) {
+                    if (lifeCycle != null) {
+                        lifeCycle._removeOnCycleListener(this);
+                        lifeCycle = null;
+                    }
+                    if (subscriber != null) {
+                        subscribes.remove(subscriber);
+                        subscriber = null;
+                    }
+                }
             }
         }
     }

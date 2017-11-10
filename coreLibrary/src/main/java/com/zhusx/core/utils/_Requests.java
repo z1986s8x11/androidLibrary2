@@ -26,7 +26,10 @@ import java.util.UUID;
  * Created      2017/8/25 18:03
  */
 
-public class _Request {
+public class _Requests {
+    /*是否显示请求Header头信息*/
+    public static boolean IS_SHOW_HEADER_LOG;
+
     public static Response request(Request request) throws IOException {
         Response response = new Response();
         final String encoding = "UTF-8";
@@ -109,14 +112,18 @@ public class _Request {
                 response.body = sb.toString();
                 response.isSuccess = true;
                 if (LogUtil.DEBUG) {
-                    LogUtil.e("HTTP Header:" + response.header);
+                    if (IS_SHOW_HEADER_LOG) {
+                        LogUtil.e("HTTP Header:" + response.header);
+                    }
                     LogUtil.e(String.valueOf(response.body));
                 }
             } else {
                 response.header = urlConn.getHeaderFields();
                 if (LogUtil.DEBUG) {
+                    if (IS_SHOW_HEADER_LOG) {
+                        LogUtil.e("HTTP Header:" + response.header);
+                    }
                     LogUtil.e("HTTP CODE:" + urlConn.getResponseCode());
-                    LogUtil.e("HTTP Header:" + response.header);
                 }
                 response.isSuccess = false;
                 // 下面开始做接收工作
