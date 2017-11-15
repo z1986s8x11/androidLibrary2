@@ -253,16 +253,6 @@ public class _Strings {
         return outBuffer.toString();
     }
 
-    /**
-     * [scheme:][//host:port][path][?query][#fragment]
-     *
-     * @param url 需要转换的url
-     *            必须以http:// 开头 转换中文url为可以访问的url
-     */
-    public static String encodeUrl(String url) {
-        return _HttpURLRequests.encodeUrl(url, null);
-    }
-
     public static String valueOf(String s) {
         if (s == null) {
             return "";

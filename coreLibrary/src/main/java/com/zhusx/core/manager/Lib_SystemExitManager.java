@@ -1,16 +1,17 @@
 package com.zhusx.core.manager;
 
 import android.app.Activity;
+import android.support.annotation.Nullable;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
-* Author        zhusx
-* Email         327270607@qq.com
-* Created       2016/12/12 9:27
-*/
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2016/12/12 9:27
+ */
 public class Lib_SystemExitManager {
     private static List<SoftReference<Activity>> list;
 
@@ -41,6 +42,7 @@ public class Lib_SystemExitManager {
         }
     }
 
+    @Nullable
     public static Activity getLastActivity() {
         if (list.isEmpty()) {
             return null;

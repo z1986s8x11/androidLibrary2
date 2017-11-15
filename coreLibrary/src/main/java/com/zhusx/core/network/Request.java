@@ -6,13 +6,12 @@ import android.text.TextUtils;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.utils._HttpURLRequests;
+import com.zhusx.core.utils._Requests;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
-
-import static com.zhusx.core.utils._HttpURLRequests.encodeUrl;
 
 /**
  * Author       zhusx
@@ -148,7 +147,7 @@ public class Request {
             switch (method) {
                 case Request.GET:
                     if (bodyMap != null && !bodyMap.isEmpty()) {
-                        url = encodeUrl(url, bodyMap);
+                        url = _Requests.encodeUrl(url, bodyMap);
                     }
                     if (!TextUtils.isEmpty(body)) {
                         if (LogUtil.DEBUG) {
@@ -186,13 +185,13 @@ public class Request {
                         //text/plain
                         //application/json
                         if (bodyMap != null && !bodyMap.isEmpty()) {
-                            url = _HttpURLRequests.encodeUrl(url, bodyMap);
+                            url = _Requests.encodeUrl(url, bodyMap);
                         }
                     }
                     break;
                 case Request.DELETE:
                     if (bodyMap != null && bodyMap.size() > 0) {
-                        url = encodeUrl(url, bodyMap);
+                        url = _Requests.encodeUrl(url, bodyMap);
                     }
                     if (!TextUtils.isEmpty(body)) {
                         if (LogUtil.DEBUG) {
