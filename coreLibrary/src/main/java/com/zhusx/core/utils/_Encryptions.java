@@ -12,7 +12,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
@@ -28,10 +27,38 @@ import javax.crypto.spec.SecretKeySpec;
 public class _Encryptions {
     /**
      * 对称加密
+     * <p>
+     * 1.电码本模式（Electronic Codebook Book (ECB)）;
+     * 2.密码分组链接模式（Cipher Block Chaining (CBC)）;
+     * 3.计算器模式（Counter (CTR)）;
+     * 4.密码反馈模式（Cipher FeedBack (CFB)）;
+     * 5.输出反馈模式（Output FeedBack (OFB)）;
+     * <p>
+     * 填充模式
+     * 1. PKCS5Padding
+     * 2. NoPadding         不填充
+     * 3. ISO10126Padding
+     * <p>
+     * 算法/模式/填充                16字节加密后数据长度        不满16字节加密后长度
+     * AES/CBC/NoPadding             16                          不支持
+     * AES/CBC/PKCS5Padding          32                          16
+     * AES/CBC/ISO10126Padding       32                          16
+     * AES/CFB/NoPadding             16                          原始数据长度
+     * AES/CFB/PKCS5Padding          32                          16
+     * AES/CFB/ISO10126Padding       32                          16
+     * AES/ECB/NoPadding             16                          不支持
+     * AES/ECB/PKCS5Padding          32                          16
+     * AES/ECB/ISO10126Padding       32                          16
+     * AES/OFB/NoPadding             16                          原始数据长度
+     * AES/OFB/PKCS5Padding          32                          16
+     * AES/OFB/ISO10126Padding       32                          16
+     * AES/PCBC/NoPadding            16                          不支持
+     * AES/PCBC/PKCS5Padding         32                          16
+     * AES/PCBC/ISO10126Padding      32                          16
      */
     public enum Symmetry {
         DES, // key 必须大于8位
-        DES_CBB_PKCS5, // key 必须大于8位
+        DES_CBC_PKCS5, // key 必须大于8位
         AES_128, // key 长度无限制
         AES_192, // 可能不支持
         AES_256, // 可能不支持
@@ -108,7 +135,7 @@ public class _Encryptions {
         return null;
     }
 
-    public static byte[] encode(Symmetry type, String key, String data) throws InvalidKeyException, NoSuchAlgorithmException,
+    private static byte[] encode(Symmetry type, String key, String data) throws InvalidKeyException, NoSuchAlgorithmException,
             InvalidKeySpecException, NoSuchPaddingException,
             IllegalBlockSizeException, BadPaddingException,
             InvalidAlgorithmParameterException {
@@ -118,9 +145,9 @@ public class _Encryptions {
                 cipher = Cipher.getInstance("DES");
                 cipher.init(Cipher.ENCRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new SecureRandom());
                 return cipher.doFinal(data.getBytes());
-            case DES_CBB_PKCS5:
+            case DES_CBC_PKCS5:
                 cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-                cipher.init(Cipher.ENCRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new IvParameterSpec(key.getBytes()));
+                cipher.init(Cipher.ENCRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new IvParameterSpec(key.getBytes()/*Iv 随便16位的数*/));
                 return cipher.doFinal(data.getBytes());
             case AES_128:
             case AES_192:
@@ -153,7 +180,7 @@ public class _Encryptions {
         return null;
     }
 
-    public static byte[] decode(Symmetry type, String key, byte[] data)
+    private static byte[] decode(Symmetry type, String key, byte[] data)
             throws InvalidKeyException, InvalidKeySpecException,
             NoSuchAlgorithmException, NoSuchPaddingException,
             IllegalBlockSizeException, BadPaddingException,
@@ -164,14 +191,14 @@ public class _Encryptions {
                 cipher = Cipher.getInstance("DES");
                 cipher.init(Cipher.DECRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new SecureRandom());
                 return cipher.doFinal(data);
-            case DES_CBB_PKCS5:
+            case DES_CBC_PKCS5:
                 cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
                 cipher.init(Cipher.DECRYPT_MODE, SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(key.getBytes())), new IvParameterSpec(key.getBytes()));
                 return cipher.doFinal(data);
             case AES_128:
             case AES_192:
             case AES_256:
-                KeyGenerator kGen = KeyGenerator.getInstance("AES");
+                KeyGenerator kGen = KeyGenerator.getInstance("AES");// //实例化一个用AES加密算法的密钥生成器
                 SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
                 sr.setSeed(key.getBytes());
                 switch (type) {
@@ -186,10 +213,8 @@ public class _Encryptions {
                         break;
                     default:
                 }
-                SecretKey sKey = kGen.generateKey();
-                byte[] rawKey = sKey.getEncoded();
-                cipher = Cipher.getInstance("AES");
-                cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(rawKey, "AES"));
+                cipher = Cipher.getInstance("AES");// 创建密码器
+                cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(kGen.generateKey().getEncoded()/*生成一个密钥 返回基本编码格式的密钥*/, "AES"));
                 return cipher.doFinal(data);
             case AES_ECB_PKCS5:
                 cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
