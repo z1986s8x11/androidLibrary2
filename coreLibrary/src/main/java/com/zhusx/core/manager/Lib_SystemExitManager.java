@@ -12,7 +12,7 @@ import java.util.List;
  * Email         327270607@qq.com
  * Created       2016/12/12 9:27
  */
-public class Lib_SystemExitManager {
+public final class Lib_SystemExitManager {
     private static List<SoftReference<Activity>> list;
 
     public static void addActivity(Activity activity) {

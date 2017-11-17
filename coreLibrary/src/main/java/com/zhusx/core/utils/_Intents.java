@@ -4,17 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.RawRes;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.IntentCompat;
@@ -162,7 +157,7 @@ public class _Intents {
     /**
      * 运行某包名的应用
      */
-    public static Intent startApp(Activity activity, String packageName) {
+    public static Intent startRunApp(Activity activity, String packageName) {
         Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
         return intent;
     }
@@ -251,10 +246,5 @@ public class _Intents {
             return null;
         }
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileSuffix.toLowerCase());
-    }
-
-    public static Uri parseUri(Context context, @ColorRes @RawRes @DrawableRes int id) {
-        Resources res = context.getResources();
-        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + res.getResourcePackageName(id) + "/" + res.getResourceTypeName(id) + "/" + res.getResourceEntryName(id));
     }
 }

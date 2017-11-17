@@ -1,8 +1,14 @@
 package com.zhusx.core.utils;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.app.Activity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ViewSwitcher;
 
 /**
  * Author       zhusx
@@ -56,5 +62,98 @@ public class _Anims {
                 ((ViewGroup) animView.getParent()).setLayoutTransition(mLayoutTransition);
             }
         }
+    }
+
+    public void showViewTop(View fromView, int top, ViewSwitcher.ViewFactory makeAnimView) {
+        //拿到ContentView
+        final FrameLayout rootView = (FrameLayout) ((Activity) fromView.getContext()).findViewById(android.R.id.content);
+        //创建用于动画显示的View
+        final View animView = makeAnimView.makeView();
+        if (animView.getParent() != null) {
+            throw new IllegalArgumentException("animView 构造器参数不能有父类  ");
+        }
+        if (animView.getMeasuredHeight() == 0 || animView.getMeasuredWidth() == 0) {
+            _Views.measureView(animView);
+        }
+        //动画View 添加进ContextView
+        rootView.addView(animView, animView.getMeasuredWidth(), animView.getMeasuredHeight());
+
+        int[] location = new int[2];
+        fromView.getLocationOnScreen(location);
+        animView.setX(fromView.getX() + (fromView.getMeasuredWidth() - animView.getMeasuredWidth()) / 2);
+        animView.setY(fromView.getY());
+
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", location[1] - fromView.getMeasuredHeight(), location[1] - fromView.getMeasuredHeight() - top);
+        PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 1, 0);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(animView, translationY, alpha);
+        animator.setDuration(1000);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                rootView.removeView(animView);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                rootView.removeView(animView);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        animator.start();
+    }
+
+    public void showViewMove(View fromView, View toView, ViewSwitcher.ViewFactory makeAnimView) {
+        //拿到ContentView
+        final FrameLayout rootView = (FrameLayout) ((Activity) fromView.getContext()).findViewById(android.R.id.content);
+        //创建用于动画显示的View
+        final View animView = makeAnimView.makeView();
+        if (animView.getParent() != null) {
+            throw new IllegalArgumentException("animView 构造器参数不能有父类  ");
+        }
+        if (animView.getMeasuredHeight() == 0 || animView.getMeasuredWidth() == 0) {
+            _Views.measureView(animView);
+        }
+        //动画View 添加进ContextView
+        rootView.addView(animView, animView.getMeasuredWidth(), animView.getMeasuredHeight());
+
+        int[] location = new int[2];
+        fromView.getLocationOnScreen(location);
+        int[] location1 = new int[2];
+        toView.getLocationOnScreen(location1);
+        animView.setX(fromView.getX());
+        animView.setY(fromView.getY());
+
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", location[1], location1[1]);
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", fromView.getLeft(), toView.getLeft());
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(animView, translationY, translationX);
+        animator.setDuration(500);
+
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                rootView.removeView(animView);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                rootView.removeView(animView);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        animator.start();
     }
 }
