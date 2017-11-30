@@ -157,9 +157,9 @@ public class _Intents {
     /**
      * 运行某包名的应用
      */
-    public static Intent startRunApp(Activity activity, String packageName) {
+    public static void startRunApp(Activity activity, String packageName) {
         Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
-        return intent;
+        activity.startActivity(intent);
     }
 
     /**
