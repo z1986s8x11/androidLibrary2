@@ -159,7 +159,11 @@ public class _Intents {
      */
     public static void startRunApp(Activity activity, String packageName) {
         Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
-        activity.startActivity(intent);
+        if (intent != null) {
+            activity.startActivity(intent);
+        } else if (LogUtil.DEBUG) {
+            LogUtil.e(packageName + " 没有启动 Launch 的 Intent ");
+        }
     }
 
     /**
