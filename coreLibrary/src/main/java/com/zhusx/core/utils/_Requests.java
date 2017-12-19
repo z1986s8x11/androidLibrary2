@@ -538,6 +538,9 @@ public class _Requests {
                 urlSb.append("#");
                 urlSb.append(uri.getFragment());
             }
+            if (url.endsWith("/")) {
+                urlSb.append("/");
+            }
             return urlSb.toString();
         } catch (Exception e) {
             if (LogUtil.DEBUG) {

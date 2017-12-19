@@ -140,19 +140,19 @@ public class LogUtil {
 
     @Nullable
     public static StackTraceElement getCurrentStackTrace() {
-        StackTraceElement[] stackTraceElement = Thread.currentThread()
-                .getStackTrace();
+        StackTraceElement[] stackTraceElement = Thread.currentThread().getStackTrace();
         if (stackTraceElement == null) {
             return null;
         }
-        boolean lastExit = false;
         for (int i = 0; i < stackTraceElement.length; i++) {
-            if (lastExit) {
-                //Log.e(TAG,String.format("at %s.%s(%s.java:%s)",stackTraceElement[i].getClassName(),stackTraceElement[i].getMethodName(),stackTraceElement[i].getClassName(),stackTraceElement[i].getLineNumber()));
-                return stackTraceElement[i];
-            }
             if ("getStackTrace".equals(stackTraceElement[i].getMethodName())) {
-                lastExit = true;
+                //保险...加一个越界判断...一般不会出现
+                if (i + 2 < stackTraceElement.length) {
+                    //Log.e(TAG,String.format("at %s.%s(%s.java:%s)",stackTraceElement[i].getClassName(),stackTraceElement[i].getMethodName(),stackTraceElement[i].getClassName(),stackTraceElement[i].getLineNumber()));
+                    // i + 1 是自己  也就是 getCurrentStackTrace();
+                    return stackTraceElement[i + 2];
+                }
+                return null;
             }
         }
         return null;
