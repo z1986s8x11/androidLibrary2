@@ -143,59 +143,6 @@ public class _Systems {
         }
     }
 
-    /**
-     * 返回手机服务商名字
-     */
-    public static String getProvidersName(Context context) {
-        String ProvidersName = null;
-        if (context == null) {
-            return ProvidersName;
-        }
-        // 返回唯一的用户ID;就是这张卡的编号神马的
-        String IMSI = getIMSI(context);
-        // IMSI号前面3位460是国家，紧接着后面2位00 02是中国移动，01是中国联通，03是中国电信。
-        if (IMSI.startsWith("46000") || IMSI.startsWith("46002")) {
-            ProvidersName = "中国移动";
-        } else if (IMSI.startsWith("46001")) {
-            ProvidersName = "中国联通";
-        } else if (IMSI.startsWith("46003")) {
-            ProvidersName = "中国电信";
-        } else {
-            ProvidersName = "其他服务商";
-        }
-        return ProvidersName;
-    }
-
-    /**
-     * @return 手机IMSI号码(国际移动用户识别码)
-     */
-    public static String getIMSI(Context context) {
-        if (context == null) {
-            return null;
-        }
-        TelephonyManager telephonyManager;
-        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        // 返回唯一的用户ID;就是这张卡的IMSI编号
-        return telephonyManager.getSubscriberId();
-    }
-
-    /**
-     * 需要 android.permission.READ_PHONE_STATE
-     *
-     * @return 返回手机ICCID号码(国际移动装备辨识码)
-     */
-    public static String getICCID(Context context) {
-        if (context == null) {
-            return null;
-        }
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        try {
-            // 返回唯一的用户ID;就是这张卡的IMSI编号
-            return telephonyManager.getSimSerialNumber();
-        } catch (SecurityException e) {
-            return null;
-        }
-    }
 
     /**
      * @return 手机串号
@@ -240,14 +187,6 @@ public class _Systems {
     }
 
     /**
-     * 返回本地手机号码，这个号码不一定能获取到
-     */
-    public static String getNativePhoneNumber(Context context) {
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getLine1Number();
-    }
-
-    /**
      * 使用Wifi时获取IP
      */
     @RequiresPermission(Manifest.permission.ACCESS_WIFI_STATE)
@@ -273,19 +212,6 @@ public class _Systems {
             }
             return null;
         }
-    }
-
-    /**
-     * 打开Wifi 按钮
-     */
-    public static boolean openWifeConnect(Context context) {
-        // 获取wifi服务
-        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        // 判断wifi是否开启
-        if (!wifiManager.isWifiEnabled()) {
-            return wifiManager.setWifiEnabled(true);
-        }
-        return false;
     }
 
     public static String getGPRSIp() {
@@ -714,5 +640,25 @@ public class _Systems {
         values.put("date", System.currentTimeMillis());
         values.put("body", body);
         cr.insert(Uri.parse("content://sms"), values);
+    }
+
+    /**
+     * 每个android应用都要运行在一个虚拟机上，有的应用服务采用Service和后台服务器通信进行通信，于是和原本的Activity就形成了多进程。
+     * 一个前台的应用进程，一个service后台进程，每个进程对应一个application对象，所以当应用配置了多个进程的时候，
+     * application对象的onCreate方法就会执行多次，所以为了保证只初始化一次，就必须做出区分的处理的
+     * 进程名是通过Manifest.xml中的"android:process"属性设置的，因此可以在application的onCreate方法中通过pid获取processName，
+     * 再做进一步的判断（跟android:process的值进行判断）使得相关初始化代码仅执行一次
+     */
+    public static boolean shouldInit(Application application) {
+        ActivityManager am = ((ActivityManager) application.getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = application.getPackageName();
+        int myPid = android.os.Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

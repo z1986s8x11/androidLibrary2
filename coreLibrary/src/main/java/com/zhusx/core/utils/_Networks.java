@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 
 /**
  * Author        zhusx
@@ -21,6 +22,19 @@ public class _Networks {
             if (mWiFiNetworkInfo != null) {
                 return mWiFiNetworkInfo.isAvailable();
             }
+        }
+        return false;
+    }
+
+    /**
+     * 打开Wifi 按钮
+     */
+    public static boolean enabledWifi(Context context) {
+        // 获取wifi服务
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        // 判断wifi是否开启
+        if (!wifiManager.isWifiEnabled()) {
+            return wifiManager.setWifiEnabled(true);
         }
         return false;
     }
