@@ -64,7 +64,7 @@ public class _Anims {
         }
     }
 
-    public void showViewTop(View fromView, int top, ViewSwitcher.ViewFactory makeAnimView) {
+    public static void showViewTop(View fromView, int top, ViewSwitcher.ViewFactory makeAnimView) {
         //拿到ContentView
         final FrameLayout rootView = (FrameLayout) ((Activity) fromView.getContext()).findViewById(android.R.id.content);
         //创建用于动画显示的View
@@ -109,7 +109,7 @@ public class _Anims {
         animator.start();
     }
 
-    public void showViewMove(View fromView, View toView, ViewSwitcher.ViewFactory makeAnimView) {
+    public static void showViewMove(View fromView, View toView, ViewSwitcher.ViewFactory makeAnimView) {
         //拿到ContentView
         final FrameLayout rootView = (FrameLayout) ((Activity) fromView.getContext()).findViewById(android.R.id.content);
         //创建用于动画显示的View

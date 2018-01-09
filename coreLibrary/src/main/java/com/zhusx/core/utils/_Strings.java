@@ -75,6 +75,7 @@ public class _Strings {
      * 转换当前byteSize大小 保留两位
      */
     public static String toFileSize(long byteSize) {
+        //return android.text.format.Formatter.formatFileSize(ZsxApplicationManager.getApplication(),byteSize);
         DecimalFormat fmt = new DecimalFormat("0.#");
         double f1 = byteSize;
         if (f1 < 1024) {

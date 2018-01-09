@@ -28,7 +28,10 @@ public class _Networks {
 
     /**
      * 打开Wifi 按钮
+     *
+     * 需要权限 android.permission.CHANGE_WIFI_STATE
      */
+    @SuppressLint("MissingPermission")
     public static boolean enabledWifi(Context context) {
         // 获取wifi服务
         WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);

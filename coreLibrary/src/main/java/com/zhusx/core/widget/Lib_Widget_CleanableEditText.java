@@ -16,6 +16,11 @@ import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 
+/**
+ * Author        zhusx
+ * Email         327270607@qq.com
+ * Created       2018/1/5 10:56
+ */
 public class Lib_Widget_CleanableEditText extends EditText {
     private Drawable mRightDrawable;
     private Drawable InvisibleDrawable;
