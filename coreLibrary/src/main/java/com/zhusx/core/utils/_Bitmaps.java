@@ -223,18 +223,19 @@ public class _Bitmaps {
         overlay = doBlur(overlay, (int) radius, true);
         toView.setBackground(new BitmapDrawable(overlay));
     }
+
     /**
      * RenderScript 是在android4.2引入
      * 如果需要支持低版本需要在
      * Gradle 中加入
      * defaultConfig {
-     *      renderscriptTargetApi 17
-     *      renderscriptSupportModeEnabled true  //引入Support lib
-     *  }
+     * renderscriptTargetApi 17
+     * renderscriptSupportModeEnabled true  //引入Support lib
+     * }
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public Bitmap doBlur(Context context, @IntRange(from = 1, to = 25) int radius, Bitmap original) {
-        RenderScript renderScript =RenderScript.create(context);
+        RenderScript renderScript = RenderScript.create(context);
         Allocation input = Allocation.createFromBitmap(renderScript, original);
         Allocation output = Allocation.createTyped(renderScript, input.getType());
         ScriptIntrinsicBlur scriptIntrinsicBlur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
@@ -479,6 +480,7 @@ public class _Bitmaps {
     }
 
     /**
+     * ThumbnailUtils  也可以使用 帮助创建缩略图  图片或者视频
      * 拿到视频流第一帧
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)

@@ -6,6 +6,8 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.app.KeyguardManager;
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -14,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.ComponentInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -533,15 +536,42 @@ public class _Systems {
 
     public static String getMetaDataFromApplication(Context activity, String name) {
         try {
-            ApplicationInfo appInfo = activity.getPackageManager()
-                    .getApplicationInfo(activity.getPackageName(),
-                            PackageManager.GET_META_DATA);
-            String mTag = appInfo.metaData.getString(name);
-            return mTag;
+            ApplicationInfo appInfo = activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
+            Object meta = appInfo.metaData.get(name);
+            if (meta != null) {
+                return String.valueOf(meta);
+            }
         } catch (NameNotFoundException e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
+    }
+
+    public static String getMetaDataFromComponentName(Context activity, Class<?> cls, String name) {
+        try {
+            ComponentInfo info = null;
+            if (Activity.class.isAssignableFrom(cls)) {
+                info = activity.getPackageManager().getActivityInfo(new ComponentName(activity, cls), PackageManager.GET_META_DATA);
+            } else if (Service.class.isAssignableFrom(cls)) {
+                info = activity.getPackageManager().getServiceInfo(new ComponentName(activity, cls), PackageManager.GET_META_DATA);
+            } else if (BroadcastReceiver.class.isAssignableFrom(cls)) {
+                info = activity.getPackageManager().getReceiverInfo(new ComponentName(activity, cls), PackageManager.GET_META_DATA);
+            } else {
+                if (LogUtil.DEBUG) {
+                    LogUtil.e(cls.getName() + " is not Activity or Service or BroadcastReceiver");
+                }
+            }
+            if (info == null) {
+                return null;
+            }
+            Object meta = info.metaData.get(name);
+            if (meta != null) {
+                return String.valueOf(meta);
+            }
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
