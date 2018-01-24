@@ -58,11 +58,7 @@ public class Lib_BaseActivity extends FragmentActivity implements Lib_LifeCycleL
             return;
         }
         if (toast == null) {
-            if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
-                toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-            } else {
-                toast = _Toast.makeText(this, message, Toast.LENGTH_SHORT);
-            }
+            toast = _Toast.makeText(this, message, Toast.LENGTH_SHORT);
         }
         toast.setText(message);
         toast.show();

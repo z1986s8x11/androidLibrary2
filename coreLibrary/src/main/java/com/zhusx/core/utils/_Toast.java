@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.zhusx.core.manager.ZsxApplicationManager;
+
 /**
  * Author       zhusx
  * Email        327270607@qq.com
@@ -27,7 +29,7 @@ public class _Toast extends Toast {
     }
 
     public static Toast makeText(Context context, @StringRes int resId, int duration) {
-        if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+        if (ZsxApplicationManager._IS_NOTIFICATION_ENABLED) {
             return Toast.makeText(context, resId, duration);
         }
         _Toast result = new _Toast(context);
@@ -38,7 +40,7 @@ public class _Toast extends Toast {
     }
 
     public static Toast makeText(Context context, CharSequence text, int duration) {
-        if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+        if (ZsxApplicationManager._IS_NOTIFICATION_ENABLED) {
             return Toast.makeText(context, text, duration);
         }
         _Toast result = new _Toast(context);
@@ -50,7 +52,7 @@ public class _Toast extends Toast {
 
     @Override
     public void show() {
-        if (NotificationManagerCompat.from(mContext).areNotificationsEnabled()) {
+        if (ZsxApplicationManager._IS_NOTIFICATION_ENABLED) {
             super.show();
             return;
         }

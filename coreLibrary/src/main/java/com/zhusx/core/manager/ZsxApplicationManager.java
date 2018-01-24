@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.interfaces.Lib_LifeCycleListener;
@@ -25,6 +26,8 @@ import java.util.Set;
  */
 public class ZsxApplicationManager {
     public static _Networks.NetType _Current_NetWork_Status = _Networks.NetType.Default;
+    /*是否有Toast等通知权限*/
+    public static boolean _IS_NOTIFICATION_ENABLED;
     @SuppressLint("StaticFieldLeak")
     private static Application mApplication;
 
@@ -86,6 +89,7 @@ public class ZsxApplicationManager {
                 receiver = new P_NetworkStateReceiver();
                 receiver.registerNetworkStateReceiver(context);
             }
+            _IS_NOTIFICATION_ENABLED = NotificationManagerCompat.from(context).areNotificationsEnabled();
             if (safety) {
                 if (!LogUtil.DEBUG) {
                     if ((context.getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
