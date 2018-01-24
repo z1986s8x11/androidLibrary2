@@ -27,7 +27,7 @@ import java.util.Set;
 public class ZsxApplicationManager {
     public static _Networks.NetType _Current_NetWork_Status = _Networks.NetType.Default;
     /*是否有Toast等通知权限*/
-    public static boolean _IS_NOTIFICATION_ENABLED;
+    public static boolean _IS_NOTIFICATION_ENABLED = true;
     @SuppressLint("StaticFieldLeak")
     private static Application mApplication;
 
