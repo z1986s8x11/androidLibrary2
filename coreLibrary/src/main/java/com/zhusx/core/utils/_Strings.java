@@ -61,9 +61,7 @@ public class _Strings {
                 e.printStackTrace();
             }
             try {
-                if (in != null) {
-                    in.close();
-                }
+                in.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
