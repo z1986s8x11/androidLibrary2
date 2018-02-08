@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Author        zhusx
@@ -59,5 +60,16 @@ public class _Dates {
 
     public static String formatTime(@IntRange(from = 0, to = 60) int date) {
         return date < 10 ? "0" + date : String.valueOf(date);
+    }
+
+    public static String formatDate(String format, long timestamp) {
+        if (timestamp < 10000000000L) {
+            timestamp = timestamp * 1000;
+        }
+        return new SimpleDateFormat(format, Locale.getDefault()).format(new Date(timestamp));
+    }
+
+    public static String formatDate(String format, String timestamp) {
+        return formatDate(format, Long.parseLong(timestamp));
     }
 }
