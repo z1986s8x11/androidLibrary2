@@ -1,6 +1,7 @@
 package com.zhusx.core.utils;
 
-import com.zhusx.core.interfaces.Filter;
+import com.zhusx.core.interfaces.IFilter;
+import com.zhusx.core.interfaces.IFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class _Lists {
         return list.size();
     }
 
-    public static <T> List<T> filter(List<T> list, Filter<T> filter) {
+    public static <T> List<T> filter(List<T> list, IFilter<T> filter) {
         List<T> temp = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             T t = list.get(i);
@@ -35,5 +36,21 @@ public class _Lists {
             }
         }
         return temp;
+    }
+
+    public static <T, S> List<T> map(List<S> sourceList, IFunction<S, T> f) {
+        List<T> list = new ArrayList<>();
+        for (int i = 0; i < sourceList.size(); i++) {
+            list.add(f.apply(sourceList.get(i)));
+        }
+        return list;
+    }
+
+    public static <T> List<T> range(int count, IFunction<Integer, T> f) {
+        List<T> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            list.add(f.apply(i));
+        }
+        return list;
     }
 }

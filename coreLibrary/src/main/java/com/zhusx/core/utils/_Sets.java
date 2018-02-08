@@ -1,6 +1,6 @@
 package com.zhusx.core.utils;
 
-import com.zhusx.core.interfaces.Filter;
+import com.zhusx.core.interfaces.IFilter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +18,7 @@ public class _Sets {
         return set.isEmpty();
     }
 
-    public static <T> Set<T> filter(Set<T> set, Filter<T> filter) {
+    public static <T> Set<T> filter(Set<T> set, IFilter<T> filter) {
         Set<T> temp = new HashSet<>();
         for (T t : set) {
             if (!filter.isFilter(t)) {
