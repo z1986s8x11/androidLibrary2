@@ -30,12 +30,12 @@ public class _Intents {
     /**
      * 短信分享
      *
-     * @param smstext 短信分享内容
+     * @param text 短信分享内容
      */
-    public static void sendSms(Context mContext, String smstext) {
+    public static void sendSms(Context mContext, String text) {
         Uri smsToUri = Uri.parse("smsto:");
         Intent mIntent = new Intent(Intent.ACTION_SENDTO, smsToUri);
-        mIntent.putExtra("sms_body", smstext);
+        mIntent.putExtra("sms_body", text);
         mContext.startActivity(mIntent);
     }
 
@@ -60,8 +60,7 @@ public class _Intents {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, title);
         // 设置邮件文本内容
         emailIntent.putExtra(Intent.EXTRA_TEXT, text);
-        mContext.startActivity(Intent.createChooser(emailIntent,
-                "Choose Email Client"));
+        mContext.startActivity(Intent.createChooser(emailIntent, "Choose Email Client"));
     }
 
     /**
@@ -71,10 +70,8 @@ public class _Intents {
      * @throws ActivityNotFoundException 没有找到该应用
      * @throws SecurityException         没有权限
      */
-    public static void uninstallApp(Context context, String packageName)
-            throws ActivityNotFoundException, SecurityException {
-        Intent uninstallIntent = new Intent(Intent.ACTION_DELETE,
-                Uri.parse("package:" + packageName));
+    public static void uninstallApp(Context context, String packageName) throws ActivityNotFoundException, SecurityException {
+        Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName));
         context.startActivity(uninstallIntent);
     }
 

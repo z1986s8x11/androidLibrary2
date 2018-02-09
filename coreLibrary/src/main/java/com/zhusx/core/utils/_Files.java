@@ -1,7 +1,5 @@
 package com.zhusx.core.utils;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,10 +26,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * Author        zhusx
@@ -49,16 +43,11 @@ public class _Files {
      BufferedReader read = new BufferedReader(isr);
      */
 
-
     /**
      * 是否存在SD卡
      */
     public static boolean isExistSDCard() {
-        if (Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else
-            return false;
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
     /**
@@ -94,7 +83,7 @@ public class _Files {
     }
 
     /**
-     * 压缩成JPG 保存到文件中
+     * 保存到文件中
      */
     public static boolean saveToFile(InputStream in, String savePath) {
         boolean isSuccess = false;
@@ -131,16 +120,7 @@ public class _Files {
     }
 
     /**
-     * @param fileDir  文件目录
-     * @param fileName 文件名
-     * @return 文件路径
-     */
-    public static String getFilePath(String fileDir, String fileName) {
-        return new File(fileDir, fileName).getAbsolutePath();
-    }
-
-    /**
-     * 压缩成JPG 保存到文件中
+     * 保存到文件中
      */
     public static boolean saveToFile(Bitmap bitmap, String savePath) {
         int quality = 100;// 压缩到文件的品质 0-100
@@ -155,8 +135,7 @@ public class _Files {
         OutputStream stream = null;
         try {
             stream = new FileOutputStream(savePath);
-            isSuccess = bitmap.compress(Bitmap.CompressFormat.JPEG, quality,
-                    stream);
+            isSuccess = bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
         } catch (Exception e) {
             e.printStackTrace();
             if (file.exists()) {
@@ -176,7 +155,7 @@ public class _Files {
     }
 
     /**
-     * 压缩成JPG 保存到文件中
+     * 保存到文件中
      */
     public static boolean saveToFile(String txt, String savePath) {
         if (TextUtils.isEmpty(txt)) {
@@ -239,8 +218,6 @@ public class _Files {
 
     /**
      * 删除文件夹中所有文件
-     *
-     * @param file
      */
     public static void deleteFile(File file) {
         if (file == null) {
@@ -267,19 +244,26 @@ public class _Files {
 
     /**
      * 获取文件扩展名
-     *
-     * @param filePath
-     * @return ""或者后缀
      */
-    public static String getFileSuffix(String filePath) {
-        if (filePath == null) {
+    public static String getFileSuffix(File file) {
+        if (file.isDirectory()) {
+            return null;
+        }
+        return getFileSuffix(file.getName());
+    }
+
+    /**
+     * 获取文件扩展名
+     */
+    public static String getFileSuffix(String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
             return "";
         }
-        if (filePath.trim().length() == 0) {
+        int index = fileName.lastIndexOf(".");
+        if (index == -1) {
             return "";
         }
-        int point = filePath.lastIndexOf('.');
-        return filePath.substring(point + 1);
+        return fileName.substring(index + 1).toLowerCase();
     }
 
     @SuppressWarnings("resource")
@@ -366,25 +350,19 @@ public class _Files {
      * 获取内置存储位置
      */
     public static String getBuildInPath(Context context) {
-        StorageManager storageManager = (StorageManager) context
-                .getSystemService(Context.STORAGE_SERVICE);
-        String path = null;
-
+        StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         try {
             Class<?>[] paramClasses = {};
-            Method getVolumePathsMethod = StorageManager.class.getMethod(
-                    "getVolumePaths", paramClasses);
+            Method getVolumePathsMethod = StorageManager.class.getMethod("getVolumePaths", paramClasses);
             getVolumePathsMethod.setAccessible(true);
             Object[] params = {};
             Object invoke = getVolumePathsMethod.invoke(storageManager, params);
             String[] invokes = (String[]) invoke;
             for (int i = 0; i < invokes.length; i++) {
-                if (!Environment.getExternalStorageDirectory().getPath()
-                        .equals(invokes[i])) {
+                if (!Environment.getExternalStorageDirectory().getPath().equals(invokes[i])) {
                     return invokes[i];
                 }
             }
-
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();
         } catch (IllegalArgumentException e) {
@@ -394,7 +372,7 @@ public class _Files {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        return path;
+        return null;
     }
 
     /**
@@ -423,8 +401,7 @@ public class _Files {
      * 复制Assets文件到指定file下
      * 使用数据库用 SQLiteDatabase.openOrCreateDatabase(new File(context.getFilesDir(), dbName).getPath(), null);
      */
-    public static void copyAssetToFile(Context context,
-                                       String assetsFileName, File sdFile) {
+    public static void copyAssetToFile(Context context, String assetsFileName, File sdFile) {
         if (sdFile.exists()) {
             if (sdFile.length() != 0) {
                 return;
@@ -473,91 +450,8 @@ public class _Files {
     }
 
     /**
-     * 只支持本地文件
+     * 通过Uri 拿到文件路径
      */
-    public File toFile(Activity activity, Uri uri) {
-        File file = null;
-        if ("file:".contains(uri.getScheme())) {
-            try {
-                file = new File(new URI(uri.toString()));
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        } else if ("content:".contains(uri.getScheme())) {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            Cursor actualimagecursor = activity.managedQuery(uri, proj, null, null, null);
-            int actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            actualimagecursor.moveToFirst();
-            String img_path = actualimagecursor.getString(actual_image_column_index);
-            //actualimagecursor.close(); //关闭之后再次打开会报错 (managedQuery 关联的是Activity activity 销毁cursor销毁)
-            file = new File(img_path);
-        }
-        return file;
-    }
-
-    public static void deleteLastModifiedFile(String dirFile, int cacheMaxFileCount) {
-        File logFile = new File(dirFile);
-        File[] fs = logFile.listFiles();
-        if (fs == null) {
-            return;
-        }
-        if (fs.length > cacheMaxFileCount) {
-            Arrays.sort(fs, new Comparator<File>() {
-                public int compare(File f1, File f2) {
-                    long diff = f1.lastModified() - f2.lastModified();
-                    if (diff > 0)
-                        return -1;
-                    else if (diff == 0)
-                        return 0;
-                    else
-                        return 1;
-                }
-            });
-            for (int i = Math.max(0, cacheMaxFileCount); i < fs.length; i++) {
-                fs[i].delete();
-            }
-        }
-    }
-
-    /**
-     * @param rootDirName rootPath
-     * @param dirName     rootPath 下面的子目录
-     */
-    public static void createFileDir(Context context, String rootDirName, String... dirName) {
-        if (TextUtils.isEmpty(rootDirName)) {
-            return;
-        }
-        if (!_Systems.isPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            if (LogUtil.DEBUG) {
-                LogUtil.e("需要权限:" + Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            return;
-        }
-        File rootPathFile;
-        if (Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            rootPathFile = new File(Environment.getExternalStorageDirectory(), rootDirName);
-        } else {
-            rootPathFile = new File(context.getDir(rootDirName, Context.MODE_PRIVATE).toString());
-        }
-        if (!rootPathFile.exists() || !rootPathFile.isDirectory()) {
-            rootPathFile.mkdirs();
-        }
-        if (dirName == null) {
-            return;
-        }
-        for (int i = 0; i < dirName.length; i++) {
-            File cacheFile = new File(rootPathFile, dirName[i]);
-            if (!cacheFile.exists() || !cacheFile.isDirectory()) {
-                if (!cacheFile.mkdir()) {
-                    if (LogUtil.DEBUG) {
-                        LogUtil.e("mkdir() is Error,Path:" + cacheFile.getPath());
-                    }
-                }
-            }
-        }
-    }
-
     public static String getUriPath(final Context context, final Uri uri) {
         // Whether the Uri authority is ExternalStorageProvider.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
@@ -572,8 +466,7 @@ public class _Files {
             // Whether the Uri authority is DownloadsProvider.
             else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
                 return getDataColumn(context, contentUri, null, null);
             }
             // Whether the Uri authority is MediaProvider.
@@ -621,15 +514,12 @@ public class _Files {
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
-    private static String getDataColumn(Context context, Uri uri, String selection,
-                                        String[] selectionArgs) {
+    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         Cursor cursor = null;
         try {
-            cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, selection, selectionArgs,
-                    null);
+            cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                return cursor.getString(index);
+                return cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
             }
         } finally {
             if (cursor != null)

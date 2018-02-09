@@ -131,7 +131,7 @@ public class _Bitmaps {
      * @param view 需要截图的View
      * @return 截图
      */
-    public static Bitmap shootmePhoto(View view) {
+    public static Bitmap screenCapture(View view) {
         Bitmap bmp = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         view.draw(new Canvas(bmp));
         return bmp;

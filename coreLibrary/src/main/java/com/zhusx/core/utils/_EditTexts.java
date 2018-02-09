@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -102,7 +103,7 @@ public class _EditTexts {
     /**
      * 插入图片
      */
-    public void appendBitmap(EditText mEditText, String tag, int res) {
+    public static void append(EditText mEditText, String tag, @DrawableRes int res) {
         Spannable spannable = Spannable.Factory.getInstance().newSpannable(tag);
         Drawable drawable = mEditText.getResources().getDrawable(res);
         Paint.FontMetrics FontMetrics = mEditText.getPaint().getFontMetrics();

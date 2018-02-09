@@ -16,25 +16,6 @@ import java.util.Locale;
  */
 public class _Dates {
     /**
-     * 字符串转化成日期  y 年 M 月 d 日 H 小时 m 分钟
-     *
-     * @param dateStr    如 2011-11-11
-     * @param dateFormat 如 yyyy-MM-dd
-     * @return 日期
-     */
-    @SuppressLint("SimpleDateFormat")
-    public static final Date toDate(String dateStr, String dateFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        Date d = null;
-        try {
-            d = sdf.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return d;
-    }
-
-    /**
      * 获取当月的 天数
      */
     public static int getCurrentMonthDay() {
@@ -58,8 +39,21 @@ public class _Dates {
         return maxDate;
     }
 
-    public static String formatTime(@IntRange(from = 0, to = 60) int date) {
-        return date < 10 ? "0" + date : String.valueOf(date);
+    /**
+     * 字符串转化成日期  y 年 M 月 d 日 H 小时 m 分钟
+     *
+     * @param dateValue  如 2011-11-11
+     * @param dateFormat 如 yyyy-MM-dd
+     * @return 日期
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static Date toDate(String dateFormat, String dateValue) {
+        try {
+            return new SimpleDateFormat(dateFormat).parse(dateValue);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static String formatDate(String format, long timestamp) {
@@ -71,5 +65,9 @@ public class _Dates {
 
     public static String formatDate(String format, String timestamp) {
         return formatDate(format, Long.parseLong(timestamp));
+    }
+
+    public static String formatTime(@IntRange(from = 0, to = 60) int date) {
+        return date < 10 ? "0" + date : String.valueOf(date);
     }
 }
