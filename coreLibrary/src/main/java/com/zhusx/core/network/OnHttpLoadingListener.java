@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 public interface OnHttpLoadingListener<Id, Result, Parameter> {
     /**
-     * 开始下载
+     * 开始请求
      *
      * @param id id
      */

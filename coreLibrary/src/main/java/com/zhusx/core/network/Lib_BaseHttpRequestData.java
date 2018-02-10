@@ -120,11 +120,10 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
         }
     }
 
-    private synchronized void requestData(boolean isRefresh,
-                                          Parameter... objects) {
+    private synchronized void requestData(boolean isRefresh, Parameter... objects) {
         if (pIsDownloading) {
             if (LogUtil.DEBUG) {
-                LogUtil.e("id:" + pId + "\t 正在下载");
+                LogUtil.e("id:" + pId + "\t 正在请求");
             }
             return;
         }
@@ -420,7 +419,6 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
     }
 
 
-
     protected void __onStart(Id id, HttpRequest<Parameter> request) {
     }
 
@@ -429,6 +427,7 @@ public abstract class Lib_BaseHttpRequestData<Id, Result, Parameter> implements 
 
     protected void __onComplete(Id id, HttpRequest<Parameter> request, IHttpResult<Result> result) {
     }
+
     /**
      * 拿到下一页 页码
      */
