@@ -86,6 +86,7 @@ public class Lib_Subscribes {
             }
             if (subscriber != null) {
                 subscribes.remove(subscriber);
+                subscriber = null;
             }
         }
 
@@ -99,7 +100,9 @@ public class Lib_Subscribes {
                             @Override
                             public void run() {
                                 try {
-                                    subscriber.onComplete(t);
+                                    if (subscriber != null) {
+                                        subscriber.onComplete(t);
+                                    }
                                 } catch (Exception e) {
                                     if (LogUtil.DEBUG) {
                                         LogUtil.e(e);
@@ -126,7 +129,6 @@ public class Lib_Subscribes {
                     }
                     if (subscriber != null) {
                         subscribes.remove(subscriber);
-                        subscriber = null;
                     }
                 }
             }
