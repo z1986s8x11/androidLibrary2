@@ -27,7 +27,7 @@ public class _Views {
     /**
      * 获得绘制文本的宽和高
      */
-    public static Rect getTextRect(TextView v, String text) {
+    public static Rect getTextFontRect(TextView v, String text) {
         Rect mBound = new Rect();
         v.getPaint().getTextBounds(text, 0, text.length(), mBound);
         return mBound;
