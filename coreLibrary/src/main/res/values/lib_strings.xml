@@ -3,4 +3,5 @@
     <string name="lib_linearLayoutManager">android.support.v7.widget.LinearLayoutManager</string>
     <string name="lib_gridLayoutManager">android.support.v7.widget.GridLayoutManager</string>
     <string name="lib_staggeredGridLayoutManager">android.support.v7.widget.StaggeredGridLayoutManager</string>
+    <string name="lib_flowLayoutManager">com.zhusx.core.widget.Lib_FlowLayoutManager</string>
 </resources>
