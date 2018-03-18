@@ -242,6 +242,19 @@ public class _Intents {
         context.startActivity(mainIntent);
     }
 
+    /**
+     * 运行某包名的应用
+     */
+    public static void restartRunApp(Activity activity) {
+        Intent intent = activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName());
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            activity.startActivity(intent);
+        } else if (LogUtil.DEBUG) {
+            LogUtil.e("没有启动 Launch 的 Intent ");
+        }
+    }
+
     public static String getMIMEType(String fileSuffix) {
         if (TextUtils.isEmpty(fileSuffix)) {
             return null;

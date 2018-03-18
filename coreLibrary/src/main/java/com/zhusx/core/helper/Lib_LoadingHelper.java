@@ -9,8 +9,8 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.zhusx.core.interfaces.IHttpResult;
 import com.zhusx.core.network.HttpRequest;
-import com.zhusx.core.network.HttpResult;
 import com.zhusx.core.network.OnHttpLoadingListener;
 
 
@@ -20,7 +20,7 @@ import com.zhusx.core.network.OnHttpLoadingListener;
  * Email         327270607@qq.com
  * Created       2016/10/13 9:20
  */
-public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttpLoadingListener<Id, HttpResult<Result>, Parameter> {
+public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttpLoadingListener<Id, IHttpResult<Result>, Parameter> {
     private ViewGroup helperLayout;
     private View loadingView;
     private View errorView;
@@ -122,10 +122,10 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
         }
     }
 
-    public void __onError(View errorView, HttpRequest<Parameter> request, HttpResult<Result> data, boolean isAPIError, String error_message) {
+    public void __onError(View errorView, HttpRequest<Parameter> request, IHttpResult<Result> data, boolean isAPIError, String error_message) {
     }
 
-    public abstract void __onComplete(HttpRequest<Parameter> request, HttpResult<Result> data);
+    public abstract void __onComplete(HttpRequest<Parameter> request, IHttpResult<Result> data);
 
     @Override
     public void onLoadStart(Id id, HttpRequest<Parameter> request) {
@@ -144,7 +144,7 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
     }
 
     @Override
-    public void onLoadError(Id id, HttpRequest<Parameter> request, HttpResult<Result> data, boolean isAPIError, String error_message) {
+    public void onLoadError(Id id, HttpRequest<Parameter> request, IHttpResult<Result> data, boolean isAPIError, String error_message) {
         if (request.isRefresh || !isSuccess) {
             if (loadingView != null) {
                 loadingView.setVisibility(View.GONE);
@@ -161,7 +161,7 @@ public abstract class Lib_LoadingHelper<Id, Result, Parameter> implements OnHttp
     }
 
     @Override
-    public void onLoadComplete(Id id, HttpRequest<Parameter> request, HttpResult<Result> data) {
+    public void onLoadComplete(Id id, HttpRequest<Parameter> request, IHttpResult<Result> data) {
         if (request.isRefresh || !isSuccess) {
             if (loadingView != null) {
                 loadingView.setVisibility(View.GONE);

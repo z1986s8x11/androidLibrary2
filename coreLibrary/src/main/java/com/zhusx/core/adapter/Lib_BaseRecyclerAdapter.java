@@ -43,6 +43,9 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     }
 
     public Lib_BaseRecyclerAdapter(Context context, List<T> list) {
+        if (list == null) {
+            list = new ArrayList<>();
+        }
         this.mList = list;
         if (context != null) {
             mLayoutInflater = LayoutInflater.from(context);
@@ -155,7 +158,9 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     @Override
     public void _setItemToUpdate(List<T> list) {
         mList.clear();
-        mList.addAll(list);
+        if (!_Lists.isEmpty(list)) {
+            mList.addAll(list);
+        }
         notifyDataSetChanged();
     }
 
