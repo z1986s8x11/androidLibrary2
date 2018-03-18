@@ -4,8 +4,10 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 
 import com.zhusx.core.debug.LogUtil;
+import com.zhusx.core.imp.OnCycleListenerImp;
 import com.zhusx.core.interfaces.IHttpResult;
 import com.zhusx.core.interfaces.IPageData;
+import com.zhusx.core.interfaces.Lib_LifeCycleListener;
 import com.zhusx.core.interfaces.Lib_LoadingListener;
 
 /**
@@ -32,6 +34,18 @@ public abstract class Lib_BaseRequestData<Id, Result, Parameter, Transform exten
 
     public Lib_BaseRequestData(Id id) {
         this.pId = id;
+    }
+
+    public <C extends Lib_LifeCycleListener> Lib_BaseRequestData(Id id, C cycle) {
+        this.pId = id;
+        if (cycle != null) {
+            cycle._addOnCycleListener(new OnCycleListenerImp() {
+                @Override
+                public void onDestroy() {
+                    _cancelLoadData();
+                }
+            });
+        }
     }
 
     public Id _getRequestID() {
@@ -196,5 +210,9 @@ public abstract class Lib_BaseRequestData<Id, Result, Parameter, Transform exten
                 return true;
             }
         }
+    }
+
+    public static <T> T cast(Object o) {
+        return (T) o;
     }
 }
