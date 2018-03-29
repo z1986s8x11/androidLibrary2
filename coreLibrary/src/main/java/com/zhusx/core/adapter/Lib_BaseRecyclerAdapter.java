@@ -58,8 +58,10 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
 
     @Override
     public _ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        _ViewHolder viewHolder = new _ViewHolder(__getLayoutView(parent, viewType));
-        return viewHolder;
+        if (mLayoutInflater == null) {
+            mLayoutInflater = LayoutInflater.from(parent.getContext());
+        }
+        return new _ViewHolder(mLayoutInflater.inflate(__getLayoutResource(viewType), parent, false));
     }
 
     @Override
@@ -70,13 +72,6 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     protected abstract void __bindViewHolder(_ViewHolder holder, int position, T t);
 
     protected abstract int __getLayoutResource(int viewType);
-
-    protected View __getLayoutView(ViewGroup parent, int viewType) {
-        if (mLayoutInflater == null) {
-            mLayoutInflater = LayoutInflater.from(parent.getContext());
-        }
-        return mLayoutInflater.inflate(__getLayoutResource(viewType), parent, false);
-    }
 
     @Override
     public int getItemCount() {
