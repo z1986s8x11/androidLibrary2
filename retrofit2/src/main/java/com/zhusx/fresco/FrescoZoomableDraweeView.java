@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -113,8 +114,12 @@ public class FrescoZoomableDraweeView extends SimpleDraweeView {
         float dy = 0;
 
         if (rectF.left > 0) {
-            dx = getLeft() - rectF.left;
-            reset = true;
+            if (getParent() instanceof ViewPager) {
+                //FIXME 缩放会大量左移
+            } else {
+                dx = getLeft() - rectF.left;
+                reset = true;
+            }
         }
         if (rectF.top > 0) {
             dy = getTop() - rectF.top;
