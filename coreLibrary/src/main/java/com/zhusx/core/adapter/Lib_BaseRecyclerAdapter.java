@@ -140,7 +140,7 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
             return;
         }
         mList.add(position, t);
-        notifyItemRangeInserted(mList.size() - position, mList.size());
+        notifyItemInserted(position);
     }
 
     @Override
