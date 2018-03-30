@@ -3,6 +3,8 @@ package com.zhusx.core.widget.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
@@ -172,9 +174,25 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
         RecyclerView recyclerView;
 
         @Override
-        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
-            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-            final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            int dragFlags;
+            int swipeFlags;
+            if (layoutManager instanceof GridLayoutManager) {
+                dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT;
+                swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+            } else if (layoutManager instanceof LinearLayoutManager) {
+                if (((LinearLayoutManager) layoutManager).getOrientation() == LinearLayoutManager.VERTICAL) {
+                    dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                    swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                } else {
+                    dragFlags = ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT;
+                    swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                }
+            } else {
+                dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+            }
             return makeMovementFlags(dragFlags, swipeFlags);
         }
 
@@ -185,6 +203,11 @@ public class Lib_Widget_RecyclerView extends RecyclerView {
                 ((IChangeAdapter) recyclerView.getAdapter())._moveItemToUpdate(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return true;
             }
+            return false;
+        }
+
+        @Override
+        public boolean isItemViewSwipeEnabled() {
             return false;
         }
 
