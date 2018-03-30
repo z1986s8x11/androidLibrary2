@@ -90,7 +90,13 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        int count = mList.size();
+        if (count == 0) {
+            if (__getEmptyLayoutResource() > 0) {
+                return 1;
+            }
+        }
+        return count;
     }
 
     @Override
