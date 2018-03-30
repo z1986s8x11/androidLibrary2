@@ -29,6 +29,7 @@ import java.util.List;
 public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Lib_BaseRecyclerAdapter._ViewHolder> implements IChangeAdapter<T> {
     private List<T> mList;
     protected LayoutInflater mLayoutInflater;
+    protected final int VIEW_TYPE_EMPTY = 500;
 
     public Lib_BaseRecyclerAdapter() {
         this(null, new ArrayList<T>());
@@ -61,12 +62,26 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
         if (mLayoutInflater == null) {
             mLayoutInflater = LayoutInflater.from(parent.getContext());
         }
+        if (viewType == VIEW_TYPE_EMPTY) {
+            return new _ViewHolder(mLayoutInflater.inflate(this.__getEmptyLayoutResource(), parent, false));
+        }
         return new _ViewHolder(mLayoutInflater.inflate(__getLayoutResource(viewType), parent, false));
     }
 
     @Override
     public void onBindViewHolder(_ViewHolder holder, int position) {
+        if (position == 0 && getItemViewType(position) == VIEW_TYPE_EMPTY) {
+            __onBindEmptyViewHolder(holder);
+            return;
+        }
         __bindViewHolder(holder, position, mList.get(position));
+    }
+
+    protected int __getEmptyLayoutResource() {
+        return -1;
+    }
+
+    protected void __onBindEmptyViewHolder(_ViewHolder var1) {
     }
 
     protected abstract void __bindViewHolder(_ViewHolder holder, int position, T t);
@@ -76,6 +91,14 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0 && _isEmpty() && __getEmptyLayoutResource() > 0) {
+            return VIEW_TYPE_EMPTY;
+        }
+        return 0;
     }
 
     public static class _ViewHolder extends RecyclerView.ViewHolder {
