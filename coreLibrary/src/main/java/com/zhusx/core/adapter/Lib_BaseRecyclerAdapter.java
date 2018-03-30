@@ -81,7 +81,7 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
         return -1;
     }
 
-    protected void __onBindEmptyViewHolder(_ViewHolder var1) {
+    protected void __onBindEmptyViewHolder(_ViewHolder holder) {
     }
 
     protected abstract void __bindViewHolder(_ViewHolder holder, int position, T t);
