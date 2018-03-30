@@ -120,14 +120,22 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     @Override
     public void _addItemToUpdate(T t) {
         mList.add(t);
-        notifyItemInserted(mList.size() - 1);
+        if (mList.size() == 1) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemInserted(mList.size() - 1);
+        }
     }
 
     @Override
     public void _addItemToUpdate(List<T> list) {
         if (!_Lists.isEmpty(list)) {
             mList.addAll(list);
-            notifyItemRangeInserted(mList.size() - list.size(), list.size());
+            if (mList.size() == list.size()) {
+                notifyDataSetChanged();
+            } else {
+                notifyItemRangeInserted(mList.size() - list.size(), list.size());
+            }
         }
     }
 
@@ -140,7 +148,11 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
             return;
         }
         mList.add(position, t);
-        notifyItemInserted(position);
+        if (mList.size() == 1) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemInserted(position);
+        }
     }
 
     @Override
@@ -170,7 +182,11 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
         int position = mList.indexOf(t);
         if (position != -1) {
             mList.remove(position);
-            notifyItemRemoved(position);
+            if (_isEmpty()) {
+                notifyDataSetChanged();
+            } else {
+                notifyItemRemoved(position);
+            }
             return true;
         }
         return false;
@@ -179,7 +195,11 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     @Override
     public boolean _removeItemToUpdate(int position) {
         T t = mList.remove(position);
-        notifyItemRemoved(position);
+        if (_isEmpty()) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemRemoved(position);
+        }
         if (t != null) {
             return true;
         }
