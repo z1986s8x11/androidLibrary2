@@ -75,12 +75,6 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
             return;
         }
         __bindViewHolder(holder, position, mList.get(position));
-        if (getItemCount() - 1 == position) {
-            __scrollToBottom();
-        }
-    }
-
-    protected void __scrollToBottom() {
     }
 
     protected int __getEmptyLayoutResource() {
