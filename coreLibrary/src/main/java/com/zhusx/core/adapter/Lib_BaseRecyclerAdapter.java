@@ -5,7 +5,9 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -244,5 +246,39 @@ public abstract class Lib_BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Li
     public void _moveItemToUpdate(int from, int to) {
         Collections.swap(mList, from, to);
         notifyItemMoved(from, to);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        if (__getEmptyLayoutResource() > 0) {
+            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+            if (manager instanceof GridLayoutManager) {
+                final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+                gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        if (position == 0) {
+                            return _isEmpty() ? gridManager.getSpanCount() : 1;
+                        }
+                        return 1;
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(_ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        if (__getEmptyLayoutResource() > 0) {
+            ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+            if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+                if (holder.getLayoutPosition() == 0 && _isEmpty()) {
+                    StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
+                    p.setFullSpan(true);
+                }
+            }
+        }
     }
 }
