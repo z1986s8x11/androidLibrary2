@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -19,17 +19,17 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.android.support:support-v4:25.4.0'
-    provided "io.reactivex.rxjava2:rxjava:2.1.1"
-    provided 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    provided 'com.squareup.retrofit2:retrofit:2.3.0'
-    provided 'com.squareup.retrofit2:converter-gson:2.3.0'
-    provided 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    provided 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-    provided "com.alibaba:fastjson:1.2.12"
-    provided 'com.facebook.fresco:fresco:1.5.0'
-    provided 'com.facebook.fresco:webpsupport:1.5.0'
-    provided 'com.facebook.fresco:animated-gif:1.5.0'
-    compile project(':core')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'com.android.support:support-v4:25.4.0'
+    compileOnly "io.reactivex.rxjava2:rxjava:2.1.1"
+    compileOnly 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compileOnly 'com.squareup.retrofit2:retrofit:2.3.0'
+    compileOnly 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compileOnly 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compileOnly 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    compileOnly "com.alibaba:fastjson:1.2.12"
+    compileOnly 'com.facebook.fresco:fresco:1.5.0'
+    compileOnly 'com.facebook.fresco:webpsupport:1.5.0'
+    compileOnly 'com.facebook.fresco:animated-gif:1.5.0'
+    implementation project(':core')
 }
