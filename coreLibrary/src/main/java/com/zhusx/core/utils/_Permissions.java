@@ -1,6 +1,7 @@
 package com.zhusx.core.utils;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -15,6 +16,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
+import android.webkit.PermissionRequest;
+
+import com.zhusx.core.debug.LogUtil;
 
 /**
  * 用户Android 6.0权限验证
@@ -28,54 +32,61 @@ public class _Permissions {
         if (ActivityCompat.checkSelfPermission(activity, requestPermission) == PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (isMIUI()) {
-                    AppOpsManager appOpsManager = (AppOpsManager) activity.getSystemService(Context.APP_OPS_SERVICE);
-                    int checkOp = appOpsManager.checkOpNoThrow(opsPermissionToManifestPermission(requestPermission), Binder.getCallingUid(), activity.getPackageName());
-                    switch (checkOp) {
-                        //有权限
-                        case AppOpsManager.MODE_ALLOWED:
-                            //出错了
-                        case AppOpsManager.MODE_ERRORED:
-                            //没出现过...估计和4一样
-                        case AppOpsManager.MODE_DEFAULT:
-                            //权限需要询问
-                        case 4:
-                            listener.allowPermission(requestPermission);
-                            break;
-                        //被禁止了
-                        case AppOpsManager.MODE_IGNORED:
-                            activity.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
-                                @Override
-                                public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-                                    if (requestId != requestCode) {
-                                        return;
-                                    }
-                                    if (permissions.length == 0 || grantResults.length == 0) {
-                                        activity.unregisterPermissionResult(this);
-                                        listener.notAllowedPermission(permissions);
-                                    } else {
-                                        for (int i = 0; i < grantResults.length; i++) {
-                                            if (permissions[i].equals(requestPermission)) {
-                                                activity.unregisterPermissionResult(this);
-                                                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                                                    listener.allowPermission(permissions);
-                                                } else {
-                                                    listener.notAllowedPermission(permissions);
+                    String aomPermission = opsPermissionToManifestPermission(requestPermission);
+                    if (aomPermission != null) {
+                        AppOpsManager appOpsManager = (AppOpsManager) activity.getSystemService(Context.APP_OPS_SERVICE);
+                        int checkOp = appOpsManager.checkOpNoThrow(aomPermission, Binder.getCallingUid(), activity.getPackageName());
+                        switch (checkOp) {
+                            //有权限
+                            case AppOpsManager.MODE_ALLOWED:
+                                //出错了
+                            case AppOpsManager.MODE_ERRORED:
+                                //没出现过...估计和4一样
+                            case AppOpsManager.MODE_DEFAULT:
+                                //权限需要询问
+                            case 4:
+                                listener.allowPermission(requestPermission);
+                                break;
+                            //被禁止了
+                            case AppOpsManager.MODE_IGNORED:
+                                activity.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
+                                    @Override
+                                    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+                                        if (requestId != requestCode) {
+                                            return;
+                                        }
+                                        if (permissions.length == 0 || grantResults.length == 0) {
+                                            activity.unregisterPermissionResult(this);
+                                            listener.notAllowedPermission(permissions);
+                                        } else {
+                                            for (int i = 0; i < grantResults.length; i++) {
+                                                if (permissions[i].equals(requestPermission)) {
+                                                    activity.unregisterPermissionResult(this);
+                                                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                                                        listener.allowPermission(permissions);
+                                                    } else {
+                                                        listener.notAllowedPermission(permissions);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            });
-                            ActivityCompat.requestPermissions(activity, new String[]{requestPermission}, requestId);
-                            break;
+                                });
+                                ActivityCompat.requestPermissions(activity, new String[]{requestPermission}, requestId);
+                                break;
+                        }
+                        return;
+                    } else {
+
                     }
                 } else {
                     listener.allowPermission(requestPermission);
+                    return;
                 }
             } else {
                 listener.allowPermission(requestPermission);
+                return;
             }
-            return;
         }
         activity.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
             @Override
@@ -103,31 +114,62 @@ public class _Permissions {
         if (ActivityCompat.checkSelfPermission(fragment.getActivity(), requestPermission) == PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (isMIUI()) {
-                    AppOpsManager appOpsManager = (AppOpsManager) fragment.getActivity().getSystemService(Context.APP_OPS_SERVICE);
-                    int checkOp = appOpsManager.checkOpNoThrow(opsPermissionToManifestPermission(requestPermission), Binder.getCallingUid(), fragment.getActivity().getPackageName());
-                    switch (checkOp) {
-                        //有权限
-                        case AppOpsManager.MODE_ALLOWED:
-                            //出错了
-                        case AppOpsManager.MODE_ERRORED:
-                            //没出现过...估计和4一样
-                        case AppOpsManager.MODE_DEFAULT:
-                            //权限需要询问
-                        case 4:
-                            listener.allowPermission(requestPermission);
-                            break;
-                        //被禁止了
-                        case AppOpsManager.MODE_IGNORED:
-                            fragment.requestPermissions(new String[]{requestPermission}, requestId);
-                            break;
+                    String aomPermission = opsPermissionToManifestPermission(requestPermission);
+                    if (aomPermission != null) {
+                        AppOpsManager appOpsManager = (AppOpsManager) fragment.getActivity().getSystemService(Context.APP_OPS_SERVICE);
+                        int checkOp = appOpsManager.checkOpNoThrow(aomPermission, Binder.getCallingUid(), fragment.getActivity().getPackageName());
+                        switch (checkOp) {
+                            //有权限
+                            case AppOpsManager.MODE_ALLOWED:
+                                //出错了
+                            case AppOpsManager.MODE_ERRORED:
+                                //没出现过...估计和4一样
+                            case AppOpsManager.MODE_DEFAULT:
+                                //权限需要询问
+                            case 4:
+                                listener.allowPermission(requestPermission);
+                                break;
+                            //被禁止了
+                            case AppOpsManager.MODE_IGNORED:
+                                fragment.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
+                                    @Override
+                                    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+                                        if (requestId != requestCode) {
+                                            return;
+                                        }
+                                        if (permissions.length == 0 || grantResults.length == 0) {
+                                            fragment.unregisterPermissionResult(this);
+                                            listener.notAllowedPermission(permissions);
+                                        } else {
+                                            for (int i = 0; i < grantResults.length; i++) {
+                                                if (permissions[i].equals(requestPermission)) {
+                                                    fragment.unregisterPermissionResult(this);
+                                                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                                                        listener.allowPermission(permissions);
+                                                    } else {
+                                                        listener.notAllowedPermission(permissions);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                                fragment.requestPermissions(new String[]{requestPermission}, requestId);
+                                break;
+                        }
+                        return;
+                    } else {
+
                     }
                 } else {
                     listener.allowPermission(requestPermission);
+                    return;
                 }
             } else {
                 listener.allowPermission(requestPermission);
+                return;
             }
-            return;
+
         }
         fragment.registerPermissionResult(new ActivityCompat.OnRequestPermissionsResultCallback() {
             @Override
@@ -196,9 +238,9 @@ public class _Permissions {
 //        return false;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @TargetApi(Build.VERSION_CODES.M)
     private static String opsPermissionToManifestPermission(String permission) {
-        String checkStr;
+        String checkStr = null;
         switch (permission) {
             case Manifest.permission.CAMERA:
                 checkStr = AppOpsManager.OPSTR_CAMERA;
@@ -246,7 +288,9 @@ public class _Permissions {
                 checkStr = AppOpsManager.OPSTR_SEND_SMS;
                 break;
             default:
-                throw new NullPointerException("未收集到对应[" + permission + "]的AppOpsManager.OPSTR 常量");
+                if (LogUtil.DEBUG) {
+                    LogUtil.e("未收集到对应[" + permission + "]的AppOpsManager.OPSTR 常量");
+                }
         }
         return checkStr;
     }
