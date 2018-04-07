@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <!-- /storage/emulated/0/Download/${applicationId}/.beta/apk-->
-    <!--<external-path-->
-    <!--name="beta_external_path"-->
-    <!--path="Download/" />-->
-    <!--/storage/emulated/0/Android/data/${applicationId}/files/apk/-->
-    <!--<external-path-->
-    <!--name="beta_external_files_path"-->
-    <!--path="Android/data/" />-->
+    <!--Environment.getExternalStorageDirectory()-->
     <external-path
         name="lib_sd_dir"
         path="" />
+
+    <!--Context.getExternalFilesDir()-->
+    <!--<external-files-path />-->
+
+    <!--Context.getExternalCacheDir()-->
+    <!--<external-cache-path />-->
+
+    <!--getCacheDir()-->
     <cache-path
         name="lib_cache_dir"
         path="" />
+
+    <!--Context.getFilesDir()-->
     <files-path
         name="lib_file_dir"
         path="" />
