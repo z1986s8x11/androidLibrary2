@@ -6,7 +6,17 @@
     </declare-styleable>
     <declare-styleable name="SwipeMenuView">
         <attr name="swipeEnable" format="boolean" />
-        <attr name="ios" format="boolean" />
+        <attr name="ios" />
         <attr name="leftSwipe" format="boolean" />
+    </declare-styleable>
+    <attr name="ios" format="boolean" />
+    <declare-styleable name="SwipeDragLayout">
+        <attr name="need_offset" format="float" />
+        <attr name="ios" />
+        <attr name="swipe_enable" format="boolean" />
+        <attr name="swipe_direction" format="enum">
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+        </attr>
     </declare-styleable>
 </resources>
