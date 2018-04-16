@@ -1,6 +1,9 @@
 package com.zhusx.core.helper;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -62,7 +65,30 @@ public class Lib_WebViewHelper {
     }
 
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        view.loadUrl(url);
+        if (url.startsWith("tel:")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            view.getContext().startActivity(intent);
+        } else if (url.startsWith("weixin://wap/pay?")) {
+            try {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                view.getContext().startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (url.startsWith("alipays://platformapi/startApp")) {
+            try {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                view.getContext().startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            view.loadUrl(url);
+        }
         return true;
     }
 
