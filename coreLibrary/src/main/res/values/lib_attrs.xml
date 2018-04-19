@@ -74,6 +74,8 @@
     </declare-styleable>
     <declare-styleable name="Lib_Widget_FrameLayout">
         <attr name="lib_aspectRatio" />
+        <attr name="lib_dragViewId" format="reference" />
+        <attr name="lib_dragAutoKeepSide" format="boolean" />
     </declare-styleable>
     <declare-styleable name="Lib_Widget_SwipeMenuLayout">
         <attr name="lib_swipeEnable" format="boolean" />
