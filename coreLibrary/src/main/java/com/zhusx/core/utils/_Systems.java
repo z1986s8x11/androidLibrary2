@@ -1,6 +1,7 @@
 package com.zhusx.core.utils;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
@@ -150,6 +151,7 @@ public class _Systems {
     /**
      * @return 手机串号
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getIMEI(Context context) {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
@@ -162,6 +164,7 @@ public class _Systems {
     /**
      * @return 获取设备唯一字符串
      */
+    @SuppressLint("MissingPermission")
     public static String getUUID(Context context) {
         String uuid = getIMEI(context);
         if (TextUtils.isEmpty(uuid) || "0".equals(uuid) || "000000000000000".equals(uuid)) {
@@ -204,17 +207,10 @@ public class _Systems {
             //boolean b = wifiManager.setWifiEnabled(true);
             return null;
         }
-        if (_Systems.isPermission(context, Manifest.permission.ACCESS_WIFI_STATE)) {
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            int ipAddress = wifiInfo.getIpAddress();
-            String ip = (ipAddress & 0xFF) + "." + ((ipAddress >> 8) & 0xFF) + "." + ((ipAddress >> 16) & 0xFF) + "." + (ipAddress >> 24 & 0xFF);
-            return ip;
-        } else {
-            if (LogUtil.DEBUG) {
-                LogUtil.e(" 没有添加权限 permission.ACCESS_WIFI_STATE");
-            }
-            return null;
-        }
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int ipAddress = wifiInfo.getIpAddress();
+        String ip = (ipAddress & 0xFF) + "." + ((ipAddress >> 8) & 0xFF) + "." + ((ipAddress >> 16) & 0xFF) + "." + (ipAddress >> 24 & 0xFF);
+        return ip;
     }
 
     public static String getGPRSIp() {
@@ -490,8 +486,7 @@ public class _Systems {
      */
     public static boolean isSleeping(Context context) {
         KeyguardManager kgMgr = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-        boolean isSleeping = kgMgr.inKeyguardRestrictedInputMode();
-        return isSleeping;
+        return kgMgr.inKeyguardRestrictedInputMode();
     }
 
     /**

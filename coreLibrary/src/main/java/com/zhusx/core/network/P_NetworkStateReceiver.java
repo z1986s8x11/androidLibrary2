@@ -5,11 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.RequiresPermission;
 
 import com.zhusx.core.debug.LogUtil;
 import com.zhusx.core.manager.ZsxApplicationManager;
 import com.zhusx.core.utils._Networks;
-import com.zhusx.core.utils._Systems;
 
 /**
  * 需要开启权限
@@ -48,16 +48,11 @@ public class P_NetworkStateReceiver extends BroadcastReceiver {
     /**
      * 注册网络状态广播
      */
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     public void registerNetworkStateReceiver(Context mContext) {
-        if (_Systems.isPermission(mContext, Manifest.permission.ACCESS_NETWORK_STATE)) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ANDROID_NET_CHANGE_ACTION);
-            mContext.getApplicationContext().registerReceiver(this, filter);
-        } else {
-            if (LogUtil.DEBUG) {
-                LogUtil.e("需要权限:" + Manifest.permission.ACCESS_NETWORK_STATE);
-            }
-        }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ANDROID_NET_CHANGE_ACTION);
+        mContext.getApplicationContext().registerReceiver(this, filter);
     }
 
     /**
