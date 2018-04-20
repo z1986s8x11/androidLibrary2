@@ -1,6 +1,8 @@
 package com.zhusx.core.utils;
 
+import android.Manifest;
 import android.content.Context;
+import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 
 /**
@@ -36,12 +38,12 @@ public class _Phones {
     /**
      * @return 手机IMSI号码(国际移动用户识别码)
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getIMSI(Context context) {
         if (context == null) {
             return null;
         }
-        TelephonyManager telephonyManager;
-        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         // 返回唯一的用户ID;就是这张卡的IMSI编号
         return telephonyManager.getSubscriberId();
     }
@@ -51,10 +53,8 @@ public class _Phones {
      *
      * @return 返回手机ICCID号码(国际移动装备辨识码)
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getICCID(Context context) {
-        if (context == null) {
-            return null;
-        }
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
             // 返回唯一的用户ID;就是这张卡的IMSI编号
@@ -67,6 +67,7 @@ public class _Phones {
     /**
      * @return 手机串号
      */
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
     public static String getIMEI(Context context) {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
