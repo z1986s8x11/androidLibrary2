@@ -7,7 +7,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "0.7.9"
+        versionName "0.8.0"
     }
     buildTypes {
         release {
@@ -22,4 +22,4 @@ dependencies {
     compileOnly 'com.android.support:support-v4:25.4.0'
     compileOnly 'com.android.support:recyclerview-v7:25.4.0'
 }
-apply from: rootProject.file('gradle/jcenter.gradle')
+//apply from: rootProject.file('gradle/jcenter.gradle')
