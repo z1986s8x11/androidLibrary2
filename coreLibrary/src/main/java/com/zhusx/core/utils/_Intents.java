@@ -235,7 +235,7 @@ public class _Intents {
         context.startActivity(intent);
     }
 
-    public static void restartActivity(Activity context, Class<? extends FragmentActivity> cls) {
+    public static void restartActivity(Context context, Class<? extends Activity> cls) {
         Intent intentToBeNewRoot = new Intent(context, cls);
         ComponentName cn = intentToBeNewRoot.getComponent();
         Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
@@ -245,7 +245,7 @@ public class _Intents {
     /**
      * 运行某包名的应用
      */
-    public static void restartRunApp(Activity activity) {
+    public static void restartRunApp(Context activity) {
         Intent intent = activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName());
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

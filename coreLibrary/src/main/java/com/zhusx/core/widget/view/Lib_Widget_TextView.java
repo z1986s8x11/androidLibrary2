@@ -4,11 +4,13 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -131,6 +133,27 @@ public class Lib_Widget_TextView extends TextView {
             return false;
         } else {
             return line.charAt(line.length() - 1) != '\n';
+        }
+    }
+
+    /**
+     * 图片Span垂直居中
+     */
+    public static class _ImageSpanVerticalCenter extends ImageSpan {
+
+        public _ImageSpanVerticalCenter(Drawable d) {
+            super(d);
+        }
+
+        @Override
+        public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+            Paint.FontMetricsInt fm = paint.getFontMetricsInt();
+            Drawable drawable = getDrawable();
+            int transY = (y + fm.descent + y + fm.ascent) / 2 - drawable.getBounds().bottom / 2;
+            canvas.save();
+            canvas.translate(x, transY);
+            drawable.draw(canvas);
+            canvas.restore();
         }
     }
 }

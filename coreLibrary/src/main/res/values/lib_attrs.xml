@@ -52,6 +52,10 @@
         <attr name="lib_background2" format="color|reference" />
         <attr name="lib_status" />
         <attr name="lib_textColor2" format="color" />
+        <attr name="lib_drawableTop" format="reference" />
+        <attr name="lib_drawableRight" format="reference" />
+        <attr name="lib_drawableLeft" format="reference" />
+        <attr name="lib_drawableBottom" format="reference" />
     </declare-styleable>
     <!--AbsListView-->
     <declare-styleable name="Lib_AbsListView">

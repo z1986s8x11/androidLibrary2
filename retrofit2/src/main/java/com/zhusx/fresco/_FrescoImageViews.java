@@ -8,6 +8,9 @@ import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.DrawableRes;
 
+import com.facebook.common.executors.CallerThreadExecutor;
+import com.facebook.common.references.CloseableReference;
+import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
@@ -18,6 +21,8 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.RotationOptions;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
+import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.BasePostprocessor;
 import com.facebook.imagepipeline.request.ImageRequest;
@@ -48,6 +53,20 @@ public class _FrescoImageViews {
                 .setAutoPlayAnimations(true)
                 .build();
         imageView.setController(draweeController);
+    }
+
+    public void downloadImage(String url) {
+        ImageRequest imageRequest = ImageRequest.fromUri(url);
+        DataSource<CloseableReference<CloseableImage>> dataSource1 = Fresco.getImagePipeline().fetchDecodedImage(imageRequest, null);
+        dataSource1.subscribe(new BaseBitmapDataSubscriber() {
+            @Override
+            protected void onNewResultImpl(Bitmap bitmap) { //get bitmap
+            }
+
+            @Override
+            protected void onFailureImpl(DataSource<CloseableReference<CloseableImage>> dataSource) {
+            }
+        }, CallerThreadExecutor.getInstance());
     }
 
     public void _setAutoPlayImage(SimpleDraweeView imageView, @DrawableRes int id) {
@@ -87,17 +106,17 @@ public class _FrescoImageViews {
                 .setControllerListener(new BaseControllerListener<ImageInfo>() {
                     @Override
                     public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                         /* 成功 */
+                        /* 成功 */
                     }
 
                     @Override
                     public void onIntermediateImageSet(String id, ImageInfo imageInfo) {
-                       /* 如果允许呈现渐进式JPEG，同时图片也是渐进式图片，onIntermediateImageSet会在每个扫描被解码后回调 */
+                        /* 如果允许呈现渐进式JPEG，同时图片也是渐进式图片，onIntermediateImageSet会在每个扫描被解码后回调 */
                     }
 
                     @Override
                     public void onFailure(String id, Throwable throwable) {
-                         /* 失败 */
+                        /* 失败 */
                     }
                 })// 监听下载事件
                 .build();

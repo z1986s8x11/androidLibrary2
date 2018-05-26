@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhusx.core.R;
+import com.zhusx.core.debug.LogUtil;
 
 
 /**
@@ -23,6 +24,8 @@ import com.zhusx.core.R;
  * Created       2016/10/12 16:56
  */
 public class Lib_ShapeHelper {
+    private static final String XML_NS = "http://schemas.android.com/apk/res/android";
+
     public static void initShapeDrawable(View view, Context context, AttributeSet attrs) {
         if (view == null || context == null || attrs == null) {
             return;
@@ -81,7 +84,7 @@ public class Lib_ShapeHelper {
             int strokeWidth = typedArray.getDimensionPixelSize(R.styleable.Lib_Widget_TextView_lib_strokeWidth, -1);
             int gradientStartColor = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_gradientStartColor, -1);
             if (solidColor == -1 && strokeWidth == -1 && gradientStartColor == -1) {
-            /*没有颜色改变,默认不进行任何操作*/
+                /*没有颜色改变,默认不进行任何操作*/
                 typedArray.recycle();
                 return;
             }
@@ -214,8 +217,39 @@ public class Lib_ShapeHelper {
         } else {
             _setBackgroundDrawable(view, gradientDrawable);
         }
-
         if (view instanceof TextView) {
+            int topDrawableRes = typedArray.getResourceId(R.styleable.Lib_Widget_TextView_lib_drawableTop, -1);
+            int rightDrawableRes = typedArray.getResourceId(R.styleable.Lib_Widget_TextView_lib_drawableRight, -1);
+            int bottomDrawableRes = typedArray.getResourceId(R.styleable.Lib_Widget_TextView_lib_drawableBottom, -1);
+            int leftDrawableRes = typedArray.getResourceId(R.styleable.Lib_Widget_TextView_lib_drawableLeft, -1);
+            if (topDrawableRes + rightDrawableRes + bottomDrawableRes + leftDrawableRes != -4) {
+                Drawable[] drawables = ((TextView) view).getCompoundDrawables();
+                if (leftDrawableRes != -1) {
+                    if (drawables[0] == null) {
+                        drawables[0] = view.getResources().getDrawable(attrs.getAttributeIntValue(XML_NS, "drawableLeft", -1));
+                    }
+                    drawables[0] = toDrawable(status, drawables[0], view.getResources().getDrawable(leftDrawableRes));
+                }
+                if (topDrawableRes != -1) {
+                    if (drawables[1] == null) {
+                        drawables[1] = view.getResources().getDrawable(attrs.getAttributeIntValue(XML_NS, "drawableTop", -1));
+                    }
+                    drawables[1] = toDrawable(status, drawables[1], view.getResources().getDrawable(topDrawableRes));
+                }
+                if (rightDrawableRes != -1) {
+                    if (drawables[2] == null) {
+                        drawables[2] = view.getResources().getDrawable(attrs.getAttributeIntValue(XML_NS, "drawableRight", -1));
+                    }
+                    drawables[2] = toDrawable(status, drawables[2], view.getResources().getDrawable(rightDrawableRes));
+                }
+                if (bottomDrawableRes != -1) {
+                    if (drawables[3] == null) {
+                        drawables[3] = view.getResources().getDrawable(attrs.getAttributeIntValue(XML_NS, "drawableBottom", -1));
+                    }
+                    drawables[3] = toDrawable(status, drawables[2], view.getResources().getDrawable(bottomDrawableRes));
+                }
+                ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+            }
             int textColor = ((TextView) view).getCurrentTextColor();
             int textColor2 = typedArray.getColor(R.styleable.Lib_Widget_TextView_lib_textColor2, -1);
             if (textColor2 != -1) {
@@ -307,5 +341,27 @@ public class Lib_ShapeHelper {
         } else {
             view.setBackgroundDrawable(drawable);
         }
+    }
+
+    private static Drawable toDrawable(int status, Drawable res, Drawable libRes) {
+        if (res == null) {
+            return libRes;
+        }
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        switch (status) {
+            case android.R.attr.state_pressed:
+            case android.R.attr.state_selected:
+            case android.R.attr.state_checked:
+                stateListDrawable.addState(new int[]{status}, libRes);
+                stateListDrawable.addState(new int[]{-status}, res);
+                stateListDrawable.addState(new int[]{}, res);
+                break;
+            case android.R.attr.state_enabled:
+                stateListDrawable.addState(new int[]{status}, res);
+                stateListDrawable.addState(new int[]{-status}, libRes);
+                stateListDrawable.addState(new int[]{}, res);
+                break;
+        }
+        return stateListDrawable;
     }
 }
