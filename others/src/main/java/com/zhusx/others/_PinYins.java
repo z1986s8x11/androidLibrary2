@@ -108,16 +108,16 @@ public class _PinYins {
     /**
      * 汉字转成ASCII码
      */
-    private int getChsAscii(String chs, String charset) {
+    private int getChsAscii(String chs) {
         int asc = -1;
         try {
-            byte[] bytes = chs.getBytes(charset);
-            if (bytes == null || bytes.length > 2 || bytes.length <= 0) {
+            byte[] bytes = chs.getBytes("gb2312");
+            if (bytes.length > 2 || bytes.length <= 0) {
                 return -1;
             }
             if (bytes.length == 1) {
                 asc = bytes[0];
-            } else if (bytes.length == 2) {
+            } else {
                 int hightByte = 256 + bytes[0];
                 int lowByte = 256 + bytes[1];
                 asc = (256 * hightByte + lowByte) - 256 * 256;
@@ -134,9 +134,9 @@ public class _PinYins {
     /**
      * 单字解析
      **/
-    private String convert(String str, String charset) {
+    private String convert(String str) {
         String result = null;
-        int ascii = getChsAscii(str, charset);
+        int ascii = getChsAscii(str);
         if (ascii > 0 && ascii < 160) {
             result = String.valueOf((char) ascii);
         } else {
@@ -153,17 +153,16 @@ public class _PinYins {
     /**
      * 词组解析
      *
-     * @param chs     中文字符
-     * @param charset 编码类型
+     * @param chs 中文字符
      * @return 拼音
      */
-    public String _toPinYin(String chs, String charset) {
+    public String _toPinYin(String chs) {
         String key, value;
         buffer = new StringBuilder();
         for (int i = 0; i < chs.length(); i++) {
             key = chs.substring(i, i + 1);
             if (key.getBytes().length >= 2) {
-                value = convert(key, charset);
+                value = convert(key);
                 if (value == null) {
                     value = "unknown";
                 }
@@ -173,5 +172,10 @@ public class _PinYins {
             buffer.append(value);
         }
         return buffer.toString();
+    }
+
+    public static void main(String[] args) {
+//        System.out.println(new _PinYins()._toPinYin("重庆"));
+        System.out.println("获取拼音首字母：" +  new _PinYins2().getAllFirstLetter("重庆"));
     }
 }
