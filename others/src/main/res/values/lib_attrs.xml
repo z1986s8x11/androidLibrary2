@@ -19,4 +19,31 @@
             <enum name="right" value="2" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="Lib_SlidingMenu">
+        <attr name="lib_mode">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+        <attr name="lib_viewAbove" format="reference" />
+        <attr name="lib_viewBehind" format="reference" />
+        <attr name="lib_behindOffset" format="dimension" />
+        <attr name="lib_behindWidth" format="dimension" />
+        <attr name="lib_behindScrollScale" format="float" />
+        <attr name="lib_touchModeAbove">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="lib_touchModeBehind">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="lib_shadowDrawable" format="reference" />
+        <attr name="lib_shadowWidth" format="dimension" />
+        <attr name="lib_fadeEnabled" format="boolean" />
+        <attr name="lib_fadeDegree" format="float" />
+        <attr name="lib_selectorEnabled" format="boolean" />
+        <attr name="lib_selectorDrawable" format="reference" />
+    </declare-styleable>
 </resources>
