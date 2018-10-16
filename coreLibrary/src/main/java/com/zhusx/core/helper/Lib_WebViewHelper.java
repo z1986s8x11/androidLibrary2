@@ -32,6 +32,7 @@ public class Lib_WebViewHelper {
     public String buttonTextColor = "#ffffff";
     private ProgressBar progressbar;
     private boolean isFinish = true;
+    private String errorUrl = "file:///android_asset/error.html";
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public Lib_WebViewHelper(WebView mWebView) {
