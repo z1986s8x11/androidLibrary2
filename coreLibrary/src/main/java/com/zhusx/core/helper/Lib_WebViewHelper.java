@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AbsoluteLayout;
 import android.widget.ProgressBar;
@@ -37,6 +38,9 @@ public class Lib_WebViewHelper {
         this.mWebView = mWebView;
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(this, "zhusx");
+        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        mWebView.getSettings().setUseWideViewPort(true);
+        mWebView.getSettings().setLoadWithOverviewMode(true);
     }
 
     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -97,7 +101,7 @@ public class Lib_WebViewHelper {
             progressbar = new ProgressBar(view.getContext(), null, android.R.attr.progressBarStyleHorizontal);
             progressbar.setLayoutParams(new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.MATCH_PARENT, _Densitys.dip2px(view.getContext(), 2), 0, 0));
             progressbar.setMax(100);
-            if (resId > 0) {
+            if (resId != 0 && resId != -1) {
                 progressbar.setProgressDrawable(view.getResources().getDrawable(resId));
             }
             view.addView(progressbar);
@@ -134,5 +138,16 @@ public class Lib_WebViewHelper {
                 }, 500);
             }
         });
+    }
+
+    public void addImgClick(WebView webView) {
+        webView.loadUrl("javascript:(function(){" +
+                "var objs = document.getElementsByTagName(\"img\"); " +
+                "for(var i=0;i<objs.length;i++){  " +
+                "    objs[i].onclick=function(){  " +
+                "        window.ajapi.openImage(this.src);  " +
+                "    }  " +
+                "}" +
+                "})()");
     }
 }
